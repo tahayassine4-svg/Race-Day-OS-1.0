@@ -92,7 +92,7 @@ When activating an agent, read its prompt file and follow it exactly:
 **Current packet:** Packet 03 — Pacing Plan
 **Status:** ⏸ GATE 3 — awaiting Yassine's "go" to start Packet 03 (BUILDER)
 
-**Git:** Initialized. Branch: `main`. Commit: `b0cd39b` (Packets 01 + 02 in initial commit). No remote yet.
+**Git:** Branch: `main`. Remote: `git@github.com:tahayassine4-svg/Race-Day-OS-1.0.git`. Pushed through `b596ffd`.
 
 **Next session command:** "Continue from where we left off" or "Read Current State and resume workflow"
 
