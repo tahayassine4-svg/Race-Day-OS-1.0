@@ -87,10 +87,12 @@ When activating an agent, read its prompt file and follow it exactly:
 > **This section is updated after every packet. It is the single source of truth for resuming work across sessions.**
 
 **Project:** Race Day OS
-**Last completed:** Packet 01 — Foundation & Auth
-**Last report:** `reports/packet-01-report.md`
-**Current packet:** Packet 02 — Race & Course Setup
-**Status:** ⏸ GATE 3 — awaiting Yassine's "go" to start Packet 02 (BUILDER)
+**Last completed:** Packet 02 — Race & Course Setup
+**Last report:** `reports/packet-02-report.md`
+**Current packet:** Packet 03 — Pacing Plan
+**Status:** ⏸ GATE 3 — awaiting Yassine's "go" to start Packet 03 (BUILDER)
+
+**Git:** Initialized. Branch: `main`. Commit: `b0cd39b` (Packets 01 + 02 in initial commit). No remote yet.
 
 **Next session command:** "Continue from where we left off" or "Read Current State and resume workflow"
 
@@ -101,6 +103,7 @@ When activating an agent, read its prompt file and follow it exactly:
 | Date | Packet | Outcome | Notes |
 |---|---|---|---|
 | 2026-05-22 | 01 — Foundation & Auth | ✅ PASSED | Build + types clean. 3 runtime criteria need live Supabase env. npm used (not pnpm). |
+| 2026-05-22 | 02 — Race & Course Setup | ✅ PASSED | Build + types clean. 6 runtime criteria need live Supabase. Git initialized; Packets 01+02 in one initial commit. |
 
 ---
 
