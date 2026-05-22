@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { registerUser } from '@/actions/auth'
@@ -36,11 +35,7 @@ export default function RegisterPage() {
       return
     }
 
-    await signIn('credentials', {
-      email,
-      password,
-      callbackUrl: '/dashboard',
-    })
+    router.push('/login?registered=1')
   }
 
   return (
@@ -99,7 +94,7 @@ export default function RegisterPage() {
         <CardFooter>
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/auth/login" className="underline underline-offset-4 hover:text-primary">
+            <Link href="/login" className="underline underline-offset-4 hover:text-primary">
               Sign in
             </Link>
           </p>

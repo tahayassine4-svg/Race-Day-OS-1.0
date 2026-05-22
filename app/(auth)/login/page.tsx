@@ -20,6 +20,7 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') ?? '/dashboard'
+  const justRegistered = searchParams.get('registered') === '1'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -59,6 +60,11 @@ function LoginForm() {
         <CardDescription>Sign in to your account</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {justRegistered && (
+          <div className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            Account created — sign in below.
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -104,7 +110,7 @@ function LoginForm() {
         <p className="text-sm text-muted-foreground">
           No account?{' '}
           <Link
-            href="/auth/register"
+            href="/register"
             className="underline underline-offset-4 hover:text-primary"
           >
             Create one
