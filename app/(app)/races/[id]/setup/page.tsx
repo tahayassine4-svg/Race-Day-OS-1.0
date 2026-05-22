@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { aidStations, races, segments } from '@/lib/db/schema'
-import { and, asc, eq } from 'drizzle-orm'
+import { aidStations, crewAssignments, crewMembers, races, segments } from '@/lib/db/schema'
+import { and, asc, eq, inArray } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { AidStationList } from '@/components/races/aid-station-list'
 import { SegmentList } from '@/components/races/segment-list'
@@ -20,7 +20,7 @@ export default async function SetupPage({
   })
   if (!race) notFound()
 
-  const [stationRows, segmentRows] = await Promise.all([
+  const [stationRows, segmentRows, memberRows] = await Promise.all([
     db
       .select()
       .from(aidStations)
@@ -31,11 +31,29 @@ export default async function SetupPage({
       .from(segments)
       .where(eq(segments.raceId, raceId))
       .orderBy(asc(segments.sortOrder)),
+    db.select().from(crewMembers).where(eq(crewMembers.raceId, raceId)),
   ])
+
+  const memberIds = memberRows.map((m) => m.id)
+  const assignmentRows =
+    memberIds.length > 0
+      ? await db
+          .select()
+          .from(crewAssignments)
+          .where(inArray(crewAssignments.crewMemberId, memberIds))
+      : []
+
+  const memberNameById = Object.fromEntries(memberRows.map((m) => [m.id, m.name]))
+
+  const crewByStation: Record<string, string[]> = {}
+  for (const a of assignmentRows) {
+    if (!crewByStation[a.stationId]) crewByStation[a.stationId] = []
+    crewByStation[a.stationId].push(memberNameById[a.crewMemberId] ?? 'Unknown')
+  }
 
   return (
     <div className="space-y-8">
-      <AidStationList raceId={raceId} stations={stationRows} />
+      <AidStationList raceId={raceId} stations={stationRows} crewByStation={crewByStation} />
       <SegmentList raceId={raceId} segments={segmentRows} stations={stationRows} />
     </div>
   )

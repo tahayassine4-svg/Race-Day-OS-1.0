@@ -27,9 +27,11 @@ const SERVICE_LABELS: Record<string, string> = {
 export function AidStationList({
   raceId,
   stations,
+  crewByStation = {},
 }: {
   raceId: string
   stations: Station[]
+  crewByStation?: Record<string, string[]>
 }) {
   const router = useRouter()
   const [showAdd, setShowAdd] = useState(stations.length === 0)
@@ -178,6 +180,11 @@ export function AidStationList({
                         Drop bag
                       </span>
                     )}
+                    {crewByStation[station.id]?.map((name) => (
+                      <span key={name} className="rounded bg-purple-100 px-1.5 py-0.5 text-xs text-purple-700">
+                        {name}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
