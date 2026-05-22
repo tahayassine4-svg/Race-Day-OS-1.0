@@ -33,6 +33,7 @@ export const races = pgTable('races', {
   crewToken: uuid('crew_token').unique(),
   activeScenario: varchar('active_scenario', { length: 20 }).default('base').notNull(),
   goalFinishSeconds: integer('goal_finish_seconds'),
+  scenarioGoals: jsonb('scenario_goals').$type<Partial<Record<'optimistic' | 'base' | 'pessimistic', { goalSeconds: number; elevAdj: number }>>>(),
   fuelCalPerHour: integer('fuel_cal_per_hour').default(250),
   fuelFluidMlPerHour: integer('fuel_fluid_ml_per_hour').default(500),
   fuelSodiumMgPerHour: integer('fuel_sodium_mg_per_hour').default(500),
