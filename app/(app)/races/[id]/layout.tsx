@@ -5,6 +5,7 @@ import { and, eq } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { CalendarDays, MapPin } from 'lucide-react'
 import { RaceNav } from '@/components/races/race-nav'
+import { CrewLinkSection } from '@/components/races/crew-link-section'
 
 export default async function RaceLayout({
   children,
@@ -48,8 +49,11 @@ export default async function RaceLayout({
       </div>
 
       <div className="flex gap-8">
-        <div className="w-36 shrink-0">
+        <div className="w-36 shrink-0 space-y-4">
           <RaceNav raceId={id} />
+          <div className="border-t pt-4">
+            <CrewLinkSection raceId={id} crewToken={race.crewToken ?? null} />
+          </div>
         </div>
         <main className="min-w-0 flex-1">{children}</main>
       </div>
