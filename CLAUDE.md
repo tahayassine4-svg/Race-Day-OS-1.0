@@ -87,10 +87,10 @@ When activating an agent, read its prompt file and follow it exactly:
 > **This section is updated after every packet. It is the single source of truth for resuming work across sessions.**
 
 **Project:** Race Day OS
-**Last completed:** Packet 03 — Pacing Engine
-**Last report:** `reports/packet-03-report.md`
-**Current packet:** Packet 04 — Fueling Plan
-**Status:** ⏸ GATE 3 — awaiting Yassine's "go" to start Packet 04 (BUILDER)
+**Last completed:** Packet 04 — Fueling Planner
+**Last report:** `reports/packet-04-report.md`
+**Current packet:** Packet 05 — Crew Management
+**Status:** ⏸ GATE 3 — awaiting Yassine's "go" to start Packet 05 (BUILDER)
 
 **Git:** Branch: `main`. Remote: `git@github.com:tahayassine4-svg/Race-Day-OS-1.0.git`. Pushed through `b596ffd`.
 
@@ -105,6 +105,7 @@ When activating an agent, read its prompt file and follow it exactly:
 | 2026-05-22 | 01 — Foundation & Auth | ✅ PASSED | Build + types clean. 3 runtime criteria need live Supabase env. npm used (not pnpm). |
 | 2026-05-22 | 02 — Race & Course Setup | ✅ PASSED | Build + types clean. 6 runtime criteria need live Supabase. Git initialized; Packets 01+02 in one initial commit. |
 | 2026-05-22 | 03 — Pacing Engine | ✅ PASSED | Build + types clean. Pure engine, 3 scenarios, inline overrides. All acceptance criteria verified in code. |
+| 2026-05-22 | 04 — Fueling Planner | ✅ PASSED | Build + types clean. Pure engine, global targets, per-segment overrides, notes-on-blur. |
 
 ---
 
