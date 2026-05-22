@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { label: 'Fueling', slug: 'fueling' },
   { label: 'Crew', slug: 'crew' },
   { label: 'Checklists', slug: 'checklists' },
+  { label: 'Live', slug: 'live' },
 ]
 
 export function RaceNav({ raceId }: { raceId: string }) {
