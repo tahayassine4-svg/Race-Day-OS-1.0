@@ -2,7 +2,7 @@ import type { NextAuthConfig } from 'next-auth'
 
 export const authConfig: NextAuthConfig = {
   pages: {
-    signIn: '/auth/login',
+    signIn: '/login',
   },
   callbacks: {
     authorized({ auth, request }) {
@@ -10,7 +10,8 @@ export const authConfig: NextAuthConfig = {
       const { pathname } = request.nextUrl
 
       const isPublic =
-        pathname.startsWith('/auth') ||
+        pathname.startsWith('/login') ||
+        pathname.startsWith('/register') ||
         pathname.startsWith('/crew') ||
         pathname.startsWith('/api/auth')
 
