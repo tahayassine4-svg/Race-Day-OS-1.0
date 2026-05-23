@@ -27,8 +27,8 @@
 
 ### Prerequisites
 
-- Node.js 20+
-- pnpm (preferred) or npm
+- Node.js 20+ (Node 26 works fine for the app; see DB note below)
+- npm (pnpm also works)
 - A Supabase project (free tier at supabase.com)
 - A Google OAuth app (for Google login, optional in dev)
 
@@ -36,19 +36,27 @@
 
 ```bash
 # 1. Install dependencies
-pnpm install
+npm install
 
 # 2. Copy env template
 cp .env.example .env.local
 
 # 3. Set required env vars (see below)
 
-# 4. Push DB schema
-pnpm db:push
+# 4. Apply DB schema
+npm run migrate
 
 # 5. Start dev server
-pnpm dev
+npm run dev
 ```
+
+> **Note — why `npm run migrate` instead of `db:push`:**
+> `drizzle-kit push` crashes on Node 26 with a `TypeError: Cannot read properties
+> of undefined (reading 'replace')` caused by a CHECK constraint parser bug in
+> drizzle-kit. `npm run migrate` runs `scripts/migrate.ts` directly against the
+> DB using the `postgres` driver. It is fully idempotent (`ADD COLUMN IF NOT
+> EXISTS`) and safe to re-run. When adding new columns or tables, append them to
+> `scripts/migrate.ts` following the existing pattern.
 
 ### Required Environment Variables
 
