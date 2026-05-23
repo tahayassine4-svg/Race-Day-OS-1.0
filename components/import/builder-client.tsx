@@ -153,7 +153,7 @@ export function BuilderClient({ raceId, trackPoints, importedStations }: Props) 
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <Link
           href={`/races/${raceId}/import`}
           className="flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"

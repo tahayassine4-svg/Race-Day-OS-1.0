@@ -97,6 +97,11 @@ export default async function LivePage({
 
               const etaMs = live && !live.isActual ? live.projectedArrival.getTime() - Date.now() : null
               const etaMin = etaMs && etaMs > 0 ? Math.round(etaMs / 60000) : null
+              // Only show ETA countdown when race is within 24 h — otherwise arrival time is enough
+              const showEta = etaMin !== null && etaMin <= 24 * 60
+              const etaLabel = etaMin !== null && etaMin >= 60
+                ? `~${Math.floor(etaMin / 60)}h ${etaMin % 60}m`
+                : etaMin !== null ? `~${etaMin}m` : null
 
               return (
                 <div key={station.id} className={`rounded-lg border px-4 py-3 flex items-center justify-between gap-4 ${live?.isActual ? 'bg-green-50 border-green-200' : 'bg-card'}`}>
@@ -123,8 +128,8 @@ export default async function LivePage({
                     ) : live ? (
                       <>
                         <p className="text-sm text-muted-foreground">{formatArrivalTime(live.projectedArrival.toISOString())}</p>
-                        {etaMin !== null && (
-                          <p className="text-xs text-muted-foreground">ETA ~{etaMin}m</p>
+                        {showEta && (
+                          <p className="text-xs text-muted-foreground">ETA {etaLabel}</p>
                         )}
                       </>
                     ) : (
