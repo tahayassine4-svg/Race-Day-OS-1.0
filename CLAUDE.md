@@ -89,8 +89,8 @@ When activating an agent, read its prompt file and follow it exactly:
 **Project:** Race Day OS
 **Last completed:** Packet 07 — Live Race Day ✅
 **Last report:** `reports/packet-07-report.md`
-**Current packet:** Packet 08 — GPX + Excel Import Pipeline
-**Status:** ⏸ GATE 2 passed — ready for IMPLEMENTER (Packet 08)
+**Current packet:** None — Packets 08 + 09 complete
+**Status:** ⏸ GATE 3 — awaiting Yassine review
 
 **Git:** Branch: `main`. Remote: `git@github.com:tahayassine4-svg/Race-Day-OS-1.0.git`. Pushed through `8062706`.
 
@@ -109,7 +109,8 @@ When activating an agent, read its prompt file and follow it exactly:
 | 2026-05-22 | 05 — Crew & Checklists | ✅ PASSED | Build + types clean. Crew CRUD, station assignments, checklist cards with task reorder + preview. |
 | 2026-05-22 | 06 — Crew Magic Link | ✅ PASSED | Build + types clean. Public /crew/[token] dashboard + station card, arrival logging, condition notes, ?crew= param. |
 | 2026-05-22 | 07 — Live Race Day | ✅ PASSED | Build + types clean. Supabase Realtime, live projections, status badges, projected finish, ETA. /races/[id]/live added. |
-| 2026-05-23 | 08 — GPX + Excel Import | ⏳ IN PROGRESS | Packet planned. GPX parser already exists (lib/gpx-parser.ts). recharts + xlsx to be installed. |
+| 2026-05-23 | 08 — GPX + Excel Import | ✅ PASSED | recharts + xlsx installed. Dual drop zones, client-side parse, 0.5 km dedup merge. saveImportData auth-gated. |
+| 2026-05-23 | 09 — Segment Builder | ✅ PASSED | Elevation chart, interactive table, validateDrafts, confirmImport transaction. Redirects to pacing on confirm. |
 
 ---
 
