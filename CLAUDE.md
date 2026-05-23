@@ -87,12 +87,12 @@ When activating an agent, read its prompt file and follow it exactly:
 > **This section is updated after every packet. It is the single source of truth for resuming work across sessions.**
 
 **Project:** Race Day OS
-**Last completed:** Packet 07 — Live Race Day ✅ ALL PACKETS COMPLETE
+**Last completed:** Packet 07 — Live Race Day ✅
 **Last report:** `reports/packet-07-report.md`
-**Current packet:** None — full build complete
-**Status:** ✅ Race Day OS v1.0 — all 7 packets shipped. Ready for Supabase deployment.
+**Current packet:** Packet 08 — GPX + Excel Import Pipeline
+**Status:** ⏸ GATE 2 passed — ready for IMPLEMENTER (Packet 08)
 
-**Git:** Branch: `main`. Remote: `git@github.com:tahayassine4-svg/Race-Day-OS-1.0.git`. Pushed through `b596ffd`.
+**Git:** Branch: `main`. Remote: `git@github.com:tahayassine4-svg/Race-Day-OS-1.0.git`. Pushed through `8062706`.
 
 **Next session command:** "Continue from where we left off" or "Read Current State and resume workflow"
 
@@ -109,6 +109,7 @@ When activating an agent, read its prompt file and follow it exactly:
 | 2026-05-22 | 05 — Crew & Checklists | ✅ PASSED | Build + types clean. Crew CRUD, station assignments, checklist cards with task reorder + preview. |
 | 2026-05-22 | 06 — Crew Magic Link | ✅ PASSED | Build + types clean. Public /crew/[token] dashboard + station card, arrival logging, condition notes, ?crew= param. |
 | 2026-05-22 | 07 — Live Race Day | ✅ PASSED | Build + types clean. Supabase Realtime, live projections, status badges, projected finish, ETA. /races/[id]/live added. |
+| 2026-05-23 | 08 — GPX + Excel Import | ⏳ IN PROGRESS | Packet planned. GPX parser already exists (lib/gpx-parser.ts). recharts + xlsx to be installed. |
 
 ---
 

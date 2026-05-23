@@ -41,5 +41,5 @@ export async function createRace(data: CreateRaceData): Promise<{ error: string 
     return { error: 'Failed to create race. Please try again.' }
   }
 
-  redirect(`/races/${raceId}/setup`)
+  redirect(`/races/${raceId}/import`)
 }

@@ -3,6 +3,8 @@ import { db } from '@/lib/db'
 import { aidStations, crewAssignments, crewMembers, races, segments } from '@/lib/db/schema'
 import { and, asc, eq, inArray } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { Upload } from 'lucide-react'
 import { AidStationList } from '@/components/races/aid-station-list'
 import { SegmentList } from '@/components/races/segment-list'
 
@@ -53,6 +55,15 @@ export default async function SetupPage({
 
   return (
     <div className="space-y-8">
+      <div className="flex items-center justify-end">
+        <Link
+          href={`/races/${raceId}/import`}
+          className="flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          <Upload className="h-3.5 w-3.5" />
+          Re-import from GPX / Excel
+        </Link>
+      </div>
       <AidStationList raceId={raceId} stations={stationRows} crewByStation={crewByStation} />
       <SegmentList raceId={raceId} segments={segmentRows} stations={stationRows} />
     </div>

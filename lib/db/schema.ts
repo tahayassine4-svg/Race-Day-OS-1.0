@@ -37,6 +37,9 @@ export const races = pgTable('races', {
   fuelCalPerHour: integer('fuel_cal_per_hour').default(250),
   fuelFluidMlPerHour: integer('fuel_fluid_ml_per_hour').default(500),
   fuelSodiumMgPerHour: integer('fuel_sodium_mg_per_hour').default(500),
+  gpxTrackPoints: jsonb('gpx_track_points').$type<Array<{ cumKm: number; ele: number }>>(),
+  importedStations: jsonb('imported_stations').$type<Array<{ name: string; distanceKm: number; crewAccess: boolean; dropBag: boolean; services: string; cutoffTime?: string }>>(),
+  importSource: varchar('import_source', { length: 20 }).default('manual').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -50,6 +53,7 @@ export const aidStations = pgTable('aid_stations', {
   pacerAccess: boolean('pacer_access').default(false).notNull(),
   dropBag: boolean('drop_bag').default(false).notNull(),
   services: varchar('services', { length: 50 }).default('full').notNull(),
+  cutoffSeconds: integer('cutoff_seconds'),
   sortOrder: integer('sort_order').notNull(),
 })
 
