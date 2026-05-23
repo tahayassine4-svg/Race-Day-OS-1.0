@@ -15,7 +15,9 @@ PaceCrew is a web application that replaces the fragile system of spreadsheets, 
 
 ## Core Features (MVP)
 
-1. **Race and course setup** — Runner defines race profile (name, date, distance, cutoff) and manually enters aid stations with metadata (crew access, pacer access, drop bag, services type). Segments between stations record distance and elevation gain/loss.
+1. **Race and course setup** — Runner defines race profile (name, date, distance, cutoff) and enters aid stations with metadata (crew access, pacer access, drop bag, services type). Segments between stations record distance and elevation gain/loss.
+
+1a. **GPX + aid station import** — Runner uploads a GPX file (course track + waypoints) and optionally an Excel/CSV aid station sheet. The app parses both client-side, shows an elevation profile, and lets the runner place segment markers interactively. On confirm, all stations and segments are written to the DB in a single transaction, replacing any manual entry.
 
 2. **Pacing and timing engine** — Runner sets a goal finish time; the app calculates per-segment duration and projected arrival clock times. Per-segment manual pace overrides allow for slow/steep sections. Three scenarios (optimistic / base / pessimistic) can be built simultaneously.
 
@@ -33,7 +35,7 @@ PaceCrew is a web application that replaces the fragile system of spreadsheets, 
 
 ## Out of Scope (v1)
 
-- GPX / Strava / course database import (manual entry only in v1)
+- Strava / third-party course database import (GPX + Excel import now in v1 — see 1a above)
 - Drop-bag packing planner (station checklists cover this sufficiently in v1)
 - Print-to-PDF export
 - Integrated crew chat or voice notes
