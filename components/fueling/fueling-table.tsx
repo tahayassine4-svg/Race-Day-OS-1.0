@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveSegmentOverride, clearSegmentOverride, saveStationNotes } from '@/actions/fueling'
 import { Button } from '@/components/ui/button'
@@ -86,8 +86,8 @@ export function FuelingTable({ raceId, rows }: { raceId: string; rows: FuelRow[]
             {rows.map((row) => {
               const isEditing = editingId === row.segmentId
               return (
-                <>
-                  <tr key={row.segmentId} className="hover:bg-muted/20 transition-colors">
+                <React.Fragment key={row.segmentId}>
+                  <tr className="hover:bg-muted/20 transition-colors">
                     <td className="px-3 py-2.5">
                       <span className="text-muted-foreground text-xs">{row.fromName}</span>
                       <span className="mx-1 text-muted-foreground">→</span>
@@ -166,7 +166,7 @@ export function FuelingTable({ raceId, rows }: { raceId: string; rows: FuelRow[]
                       />
                     </td>
                   </tr>
-                </>
+                </React.Fragment>
               )
             })}
           </tbody>
