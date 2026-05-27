@@ -64,6 +64,9 @@ Eight agents collaborate in a fixed sequence to take a raw app idea all the way 
 | 6 | Code-Reviewer | `prompts/code-reviewer.md` | Tester (+ UI-Reviewer) done | Review against `reviews/*.md` | Pass → Git-Manager / Fail → Implementer |
 | 7 | Git-Manager | `prompts/git-manager.md` | Code-Reviewer passes | Commit + push + PR | → Reporter |
 | 8 | Reporter | `prompts/reporter.md` | Git-Manager done | `reports/packet-NN-report.md` | GATE 3 |
+| — | **ICP** | `prompts/icp.md` | **On-demand** — invoke any time | `reports/icp-session-[date].md` | None (report to Yassine) |
+
+> **ICP agent is on-demand.** Invoke with: "Run ICP session" or "Run ICP on [specific flow]". It reads `docs/icp.md` for the persona — update that file when the project changes.
 
 ---
 
@@ -75,6 +78,7 @@ When activating an agent, read its prompt file and follow it exactly:
 - **Planner:** Read `prompts/planner.md` — read `docs/vision.md`, produce all `tasks/packet-NN.md` files.
 - **Implementer:** Read `prompts/implementer.md` — read the active packet, implement only what is specified.
 - **Tester:** Read `prompts/tester.md` — run all tests defined in the packet's acceptance criteria.
+- **ICP:** Read `prompts/icp.md` + `docs/icp.md` — embody the persona, walk the live app, produce `reports/icp-session-[date].md`.
 - **UI-Reviewer:** Read `prompts/ui-reviewer.md` — validate UI renders correctly and is responsive.
 - **Code-Reviewer:** Read `prompts/code-reviewer.md` — check against `reviews/frontend.md` or `reviews/backend.md`.
 - **Git-Manager:** Read `prompts/git-manager.md` — commit, push to feature branch, open PR.

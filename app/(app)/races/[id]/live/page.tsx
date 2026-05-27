@@ -77,12 +77,30 @@ export default async function LivePage({
         </div>
 
         {stationRows.length === 0 ? (
-          <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-            No aid stations set up yet.
+          <div className="rounded-lg border border-dashed p-8 text-center space-y-3">
+            <p className="text-sm font-medium">Race plan not complete</p>
+            <p className="text-sm text-muted-foreground">
+              Add aid stations and set a goal time to activate live tracking.
+            </p>
+            <a
+              href={`/races/${raceId}/setup`}
+              className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Set up course →
+            </a>
           </div>
         ) : !pacingRows.length ? (
-          <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-            No pacing plan yet. Set your goal time in the Pacing tab first.
+          <div className="rounded-lg border border-dashed p-8 text-center space-y-3">
+            <p className="text-sm font-medium">No pacing plan yet</p>
+            <p className="text-sm text-muted-foreground">
+              Set your goal finish time to generate projected arrival times.
+            </p>
+            <a
+              href={`/races/${raceId}/pacing`}
+              className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Set goal time →
+            </a>
           </div>
         ) : (
           <div className="space-y-2">

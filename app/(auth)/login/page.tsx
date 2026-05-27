@@ -57,7 +57,7 @@ function LoginForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Race Day OS</CardTitle>
-        <CardDescription>Sign in to your account</CardDescription>
+        <CardDescription>Plan your race. Brief your crew. Track your finish.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {justRegistered && (

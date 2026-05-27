@@ -5,6 +5,7 @@ import { and, eq, inArray } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { CrewRoster } from '@/components/crew/crew-roster'
 import { StationAssignments } from '@/components/crew/station-assignments'
+import { CrewLinkBanner } from '@/components/crew/crew-link-banner'
 
 export default async function CrewPage({
   params,
@@ -16,7 +17,7 @@ export default async function CrewPage({
 
   const race = await db.query.races.findFirst({
     where: and(eq(races.id, raceId), eq(races.userId, session!.user.id)),
-    columns: { id: true },
+    columns: { id: true, crewToken: true },
   })
   if (!race) notFound()
 
@@ -49,6 +50,7 @@ export default async function CrewPage({
 
   return (
     <div className="space-y-8">
+      <CrewLinkBanner raceId={raceId} crewToken={race.crewToken ?? null} />
       <CrewRoster raceId={raceId} members={memberRows} />
       <div className="border-t pt-6">
         <StationAssignments

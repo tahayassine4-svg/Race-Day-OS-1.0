@@ -51,14 +51,24 @@ export default async function PacingPage({
       .where(and(eq(pacePlans.raceId, raceId), eq(pacePlans.scenario, viewScenario))),
   ])
 
+  const scenarioConfig = race.scenarioGoals?.[viewScenario]
+
   if (segmentRows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        No segments yet. Add aid stations in the{' '}
-        <a href={`/races/${raceId}/setup`} className="underline">
-          Setup tab
-        </a>{' '}
-        first.
+      <div className="space-y-6">
+        <ScenarioTabs raceId={raceId} currentScenario={viewScenario} />
+        <GoalTimeForm raceId={raceId} scenario={viewScenario} initial={scenarioConfig} />
+        <div className="rounded-lg border border-dashed p-8 text-center space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Your splits will appear here once you add aid stations.
+          </p>
+          <a
+            href={`/races/${raceId}/setup`}
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            Add aid stations →
+          </a>
+        </div>
       </div>
     )
   }
@@ -74,8 +84,6 @@ export default async function PacingPage({
       },
     ])
   )
-
-  const scenarioConfig = race.scenarioGoals?.[viewScenario]
 
   return (
     <div className="space-y-6">

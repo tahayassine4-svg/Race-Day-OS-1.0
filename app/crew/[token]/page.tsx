@@ -18,6 +18,9 @@ export default async function CrewDashboardPage({
   const { token } = await params
   const { crew: crewName } = await searchParams
 
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!UUID_RE.test(token)) notFound()
+
   const race = await db.query.races.findFirst({
     where: eq(races.crewToken, token),
     columns: { id: true, name: true, startTime: true, userId: true, activeScenario: true },
@@ -140,7 +143,12 @@ export default async function CrewDashboardPage({
         <div className="space-y-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">All Stations</h2>
           {stationRows.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">No stations set up yet.</p>
+            <div className="rounded-lg border border-dashed p-6 text-center space-y-1">
+              <p className="text-sm font-medium">Race plan not ready yet</p>
+              <p className="text-sm text-muted-foreground">
+                {runner?.name ?? 'The runner'} is still setting up the course. Check back closer to race day.
+              </p>
+            </div>
           ) : (
             <div className="space-y-3">
               {stationRows.map((s) => (

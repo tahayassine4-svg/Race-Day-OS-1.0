@@ -53,15 +53,53 @@ export default async function SetupPage({
     crewByStation[a.stationId].push(memberNameById[a.crewMemberId] ?? 'Unknown')
   }
 
+  const hasStations = stationRows.length > 0
+
   return (
     <div className="space-y-8">
+      {!hasStations && (
+        <div className="rounded-lg border bg-muted/30 p-5 space-y-4">
+          <div>
+            <p className="text-sm font-semibold">Getting started</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Complete these steps to unlock pacing, fueling, and your crew link.</p>
+          </div>
+          <ol className="space-y-2 text-sm">
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700">✓</span>
+              <span className="text-muted-foreground line-through">Create your race</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">2</span>
+              <span>
+                <strong>Add your aid stations</strong>
+                <span className="block text-xs text-muted-foreground">Use the form below, or{' '}
+                  <Link href={`/races/${raceId}/import`} className="underline underline-offset-2">import a GPX file</Link>
+                  {' '}for automatic station placement.
+                </span>
+              </span>
+            </li>
+            <li className="flex items-start gap-2 opacity-50">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">3</span>
+              <span>
+                Set your goal time in <strong>Pacing</strong>
+              </span>
+            </li>
+            <li className="flex items-start gap-2 opacity-50">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">4</span>
+              <span>
+                Generate and share your <strong>Crew link</strong>
+              </span>
+            </li>
+          </ol>
+        </div>
+      )}
       <div className="flex items-center justify-end">
         <Link
           href={`/races/${raceId}/import`}
           className="flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
         >
           <Upload className="h-3.5 w-3.5" />
-          Re-import from GPX / Excel
+          Import from GPX / Excel
         </Link>
       </div>
       <AidStationList raceId={raceId} stations={stationRows} crewByStation={crewByStation} />

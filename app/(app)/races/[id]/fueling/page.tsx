@@ -50,18 +50,38 @@ export default async function FuelingPage({
 
   if (segmentRows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        No segments yet. Add aid stations in the{' '}
-        <a href={`/races/${raceId}/setup`} className="underline">Setup tab</a> first.
+      <div className="space-y-6">
+        <GlobalTargetsForm raceId={raceId} defaults={{ cal: globalCal, fluid: globalFluid, sodium: globalSodium }} />
+        <div className="rounded-lg border border-dashed p-8 text-center space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Per-segment fuel totals will appear here once you add aid stations.
+          </p>
+          <a
+            href={`/races/${raceId}/setup`}
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            Add aid stations →
+          </a>
+        </div>
       </div>
     )
   }
 
   if (pacingRows.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        No pacing plan yet. Set your goal time in the{' '}
-        <a href={`/races/${raceId}/pacing`} className="underline">Pacing tab</a> first.
+      <div className="space-y-6">
+        <GlobalTargetsForm raceId={raceId} defaults={{ cal: globalCal, fluid: globalFluid, sodium: globalSodium }} />
+        <div className="rounded-lg border border-dashed p-8 text-center space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Set your goal time to see per-segment fuel calculations.
+          </p>
+          <a
+            href={`/races/${raceId}/pacing`}
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            Set goal time →
+          </a>
+        </div>
       </div>
     )
   }
