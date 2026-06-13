@@ -7,7 +7,15 @@ import SwiftData
 protocol ExerciseRepositoryProtocol: AnyObject, Sendable {
     func allOrdered() throws -> [Exercise]
     func setEnabled(key: String, _ enabled: Bool) throws
+    func appSettings() throws -> AppSettings
     func currentTarget(for exercise: Exercise, on date: Date) -> Int
+    func currentTargetRecord(for exercise: Exercise, on date: Date) -> DailyTarget?
+    func setTarget(key: String, reps: Int, effectiveDate: Date, isManualOverride: Bool) throws
+    func setAutoProgressionEnabled(_ enabled: Bool) throws
+    func setProgressionAmount(_ amount: Int) throws
+    func setProgressionIntervalDays(_ days: Int) throws
+    func setPullupCap(_ cap: Int) throws
+    func markProgressionRun(on date: Date) throws
 }
 
 @MainActor
@@ -28,12 +36,77 @@ final class ExerciseRepository: ExerciseRepositoryProtocol {
         try context.save()
     }
 
+    func appSettings() throws -> AppSettings {
+        let descriptor = FetchDescriptor<AppSettings>()
+        if let settings = try context.fetch(descriptor).first {
+            return settings
+        }
+
+        let settings = AppSettings()
+        context.insert(settings)
+        try context.save()
+        return settings
+    }
+
     /// The reps value of the most recent target on or before `date` (0 if none).
     func currentTarget(for exercise: Exercise, on date: Date = Date()) -> Int {
+        currentTargetRecord(for: exercise, on: date)?.reps ?? 0
+    }
+
+    func currentTargetRecord(for exercise: Exercise, on date: Date = Date()) -> DailyTarget? {
         let key = GMCalendar.dayKey(for: date)
         let applicable = (exercise.targets ?? [])
             .filter { $0.effectiveDate <= key }
             .sorted { $0.effectiveDate > $1.effectiveDate }
-        return applicable.first?.reps ?? 0
+        return applicable.first
+    }
+
+    func setTarget(key: String, reps: Int, effectiveDate: Date = Date(), isManualOverride: Bool = true) throws {
+        guard let exercise = try allOrdered().first(where: { $0.key == key }) else { return }
+        let dayKey = GMCalendar.dayKey(for: effectiveDate)
+
+        if let existing = (exercise.targets ?? []).first(where: { $0.effectiveDate == dayKey }) {
+            existing.reps = max(0, reps)
+            existing.isManualOverride = isManualOverride
+        } else {
+            context.insert(DailyTarget(
+                effectiveDate: dayKey,
+                reps: max(0, reps),
+                isManualOverride: isManualOverride,
+                exercise: exercise
+            ))
+        }
+
+        try context.save()
+    }
+
+    func setAutoProgressionEnabled(_ enabled: Bool) throws {
+        let settings = try appSettings()
+        settings.autoProgressionEnabled = enabled
+        try context.save()
+    }
+
+    func setProgressionAmount(_ amount: Int) throws {
+        let settings = try appSettings()
+        settings.progressionAmount = min(max(amount, 5), 10)
+        try context.save()
+    }
+
+    func setProgressionIntervalDays(_ days: Int) throws {
+        let settings = try appSettings()
+        settings.progressionIntervalDays = max(1, days)
+        try context.save()
+    }
+
+    func setPullupCap(_ cap: Int) throws {
+        let settings = try appSettings()
+        settings.pullupCap = max(1, cap)
+        try context.save()
+    }
+
+    func markProgressionRun(on date: Date = Date()) throws {
+        let settings = try appSettings()
+        settings.lastProgressionDate = GMCalendar.dayKey(for: date)
+        try context.save()
     }
 }

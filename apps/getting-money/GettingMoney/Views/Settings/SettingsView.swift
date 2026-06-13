@@ -1,8 +1,6 @@
 import SwiftUI
 
-/// Packet 02: a persisted Settings section proving the data layer.
-/// Shows the seeded exercises + their targets and lets dips be toggled — the
-/// change persists across launches. Full target editing arrives in Packet 03.
+/// Packet 03: target editing + progression settings.
 struct SettingsView: View {
     @State private var vm: SettingsViewModel
 
@@ -13,79 +11,71 @@ struct SettingsView: View {
     var body: some View {
         ZStack {
             ScreenBackground()
+
             ScrollView {
                 VStack(alignment: .leading, spacing: GMSpacing.lg) {
-                    VStack(alignment: .leading, spacing: GMSpacing.xs) {
-                        Text("TARGETS · YOUR RULES")
-                            .font(.system(size: 12, weight: .semibold)).tracking(1.4)
-                            .foregroundStyle(GMColor.muted)
-                        Text("Your targets, your rules.")
-                            .font(.gmTitle).foregroundStyle(GMColor.ink)
-                    }
-
-                    Text("EXERCISES")
-                        .font(.gmSection).tracking(0.4).foregroundStyle(GMColor.muted)
-
-                    GMCard(padding: 0) {
-                        VStack(spacing: 0) {
-                            ForEach(Array(vm.rows.enumerated()), id: \.element.id) { index, row in
-                                if index > 0 { Divider().overlay(GMColor.hairline) }
-                                exerciseRow(row)
-                            }
-                        }
-                    }
+                    header
+                    NextProgressionCard(viewModel: vm)
+                    SettingsSectionHeader("DAILY TARGETS", action: "Edit")
+                    TargetSettingsList(viewModel: vm)
+                    SettingsSectionHeader("PROGRESSION")
+                    ProgressionSettingsCard(viewModel: vm)
 
                     if let errorMessage = vm.errorMessage {
                         Text(errorMessage)
                             .font(.gmMeta)
                             .foregroundStyle(GMColor.debt)
                     }
-
-                    Text("Editing targets, the pull-up cap, and auto-progression arrive in Packet 03.")
-                        .font(.gmMeta).foregroundStyle(GMColor.muted)
                 }
                 .gmScreenPadding()
                 .padding(.top, GMSpacing.xs)
+                .padding(.bottom, 96)
             }
         }
         .task {
-            vm.load()
+            vm.applyDueProgression()
         }
     }
 
-    private func exerciseRow(_ row: SettingsViewModel.Row) -> some View {
-        HStack(spacing: GMSpacing.md + 2) {
-            Image(systemName: row.glyph)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(row.isEnabled ? GMColor.ink : GMColor.muted)
-                .frame(width: 38, height: 38)
-                .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.elevated))
-                .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+    private var header: some View {
+        VStack(alignment: .leading, spacing: GMSpacing.xs) {
+            Text("TARGETS · YOUR RULES")
+                .font(.system(size: 12, weight: .semibold))
+                .tracking(1.4)
+                .foregroundStyle(GMColor.muted)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(row.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
-                Text(row.isOptional ? "optional" : "\(row.target.gmGrouped) reps / day")
-                    .font(.gmMeta).foregroundStyle(GMColor.muted)
-            }
+            Text("Your targets,\nyour rules.")
+                .font(.gmTitle)
+                .foregroundStyle(GMColor.ink)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+private struct SettingsSectionHeader: View {
+    let title: String
+    let action: String?
+
+    init(_ title: String, action: String? = nil) {
+        self.title = title
+        self.action = action
+    }
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.gmSection)
+                .tracking(0.4)
+                .foregroundStyle(GMColor.muted)
+
             Spacer()
 
-            if row.isOptional {
-                Toggle("", isOn: Binding(
-                    get: { row.isEnabled },
-                    set: { vm.setEnabled(row.id, $0) }
-                ))
-                .labelsHidden()
-                .tint(GMColor.accent)
-                .accessibilityLabel("Enable \(row.name)")
-            } else {
-                Text("\(row.target.gmGrouped)")
-                    .font(.system(size: 17, weight: .bold)).monospacedDigit()
-                    .foregroundStyle(GMColor.ink)
+            if let action {
+                Text(action)
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(GMColor.accent)
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 14)
-        .opacity(row.isEnabled ? 1 : 0.55)
     }
 }
 

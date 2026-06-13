@@ -12,5 +12,7 @@ final class AppSettings {
     var roundsPreference: Int = 3
     var lastProgressionDate: Date? = nil
 
-    init() {}
+    init(lastProgressionDate: Date? = nil) {
+        self.lastProgressionDate = lastProgressionDate
+    }
 }

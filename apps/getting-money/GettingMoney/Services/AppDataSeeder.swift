@@ -22,13 +22,14 @@ enum AppDataSeeder {
     @MainActor
     static func seedIfNeeded(_ context: ModelContext, today: Date = Date()) throws {
         // Settings singleton.
+        let dayKey = GMCalendar.dayKey(for: today)
+
         if try context.fetch(FetchDescriptor<AppSettings>()).isEmpty {
-            context.insert(AppSettings())
+            context.insert(AppSettings(lastProgressionDate: dayKey))
         }
 
         let existing = try context.fetch(FetchDescriptor<Exercise>())
         let existingKeys = Set(existing.map(\.key))
-        let dayKey = GMCalendar.dayKey(for: today)
 
         for (index, seed) in defaults.enumerated() where !existingKeys.contains(seed.key) {
             let exercise = Exercise(key: seed.key, name: seed.name, glyph: seed.glyph,
