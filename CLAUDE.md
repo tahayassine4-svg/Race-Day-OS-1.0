@@ -1,18 +1,23 @@
-# AI-Orchestrated Web App Development System
+# AI-Orchestrated App Development System
 
-This is a reusable orchestration system for building web applications through a sequence of specialized AI agents. Every session reads this file first to determine the current state and activate the correct agent.
+This is a reusable orchestration system for building applications (web, mobile, and native) through a sequence of specialized AI agents. Every session reads this file first to determine the current state and activate the correct agent.
 
 ---
 
 ## System Overview
 
-Eight agents collaborate in a fixed sequence to take a raw app idea all the way to committed, tested, reviewed code — with Yassine (Engineering Manager) as the decision-maker at every gate.
+Nine agents collaborate in a fixed sequence to take a raw app idea all the way to committed, tested, reviewed code — with Yassine (Engineering Manager) as the decision-maker at every gate.
 
 **Standing rules — non-negotiable:**
+- **Design before code.** No UI is ever implemented before its rendered design mockup (`design/*.png`) is approved by Yassine at the Design Gate. The Designer builds an HTML mockup, renders it to an image, and shows it first. (Backend/data-only packets skip the Design Gate.)
 - Never skip a gate. Every gate requires explicit approval from Yassine before proceeding.
 - Never run two agents in parallel. Agents are sequential within each packet.
-- Always read `docs/vision.md`, `docs/stack.md`, and the active `tasks/packet-NN.md` before acting.
+- Always read `docs/vision.md`, `docs/stack.md`, `docs/ui-system.md`, and the active `tasks/packet-NN.md` before acting.
 - Never implement anything not defined in the current packet.
+- **Baseline first.** Establish a green build/tests before editing, so you can tell if your change broke something.
+- **Verify visually.** UI is confirmed by screenshotting the running app (simulator or headless browser) against the approved mockup — never by reading source.
+- **Protect user data.** If the app is already shipped (TestFlight/production) with real data, every persistence/schema/migration change must preserve it, proven by a migration test that loads an old-schema store with data. A code-level default is not a store-level default — test, don't assume.
+- **Use the advisor** before committing to a non-trivial approach and before declaring work done.
 - When blocked or uncertain, surface the issue to Yassine. Do not improvise silently.
 
 ---
@@ -33,7 +38,13 @@ Eight agents collaborate in a fixed sequence to take a raw app idea all the way 
     ┌─────────────────────────────────────────┐
     │         For each packet, in order:       │
     │                                          │
-    │  [IMPLEMENTER]  →  code in app/          │
+    │  [DESIGNER]  →  docs/ui-system.md +      │
+    │     design/packet-NN.png  (if UI)        │
+    │       ↓                                  │
+    │  ⏸ DESIGN GATE: Yassine approves the     │
+    │     rendered mockup (skipped if no UI)   │
+    │       ↓                                  │
+    │  [IMPLEMENTER]  →  code, built to match  │
     │       ↓                                  │
     │   [TESTER]  →  tests + results           │
     │       ↓                                  │
@@ -58,12 +69,13 @@ Eight agents collaborate in a fixed sequence to take a raw app idea all the way 
 |---|---|---|---|---|---|
 | 1 | Architect | `prompts/architect.md` | New app idea | `docs/vision.md`, `docs/stack.md`, dev plan | GATE 1 |
 | 2 | Planner | `prompts/planner.md` | GATE 1 approved | `tasks/packet-NN.md` files | GATE 2 |
-| 3 | Implementer | `prompts/implementer.md` | GATE 2 / prev packet approved | Code in `app/` | → Tester |
-| 4 | Tester | `prompts/tester.md` | Implementer done | Tests + results | → UI-Reviewer or Code-Reviewer |
-| 5 | UI-Reviewer | `prompts/ui-reviewer.md` | Tester done (UI changed) | UI validation notes | → Code-Reviewer |
-| 6 | Code-Reviewer | `prompts/code-reviewer.md` | Tester (+ UI-Reviewer) done | Review against `reviews/*.md` | Pass → Git-Manager / Fail → Implementer |
-| 7 | Git-Manager | `prompts/git-manager.md` | Code-Reviewer passes | Commit + push + PR | → Reporter |
-| 8 | Reporter | `prompts/reporter.md` | Git-Manager done | `reports/packet-NN-report.md` | GATE 3 |
+| 3 | Designer | `prompts/designer.md` | GATE 2 / any UI packet | `docs/ui-system.md`, `design/packet-NN.png` (rendered mockups) | **DESIGN GATE** |
+| 4 | Implementer | `prompts/implementer.md` | DESIGN GATE approved (or backend packet) | Code, built to match the mockup | → Tester |
+| 5 | Tester | `prompts/tester.md` | Implementer done | Tests + results (incl. migration/data-safety + visual checks) | → UI-Reviewer or Code-Reviewer |
+| 6 | UI-Reviewer | `prompts/ui-reviewer.md` | Tester done (UI changed) | UI validation vs approved mockup | → Code-Reviewer |
+| 7 | Code-Reviewer | `prompts/code-reviewer.md` | Tester (+ UI-Reviewer) done | Review against `reviews/*.md` | Pass → Git-Manager / Fail → Implementer |
+| 8 | Git-Manager | `prompts/git-manager.md` | Code-Reviewer passes | Commit + push + PR | → Reporter |
+| 9 | Reporter | `prompts/reporter.md` | Git-Manager done | `reports/packet-NN-report.md` | GATE 3 |
 | — | **ICP** | `prompts/icp.md` | **On-demand** — invoke any time | `reports/icp-session-[date].md` | None (report to Yassine) |
 
 > **ICP agent is on-demand.** Invoke with: "Run ICP session" or "Run ICP on [specific flow]". It reads `docs/icp.md` for the persona — update that file when the project changes.
@@ -74,9 +86,10 @@ Eight agents collaborate in a fixed sequence to take a raw app idea all the way 
 
 When activating an agent, read its prompt file and follow it exactly:
 
-- **Architect:** Read `prompts/architect.md` — ask clarifying questions, then produce `docs/vision.md` and `docs/stack.md`.
+- **Architect:** Read `prompts/architect.md` — ask one tight round of clarifying questions, then produce `docs/vision.md` and `docs/stack.md`.
 - **Planner:** Read `prompts/planner.md` — read `docs/vision.md`, produce all `tasks/packet-NN.md` files.
-- **Implementer:** Read `prompts/implementer.md` — read the active packet, implement only what is specified.
+- **Designer:** Read `prompts/designer.md` + `reviews/design.md` — for any UI packet, write `docs/ui-system.md`, build an HTML mockup, render it to `design/packet-NN.png`, show it, and HALT at the Design Gate. Skip for backend-only packets.
+- **Implementer:** Read `prompts/implementer.md` — read the active packet and the approved `design/packet-NN.png`, implement only what is specified, built to match the mockup.
 - **Tester:** Read `prompts/tester.md` — run all tests defined in the packet's acceptance criteria.
 - **ICP:** Read `prompts/icp.md` + `docs/icp.md` — embody the persona, walk the live app, produce `reports/icp-session-[date].md`.
 - **UI-Reviewer:** Read `prompts/ui-reviewer.md` — validate UI renders correctly and is responsive.
@@ -127,7 +140,7 @@ At the start of every session:
 3. Read `tasks/packet-NN.md` for the current packet to understand what to build next.
 4. State your mode and confirm with Yassine: "Resuming from [status]. Ready to [next action] — continue?"
 
-If `## Current State` shows `Status: ⏸ GATE 3`, wait for Yassine's "go" before activating BUILDER.
+If `## Current State` shows `Status: ⏸ GATE 3` (or any gate), wait for Yassine's "go" before activating the next agent.
 If no `docs/` files exist: "No project found. Activating ARCHITECT — tell me about your app idea."
 
 **After every packet, update Current State:**
