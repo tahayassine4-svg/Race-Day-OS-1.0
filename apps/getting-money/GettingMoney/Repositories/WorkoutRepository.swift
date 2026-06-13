@@ -8,6 +8,7 @@ protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
     func entries(on date: Date) throws -> [RepEntry]
     func allEntries() throws -> [RepEntry]
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
+    func replaceRoundPlans(_ rounds: [PlannedRound], includesDebtPayoff: Bool, on date: Date) throws
     func roundPlans(on date: Date) throws -> [RoundPlan]
 }
 
@@ -57,17 +58,44 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
 
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int = 0, includesDebtPayoff: Bool = false, on date: Date = Date()) throws -> RoundPlan {
         let workoutDay = try day(for: date)
+        if let existing = (workoutDay.rounds ?? []).first(where: { $0.roundNumber == roundNumber && $0.exerciseKey == exerciseKey }) {
+            existing.plannedReps = max(0, plannedReps)
+            existing.completedReps = max(0, completedReps)
+            existing.includesDebtPayoff = includesDebtPayoff
+            try context.save()
+            return existing
+        }
+
         let round = RoundPlan(
             roundNumber: roundNumber,
             exerciseKey: exerciseKey,
-            plannedReps: plannedReps,
-            completedReps: completedReps,
+            plannedReps: max(0, plannedReps),
+            completedReps: max(0, completedReps),
             includesDebtPayoff: includesDebtPayoff,
             day: workoutDay
         )
         context.insert(round)
         try context.save()
         return round
+    }
+
+    func replaceRoundPlans(_ rounds: [PlannedRound], includesDebtPayoff: Bool = false, on date: Date = Date()) throws {
+        let workoutDay = try day(for: date)
+        for round in workoutDay.rounds ?? [] {
+            context.delete(round)
+        }
+        for round in rounds {
+            for exercise in round.exercises {
+                context.insert(RoundPlan(
+                    roundNumber: round.id,
+                    exerciseKey: exercise.key,
+                    plannedReps: exercise.reps,
+                    includesDebtPayoff: includesDebtPayoff,
+                    day: workoutDay
+                ))
+            }
+        }
+        try context.save()
     }
 
     func roundPlans(on date: Date = Date()) throws -> [RoundPlan] {
