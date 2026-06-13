@@ -1,0 +1,74 @@
+import Foundation
+import SwiftData
+
+@MainActor
+protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
+    func day(for date: Date) throws -> WorkoutDay
+    func addRepEntry(exerciseKey: String, count: Int, at timestamp: Date) throws -> RepEntry
+    func entries(on date: Date) throws -> [RepEntry]
+    func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
+    func roundPlans(on date: Date) throws -> [RoundPlan]
+}
+
+@MainActor
+final class WorkoutRepository: WorkoutRepositoryProtocol {
+    private let context: ModelContext
+
+    init(context: ModelContext) {
+        self.context = context
+    }
+
+    func day(for date: Date = Date()) throws -> WorkoutDay {
+        let dayKey = GMCalendar.dayKey(for: date)
+        let descriptor = FetchDescriptor<WorkoutDay>(
+            predicate: #Predicate { $0.dayKey == dayKey }
+        )
+
+        if let existing = try context.fetch(descriptor).first {
+            return existing
+        }
+
+        let day = WorkoutDay(dayKey: dayKey)
+        context.insert(day)
+        try context.save()
+        return day
+    }
+
+    func addRepEntry(exerciseKey: String, count: Int, at timestamp: Date = Date()) throws -> RepEntry {
+        let workoutDay = try day(for: timestamp)
+        let entry = RepEntry(timestamp: timestamp, exerciseKey: exerciseKey, count: count, day: workoutDay)
+        context.insert(entry)
+        try context.save()
+        return entry
+    }
+
+    func entries(on date: Date = Date()) throws -> [RepEntry] {
+        let workoutDay = try day(for: date)
+        return (workoutDay.repEntries ?? []).sorted { $0.timestamp < $1.timestamp }
+    }
+
+    func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int = 0, includesDebtPayoff: Bool = false, on date: Date = Date()) throws -> RoundPlan {
+        let workoutDay = try day(for: date)
+        let round = RoundPlan(
+            roundNumber: roundNumber,
+            exerciseKey: exerciseKey,
+            plannedReps: plannedReps,
+            completedReps: completedReps,
+            includesDebtPayoff: includesDebtPayoff,
+            day: workoutDay
+        )
+        context.insert(round)
+        try context.save()
+        return round
+    }
+
+    func roundPlans(on date: Date = Date()) throws -> [RoundPlan] {
+        let workoutDay = try day(for: date)
+        return (workoutDay.rounds ?? []).sorted {
+            if $0.roundNumber == $1.roundNumber {
+                return $0.exerciseKey < $1.exerciseKey
+            }
+            return $0.roundNumber < $1.roundNumber
+        }
+    }
+}

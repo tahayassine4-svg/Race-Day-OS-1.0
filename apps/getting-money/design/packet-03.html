@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Targets (Packet 03)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .next{padding:15px 18px;display:flex;align-items:center;gap:13px;}
+  .next .ico{width:40px;height:40px;border-radius:12px;background:rgba(174,230,61,.14);border:1px solid rgba(174,230,61,.25);display:flex;align-items:center;justify-content:center;font-size:19px;}
+  .next .k{font-size:13px;color:var(--muted);font-weight:600;}
+  .next .v{font-size:16px;font-weight:700;margin-top:2px;}
+  .next .v b{color:var(--accent);}
+  .tlist{display:flex;flex-direction:column;}
+  .trow{display:flex;align-items:center;gap:14px;padding:15px 18px;}
+  .trow+.trow{border-top:1px solid var(--hair);}
+  .trow .ico{width:38px;height:38px;border-radius:11px;background:var(--elevated);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .trow .mid{flex:1;}
+  .trow .name{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .trow .meta{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .cappill{font-size:10.5px;font-weight:700;color:var(--warning);background:rgba(242,193,78,.13);border:1px solid rgba(242,193,78,.28);padding:2px 7px;border-radius:999px;}
+  .stepper{display:flex;align-items:center;gap:12px;}
+  .stepper button{width:32px;height:32px;border-radius:9px;border:1px solid var(--hair);background:var(--elevated);color:var(--ink);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .stepper .val{font-size:20px;font-weight:800;min-width:42px;text-align:center;}
+  .trow.off{opacity:.55;}
+  .toggle{width:48px;height:30px;border-radius:999px;background:var(--accent);position:relative;}
+  .toggle:after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;background:#0e120f;}
+  .toggle.on{background:var(--accent);} .toggle.offt{background:var(--hair);} .toggle.offt:after{left:3px;right:auto;background:var(--muted);}
+  .switchrow{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;}
+  .switchrow .l .k{font-size:15px;font-weight:600;} .switchrow .l .s{font-size:12.5px;color:var(--muted);margin-top:2px;}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Targets · Your rules</div>
+    <div class="headrow"><div class="headline">Your targets,<br/>your rules.</div></div>
+  </div>
+  <div class="card next">
+    <div class="ico">📈</div>
+    <div><div class="k">Next auto-increase</div><div class="v">in <b>9 days</b> · +5–10 reps</div></div>
+  </div>
+  <div class="section-h"><span class="t">Daily targets</span><span class="a">Edit</span></div>
+  <div class="card tlist">
+    <div class="trow"><div class="ico">💪</div><div class="mid"><div class="name">Push-ups</div><div class="meta">reps / day</div></div>
+      <div class="stepper"><button>−</button><span class="val num">120</span><button>＋</button></div></div>
+    <div class="trow"><div class="ico">🆙</div><div class="mid"><div class="name">Pull-ups <span class="cappill">cap 10</span></div><div class="meta">auto-progression stops at 10</div></div>
+      <div class="stepper"><button>−</button><span class="val num">10</span><button>＋</button></div></div>
+    <div class="trow"><div class="ico">🦵</div><div class="mid"><div class="name">Squats</div><div class="meta">reps / day</div></div>
+      <div class="stepper"><button>−</button><span class="val num">190</span><button>＋</button></div></div>
+    <div class="trow off"><div class="ico">🔻</div><div class="mid"><div class="name">Dips</div><div class="meta">optional · off</div></div>
+      <div class="toggle offt"></div></div>
+  </div>
+  <div class="section-h"><span class="t">Progression</span></div>
+  <div class="card">
+    <div class="switchrow"><div class="l"><div class="k">Auto-increase</div><div class="s">Every 2 weeks · +5–10 reps</div></div><div class="toggle on"></div></div>
+  </div>
+</div>
+<div class="tabbar">
+  <div class="tab"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab"><span class="gi">＋</span>Log</div>
+  <div class="tab"><span class="gi">◌</span>Rounds</div>
+  <div class="tab"><span class="gi">↺</span>Debt</div>
+  <div class="tab active"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>

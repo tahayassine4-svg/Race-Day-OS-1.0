@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Log (Packet 04)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .earned{padding:15px 18px;display:flex;align-items:center;justify-content:space-between;}
+  .earned .k{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
+  .earned .v{font-size:34px;font-weight:800;color:var(--accent);letter-spacing:-1px;margin-top:4px;}
+  .earned .r{text-align:right;} .earned .r .k2{font-size:12.5px;color:var(--muted);} .earned .r .v2{font-size:16px;font-weight:700;margin-top:3px;}
+  .logcard{padding:15px 18px;}
+  .logcard+.logcard{margin-top:0;}
+  .lc-top{display:flex;align-items:center;gap:12px;}
+  .lc-top .ico{width:38px;height:38px;border-radius:11px;background:var(--elevated);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .lc-top .name{font-size:16px;font-weight:700;flex:1;}
+  .lc-top .prog{font-size:13px;color:var(--muted);font-weight:600;} .lc-top .prog b{color:var(--ink);}
+  .minibar{height:7px;border-radius:5px;background:#0e120f;border:1px solid var(--hair);margin:11px 0 13px;overflow:hidden;}
+  .minibar>i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#8fd02b,var(--accent));}
+  .stepwrap{display:flex;align-items:center;gap:12px;}
+  .stepwrap .big{width:46px;height:46px;border-radius:13px;border:1px solid var(--hair);background:var(--elevated);color:var(--ink);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .stepwrap .count{flex:1;text-align:center;font-size:26px;font-weight:800;}
+  .chips{display:flex;gap:8px;margin-left:auto;}
+  .chip{padding:8px 12px;border-radius:10px;border:1px solid rgba(174,230,61,.3);background:rgba(174,230,61,.10);color:var(--accent);font-size:13px;font-weight:700;}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Log · Today</div>
+    <div class="headrow"><div class="headline">Log your reps.</div><span class="pill ontrack"><span class="dot"></span>On track</span></div>
+  </div>
+  <div class="card earned">
+    <div><div class="k">Earned today</div><div class="v num">+$284</div></div>
+    <div class="r"><div class="k2">Reps logged</div><div class="v2 num">284 / 320</div></div>
+  </div>
+  <div class="card logcard">
+    <div class="lc-top"><div class="ico">💪</div><div class="name">Push-ups</div><div class="prog"><b class="num">76</b> / 100</div></div>
+    <div class="minibar"><i style="width:76%"></i></div>
+    <div class="stepwrap"><button class="big">−</button><span class="count num">76</span><button class="big">＋</button>
+      <span class="chips"><span class="chip">+5</span><span class="chip">+10</span><span class="chip">+20</span></span></div>
+  </div>
+  <div class="card logcard">
+    <div class="lc-top"><div class="ico">🆙</div><div class="name">Pull-ups</div><div class="prog"><b class="num">8</b> / 10</div></div>
+    <div class="minibar"><i style="width:80%"></i></div>
+    <div class="stepwrap"><button class="big">−</button><span class="count num">8</span><button class="big">＋</button>
+      <span class="chips"><span class="chip">+1</span><span class="chip">+2</span><span class="chip">+5</span></span></div>
+  </div>
+  <div class="card logcard">
+    <div class="lc-top"><div class="ico">🦵</div><div class="name">Squats</div><div class="prog"><b class="num">140</b> / 150</div></div>
+    <div class="minibar"><i style="width:93%"></i></div>
+    <div class="stepwrap"><button class="big">−</button><span class="count num">140</span><button class="big">＋</button>
+      <span class="chips"><span class="chip">+5</span><span class="chip">+10</span><span class="chip">+20</span></span></div>
+  </div>
+</div>
+<div class="cta-wrap"><button class="cta">Save reps <span class="sub">· +$284 today</span></button></div>
+<div class="tabbar">
+  <div class="tab"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab active"><span class="gi">＋</span>Log</div>
+  <div class="tab"><span class="gi">◌</span>Rounds</div>
+  <div class="tab"><span class="gi">↺</span>Debt</div>
+  <div class="tab"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>

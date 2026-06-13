@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Rounds (Packet 06)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .seg{display:flex;gap:6px;background:var(--elevated);border:1px solid var(--hair);border-radius:12px;padding:5px;}
+  .seg .o{flex:1;text-align:center;padding:10px;border-radius:9px;font-size:15px;font-weight:700;color:var(--muted);}
+  .seg .o.active{background:rgba(174,230,61,.16);color:var(--accent);}
+  .logic{padding:10px 16px;display:flex;align-items:center;gap:11px;}
+  .logic .ico{width:34px;height:34px;border-radius:10px;background:rgba(174,230,61,.12);border:1px solid rgba(174,230,61,.22);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .logic .tx{font-size:13px;color:var(--muted);} .logic .tx b{color:var(--ink);font-weight:700;}
+  .circle{padding:11px 14px;}
+  .circle+.circle{margin-top:0;}
+  .ctop{display:flex;align-items:center;gap:11px;margin-bottom:8px;}
+  .ctop .n{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#13200a;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .ctop .t{font-size:15px;font-weight:700;flex:1;}
+  .ctop .edit{font-size:13px;color:var(--accent);font-weight:600;}
+  .reps{display:flex;gap:8px;}
+  .rep{flex:1;background:var(--elevated);border:1px solid var(--hair);border-radius:11px;padding:8px;text-align:center;}
+  .rep .v{font-size:18px;font-weight:800;} .rep .l{font-size:11px;color:var(--muted);margin-top:2px;}
+  .incl{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;}
+  .incl .l .k{font-size:14.5px;font-weight:600;} .incl .l .s{font-size:12px;color:var(--debt);margin-top:2px;}
+  .toggle{width:48px;height:30px;border-radius:999px;background:var(--accent);position:relative;}
+  .toggle:after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;background:#0e120f;}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Rounds · Today</div>
+    <div class="headrow"><div class="headline">3 rounds<br/>to hit zero.</div></div>
+  </div>
+  <div class="seg"><div class="o">2</div><div class="o active">3</div><div class="o">4</div><div class="o">5</div></div>
+  <div class="card logic"><div class="ico">◌</div><div class="tx">Targets split automatically — <b>uneven remainder goes to the earliest rounds.</b></div></div>
+  <div class="incl card"><div class="l"><div class="k">Include debt payoff</div><div class="s">+36 reps folded into today</div></div><div class="toggle"></div></div>
+  <div class="card circle">
+    <div class="ctop"><span class="n">1</span><span class="t">Circle 1</span><span class="edit">Edit</span></div>
+    <div class="reps"><div class="rep"><div class="v num">48</div><div class="l">push-ups</div></div><div class="rep"><div class="v num">4</div><div class="l">pull-ups</div></div><div class="rep"><div class="v num">74</div><div class="l">squats</div></div></div>
+  </div>
+  <div class="card circle">
+    <div class="ctop"><span class="n">2</span><span class="t">Circle 2</span><span class="edit">Edit</span></div>
+    <div class="reps"><div class="rep"><div class="v num">48</div><div class="l">push-ups</div></div><div class="rep"><div class="v num">3</div><div class="l">pull-ups</div></div><div class="rep"><div class="v num">73</div><div class="l">squats</div></div></div>
+  </div>
+  <div class="card circle">
+    <div class="ctop"><span class="n">3</span><span class="t">Circle 3</span><span class="edit">Edit</span></div>
+    <div class="reps"><div class="rep"><div class="v num">48</div><div class="l">push-ups</div></div><div class="rep"><div class="v num">3</div><div class="l">pull-ups</div></div><div class="rep"><div class="v num">73</div><div class="l">squats</div></div></div>
+  </div>
+</div>
+<div class="cta-wrap"><button class="cta">Start round 1 <span class="sub">· of 3</span></button></div>
+<div class="tabbar">
+  <div class="tab"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab"><span class="gi">＋</span>Log</div>
+  <div class="tab active"><span class="gi">◌</span>Rounds</div>
+  <div class="tab"><span class="gi">↺</span>Debt</div>
+  <div class="tab"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>
