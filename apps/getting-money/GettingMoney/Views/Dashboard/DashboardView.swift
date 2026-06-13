@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// Packet 01 Dashboard — premium bank hierarchy, sample data, matches design/packet-01.png.
 struct DashboardView: View {
-    private let model = DashboardSample.preview
+    let viewModel: DashboardViewModel
 
     var body: some View {
         ZStack {
@@ -13,15 +12,8 @@ struct DashboardView: View {
                     balanceCard
                     dailyTargetCard
                     sectionHeader("Today's reps", action: "Log →")
-                    GMCard(padding: 0) {
-                        VStack(spacing: 0) {
-                            ForEach(Array(model.exercises.enumerated()), id: \.element.id) { index, item in
-                                if index > 0 { Divider().overlay(GMColor.hairline) }
-                                ExerciseProgressRow(item: item)
-                            }
-                        }
-                    }
-                    if model.hasDebt { debtStrip }
+                    exerciseList
+                    debtStrip
                 }
                 .gmScreenPadding()
                 .padding(.top, GMSpacing.xs)
@@ -29,9 +21,8 @@ struct DashboardView: View {
             }
         }
         .safeAreaInset(edge: .bottom) { startRoundsCTA }
+        .onAppear { viewModel.load() }
     }
-
-    // MARK: - Sections
 
     private var header: some View {
         VStack(alignment: .leading, spacing: GMSpacing.xs) {
@@ -42,7 +33,7 @@ struct DashboardView: View {
                 Text("Make reps.\nStack money.")
                     .font(.gmTitle).foregroundStyle(GMColor.ink)
                 Spacer()
-                GMStatusPill(status: model.status)
+                GMStatusPill(status: viewModel.dailyCompleted >= viewModel.dailyTarget ? .profit : .onTrack)
             }
         }
     }
@@ -56,27 +47,20 @@ struct DashboardView: View {
                     Spacer()
                     coin
                 }
-                Text(model.bankBalance.gmMoney)
+                Text(viewModel.bankBalance.gmMoney)
                     .font(.gmHero).monospacedDigit().foregroundStyle(GMColor.ink)
                     .padding(.top, GMSpacing.sm)
                 HStack(spacing: 18) {
-                    Label("\(model.streakDays) day streak", systemImage: "flame.fill")
+                    Label("12 day streak", systemImage: "flame.fill")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(GMColor.muted)
                     (Text("Today ").foregroundStyle(GMColor.muted)
-                     + Text("+" + model.earnedToday.gmMoney).foregroundStyle(GMColor.accent))
+                     + Text("+" + viewModel.earnedToday.gmMoney).foregroundStyle(GMColor.accent))
                         .font(.system(size: 13, weight: .semibold)).monospacedDigit()
                 }
                 .padding(.top, GMSpacing.md)
             }
         }
-    }
-
-    private var coin: some View {
-        ZStack {
-            Circle().fill(GMColor.accent)
-            Text("$").font(.system(size: 15, weight: .bold)).foregroundStyle(GMColor.onAccent)
-        }.frame(width: 30, height: 30)
     }
 
     private var dailyTargetCard: some View {
@@ -85,13 +69,37 @@ struct DashboardView: View {
                 HStack {
                     Text("Daily target").font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
                     Spacer()
-                    (Text(model.dailyCompleted.gmGrouped).foregroundStyle(GMColor.ink)
-                     + Text(" / \(model.dailyTarget.gmGrouped) reps").foregroundStyle(GMColor.muted))
+                    (Text(viewModel.dailyCompleted.gmGrouped).foregroundStyle(GMColor.ink)
+                     + Text(" / \(viewModel.dailyTarget.gmGrouped) reps").foregroundStyle(GMColor.muted))
                         .font(.system(size: 14, weight: .semibold)).monospacedDigit()
                 }
-                GMProgressBar(fraction: model.dailyFraction)
+                GMProgressBar(fraction: viewModel.dailyTarget == 0 ? 0 : Double(viewModel.dailyCompleted) / Double(viewModel.dailyTarget))
             }
         }
+    }
+
+    private var exerciseList: some View {
+        GMCard(padding: 0) {
+            VStack(spacing: 0) {
+                ForEach(Array(viewModel.rows.enumerated()), id: \.element.id) { index, item in
+                    if index > 0 { Divider().overlay(GMColor.hairline) }
+                    DashboardExerciseRow(item: item)
+                }
+            }
+        }
+    }
+
+    private var debtStrip: some View {
+        HStack {
+            Text(viewModel.bonusEarnedToday > 0 ? "Bonus earned today" : "Current rep debt")
+                .font(.system(size: 13, weight: .semibold)).foregroundStyle(GMColor.muted)
+            Spacer()
+            Text(viewModel.bonusEarnedToday.gmMoney + " bonus")
+                .font(.system(size: 13, weight: .bold)).foregroundStyle(GMColor.accent)
+        }
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous).fill(GMColor.surface))
+        .overlay(RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
     }
 
     private func sectionHeader(_ title: String, action: String) -> some View {
@@ -102,33 +110,11 @@ struct DashboardView: View {
         }
     }
 
-    private var debtStrip: some View {
-        HStack {
-            HStack(spacing: 11) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: GMRadius.control, style: .continuous)
-                        .fill(GMColor.debt.opacity(0.16))
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                        .font(.system(size: 16, weight: .semibold)).foregroundStyle(GMColor.debt)
-                }.frame(width: 36, height: 36)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Current rep debt").font(.system(size: 13, weight: .semibold)).foregroundStyle(GMColor.muted)
-                    Text(model.repDebtValue.gmMoney + " · \(model.repDebtReps.gmGrouped) reps")
-                        .font(.system(size: 18, weight: .bold)).monospacedDigit().foregroundStyle(GMColor.debt)
-                }
-            }
-            Spacer()
-            Text("Plan →").font(.system(size: 13, weight: .bold)).foregroundStyle(GMColor.debt)
-        }
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous)
-                .fill(GMColor.debt.opacity(0.08))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous)
-                .stroke(GMColor.debt.opacity(0.28), lineWidth: 1)
-        )
+    private var coin: some View {
+        ZStack {
+            Circle().fill(GMColor.accent)
+            Text("$").font(.system(size: 15, weight: .bold)).foregroundStyle(GMColor.onAccent)
+        }.frame(width: 30, height: 30)
     }
 
     private var startRoundsCTA: some View {
@@ -139,9 +125,7 @@ struct DashboardView: View {
             }
             .foregroundStyle(GMColor.onAccent)
             .frame(maxWidth: .infinity).frame(height: 56)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous).fill(GMColor.accent)
-            )
+            .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(GMColor.accent))
         }
         .gmScreenPadding()
         .padding(.top, GMSpacing.md)
@@ -150,6 +134,30 @@ struct DashboardView: View {
     }
 }
 
-#Preview {
-    DashboardView().preferredColorScheme(.dark)
+private struct DashboardExerciseRow: View {
+    let item: DashboardViewModel.ExerciseRow
+
+    var body: some View {
+        HStack(spacing: GMSpacing.md + 2) {
+            Image(systemName: item.glyph)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(GMColor.ink)
+                .frame(width: 38, height: 38)
+                .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.elevated))
+                .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+            VStack(alignment: .leading, spacing: 8) {
+                Text(item.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
+                GMProgressBar(fraction: item.fraction, height: 7)
+            }
+            VStack(alignment: .trailing, spacing: 2) {
+                (Text(item.completed.gmGrouped).foregroundStyle(GMColor.ink)
+                 + Text("/\(item.target.gmGrouped)").foregroundStyle(GMColor.muted))
+                    .font(.gmValue).monospacedDigit()
+                Text("\(item.remaining) to go").font(.gmMeta).foregroundStyle(GMColor.muted)
+            }
+            .frame(minWidth: 74, alignment: .trailing)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 12)
+    }
 }

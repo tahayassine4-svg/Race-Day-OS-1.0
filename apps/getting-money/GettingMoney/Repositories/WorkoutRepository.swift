@@ -6,6 +6,7 @@ protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
     func day(for date: Date) throws -> WorkoutDay
     func addRepEntry(exerciseKey: String, count: Int, at timestamp: Date) throws -> RepEntry
     func entries(on date: Date) throws -> [RepEntry]
+    func allEntries() throws -> [RepEntry]
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
     func roundPlans(on date: Date) throws -> [RoundPlan]
 }
@@ -45,6 +46,13 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
     func entries(on date: Date = Date()) throws -> [RepEntry] {
         let workoutDay = try day(for: date)
         return (workoutDay.repEntries ?? []).sorted { $0.timestamp < $1.timestamp }
+    }
+
+    func allEntries() throws -> [RepEntry] {
+        let descriptor = FetchDescriptor<RepEntry>(
+            sortBy: [SortDescriptor(\.timestamp, order: .forward)]
+        )
+        return try context.fetch(descriptor)
     }
 
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int = 0, includesDebtPayoff: Bool = false, on date: Date = Date()) throws -> RoundPlan {
