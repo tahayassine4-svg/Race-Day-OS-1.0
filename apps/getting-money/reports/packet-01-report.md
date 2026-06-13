@@ -42,8 +42,8 @@ None blocking.
 - **XcodeGen note:** after adding/removing Swift files, re-run `xcodegen generate` before building (files are listed at generation time).
 
 ## Git
-- Branch: not yet committed (awaiting Yassine's go).
-- Commit: —
+- Branch: `packet-01-02-foundation-persistence`
+- Commit: `9b8d597`
 - TestFlight: not yet.
 
 ## Retry count

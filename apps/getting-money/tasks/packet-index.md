@@ -4,8 +4,8 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 
 | # | Name | UI? | Status | Branch | Commit |
 |---|------|-----|--------|--------|--------|
-| 01 | Foundation + Premium Design System | UI | PASSED (uncommitted) | — | — |
-| 02 | Local Data Models + Persistence (SwiftData) | backend (+small Settings UI) | PASSED (uncommitted) | — | — |
+| 01 | Foundation + Premium Design System | UI | COMPLETE | packet-01-02-foundation-persistence | 9b8d597 |
+| 02 | Local Data Models + Persistence (SwiftData) | backend (+small Settings UI) | COMPLETE | packet-01-02-foundation-persistence | 9b8d597 |
 | 03 | Targets + Two-Week Progression | UI | NOT_STARTED | — | — |
 | 04 | Rep Logging + EarningsEngine | UI | NOT_STARTED | — | — |
 | 05 | DebtEngine + Debt Dashboard | UI | NOT_STARTED | — | — |

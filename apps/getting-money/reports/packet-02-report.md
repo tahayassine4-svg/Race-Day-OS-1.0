@@ -48,9 +48,9 @@ No blocking issues.
 0 of 3
 
 ## Git
-- Branch: not committed.
-- Commit: —
-- Blocker: `apps/getting-money` is currently untracked on top of a broad repository restructure, and Packet 01 was never committed before Packet 02 files appeared. A clean per-packet commit requires Yassine's direction on whether to commit the current app snapshot as combined Packet 01+02, or reconstruct packet-specific history.
+- Branch: `packet-01-02-foundation-persistence`
+- Commit: `9b8d597`
+- Push: complete.
 
 ## Next Packet Preview
 Packet 03 — Targets + Two-Week Progression: target editing and auto-progression rules on top of the persisted `DailyTarget` history.
