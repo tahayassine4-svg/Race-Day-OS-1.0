@@ -11,6 +11,9 @@ protocol ExerciseRepositoryProtocol: AnyObject, Sendable {
     func currentTarget(for exercise: Exercise, on date: Date) -> Int
     func currentTargetRecord(for exercise: Exercise, on date: Date) -> DailyTarget?
     func setTarget(key: String, reps: Int, effectiveDate: Date, isManualOverride: Bool) throws
+    func debtBalances() throws -> [DebtBalance]
+    func setDebt(key: String, repsOwed: Int, updatedAt: Date) throws
+    func applyDebtSettlements(_ settlements: [DebtSettlement], updatedAt: Date) throws
     func setAutoProgressionEnabled(_ enabled: Bool) throws
     func setProgressionAmount(_ amount: Int) throws
     func setProgressionIntervalDays(_ days: Int) throws
@@ -78,6 +81,28 @@ final class ExerciseRepository: ExerciseRepositoryProtocol {
         }
 
         try context.save()
+    }
+
+    func debtBalances() throws -> [DebtBalance] {
+        try allOrdered().compactMap(\.debt)
+    }
+
+    func setDebt(key: String, repsOwed: Int, updatedAt: Date = Date()) throws {
+        guard let exercise = try allOrdered().first(where: { $0.key == key }) else { return }
+        let clamped = max(0, repsOwed)
+        if let debt = exercise.debt {
+            debt.repsOwed = clamped
+            debt.updatedAt = updatedAt
+        } else {
+            context.insert(DebtBalance(repsOwed: clamped, updatedAt: updatedAt, exercise: exercise))
+        }
+        try context.save()
+    }
+
+    func applyDebtSettlements(_ settlements: [DebtSettlement], updatedAt: Date = Date()) throws {
+        for settlement in settlements {
+            try setDebt(key: settlement.key, repsOwed: settlement.debtAfterClose, updatedAt: updatedAt)
+        }
     }
 
     func setAutoProgressionEnabled(_ enabled: Bool) throws {

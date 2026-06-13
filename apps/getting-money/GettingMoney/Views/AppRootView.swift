@@ -7,6 +7,7 @@ struct AppRootView: View {
     @State private var settingsViewModel: SettingsViewModel
     @State private var dashboardViewModel: DashboardViewModel
     @State private var repLoggerViewModel: RepLoggerViewModel
+    @State private var debtViewModel: DebtViewModel
     let store: LocalStore
 
     init(store: LocalStore) {
@@ -20,6 +21,7 @@ struct AppRootView: View {
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository
         ))
+        _debtViewModel = State(initialValue: DebtViewModel(exerciseRepository: store.exerciseRepository))
     }
 
     var body: some View {
@@ -36,7 +38,7 @@ struct AppRootView: View {
                 .tabItem { Label("Rounds", systemImage: "circle.dotted") }
                 .tag(Tab.rounds)
 
-            DebtView()
+            DebtView(viewModel: debtViewModel)
                 .tabItem { Label("Debt", systemImage: "arrow.triangle.2.circlepath") }
                 .tag(Tab.debt)
 

@@ -33,7 +33,7 @@ struct DashboardView: View {
                 Text("Make reps.\nStack money.")
                     .font(.gmTitle).foregroundStyle(GMColor.ink)
                 Spacer()
-                GMStatusPill(status: viewModel.dailyCompleted >= viewModel.dailyTarget ? .profit : .onTrack)
+                GMStatusPill(status: viewModel.status)
             }
         }
     }
@@ -91,11 +91,12 @@ struct DashboardView: View {
 
     private var debtStrip: some View {
         HStack {
-            Text(viewModel.bonusEarnedToday > 0 ? "Bonus earned today" : "Current rep debt")
+            Text(viewModel.totalDebt > 0 ? "Current rep debt" : "Bonus earned today")
                 .font(.system(size: 13, weight: .semibold)).foregroundStyle(GMColor.muted)
             Spacer()
-            Text(viewModel.bonusEarnedToday.gmMoney + " bonus")
-                .font(.system(size: 13, weight: .bold)).foregroundStyle(GMColor.accent)
+            Text(viewModel.totalDebt > 0 ? "\(viewModel.totalDebt.gmMoney) · \(viewModel.totalDebt.gmGrouped) reps" : viewModel.bonusEarnedToday.gmMoney + " bonus")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(viewModel.totalDebt > 0 ? GMColor.debt : GMColor.accent)
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous).fill(GMColor.surface))
@@ -154,6 +155,11 @@ private struct DashboardExerciseRow: View {
                  + Text("/\(item.target.gmGrouped)").foregroundStyle(GMColor.muted))
                     .font(.gmValue).monospacedDigit()
                 Text("\(item.remaining) to go").font(.gmMeta).foregroundStyle(GMColor.muted)
+                if item.debtOwed > 0 {
+                    Label("\(item.debtOwed) debt", systemImage: "exclamationmark.circle.fill")
+                        .font(.gmMeta)
+                        .foregroundStyle(GMColor.debt)
+                }
             }
             .frame(minWidth: 74, alignment: .trailing)
         }

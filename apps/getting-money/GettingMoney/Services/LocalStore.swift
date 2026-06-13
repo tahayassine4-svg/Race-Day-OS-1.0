@@ -18,6 +18,13 @@ final class LocalStore {
         self.workoutRepository = WorkoutRepository(context: context)
 
         try AppDataSeeder.seedIfNeeded(context, today: seedDate)
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-GMSeedDebtFixture") {
+            try exerciseRepository.setDebt(key: "pushups", repsOwed: 24, updatedAt: seedDate)
+            try exerciseRepository.setDebt(key: "pullups", repsOwed: 2, updatedAt: seedDate)
+            try exerciseRepository.setDebt(key: "squats", repsOwed: 10, updatedAt: seedDate)
+        }
+#endif
     }
 
     convenience init(inMemory: Bool = false, seedDate: Date = Date()) throws {
