@@ -51,6 +51,13 @@ surfaces simply bind to a live (reduced) debt number.
 ## Dependencies
 Packet 09 (day-close) complete.
 
+## Known limitations (accepted for v1, not bugs)
+- **Install-day debt:** the day-close watermark is set to the install day, so a brand-new user
+  can owe a full day's debt the morning after installing. Defensible; a "don't settle the
+  install day" tweak is easy later.
+- **Foreground paydown on the Log tab:** the Log status pill refreshes on save / tab-switch /
+  foreground, not live mid-draft typing — consistent and expected, just not continuous.
+
 ## Out of Scope
 Background settlement · animated count-down on the debt number (possible juice polish later).
 
