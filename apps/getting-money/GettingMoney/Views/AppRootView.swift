@@ -74,14 +74,18 @@ struct AppRootView: View {
             publishWidget()
         }
         .onChange(of: scenePhase) { _, phase in
-            // Returning to the foreground may have crossed a midnight: settle any
-            // newly-completed days into debt, then refresh what's on screen.
-            guard phase == .active else { return }
-            try? DayCloseService(
-                exerciseRepository: store.exerciseRepository,
-                workoutRepository: store.workoutRepository
-            ).run()
-            refreshAll()
+            if phase == .active {
+                // Returning to the foreground may have crossed a midnight: settle any
+                // newly-completed days into debt, then refresh what's on screen.
+                try? DayCloseService(
+                    exerciseRepository: store.exerciseRepository,
+                    workoutRepository: store.workoutRepository
+                ).run()
+                refreshAll()
+            }
+            // Publish on EVERY phase change — including .inactive/.background — so reps
+            // just logged are captured the instant the user leaves to glance at the
+            // home-screen widget.
             publishWidget()
         }
     }

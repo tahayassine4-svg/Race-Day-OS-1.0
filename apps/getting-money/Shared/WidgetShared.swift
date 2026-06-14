@@ -38,6 +38,22 @@ struct WidgetSnapshot: Codable, Equatable {
         return min(1, Double(totalCompleted) / Double(totalTarget))
     }
 
+    /// If the stored snapshot is from a previous day, keep the targets but reset
+    /// the completed counts to 0 so the widget shows a clean new day even when the
+    /// app hasn't been opened yet. (The widget can't read SwiftData; the app will
+    /// publish the day's real progress on next launch / foreground.)
+    func zeroedIfStale(today: Date = Date()) -> WidgetSnapshot {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        if calendar.isDate(dayKey, inSameDayAs: today) { return self }
+        return WidgetSnapshot(
+            dayKey: calendar.startOfDay(for: today),
+            exercises: exercises.map {
+                WidgetExercise(key: $0.key, name: $0.name, glyph: $0.glyph, target: $0.target, completed: 0)
+            }
+        )
+    }
+
     /// Shown in the gallery / before the app has written real data.
     static var placeholder: WidgetSnapshot {
         WidgetSnapshot(

@@ -20,6 +20,14 @@ risk on shipped data) or a fragile pending-write queue. This packet ships the sa
 read-only deep-link widget. An interactive version can be a later packet once a
 store-sharing strategy is proven safe.
 
+### Freshness (two paths hardened after review)
+- **Just-logged reps:** the app publishes on *every* scene-phase change, including
+  `.inactive`/`.background`, so reps logged then a swipe-to-home capture immediately —
+  not on the next launch.
+- **New-day reset:** `WidgetSnapshot.zeroedIfStale()` resets a previous day's snapshot
+  to `completed = 0` (targets kept) inside the widget's timeline provider, so a fresh
+  morning shows a clean day even if the app was never opened.
+
 ### Future-proofed for Dips
 `buildSnapshot` filters `.isEnabled`, so the optional Dips exercise appears in the
 widget automatically the moment it is enabled — no widget code change. Verified.
@@ -41,11 +49,13 @@ widget automatically the moment it is enabled — no widget code change. Verifie
 - `GettingMoneyTests/WidgetSnapshotTests.swift` — 4 new tests.
 
 ## Test Results
-- `xcodebuild test ... -scheme GettingMoney`: PASS — **96/96** tests (92 prior + 4 new).
+- `xcodebuild test ... -scheme GettingMoney`: PASS — **98/98** tests (92 prior + 6 new).
   - Fresh snapshot lists the 3 default targets, no reps, Dips hidden.
   - Logged reps reflected as completed; `isMet`/fraction correct.
   - Enabling Dips makes it appear in the snapshot (target 30).
   - Snapshot round-trips through the App Group Codable encoding.
+  - A stale (yesterday) snapshot zeroes completed reps but keeps targets.
+  - Today's snapshot is left unchanged by the staleness reset.
 - Build: PASS — app + embedded widget extension build for the simulator.
 - Widget UI (in-app harness, `simctl` screenshots):
   - `reports/artifacts/qa/p14-widget-preview-default.png` — 3 rows, partial progress.

@@ -21,12 +21,14 @@ struct DailyTargetsProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (DailyTargetsEntry) -> Void) {
-        let snapshot = WidgetShared.load() ?? .placeholder
+        let snapshot = (WidgetShared.load() ?? .placeholder).zeroedIfStale()
         completion(DailyTargetsEntry(date: Date(), snapshot: snapshot))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<DailyTargetsEntry>) -> Void) {
-        let snapshot = WidgetShared.load() ?? .placeholder
+        // Reset a previous day's snapshot to zero so a new morning shows a fresh
+        // day even if the app hasn't been opened.
+        let snapshot = (WidgetShared.load() ?? .placeholder).zeroedIfStale()
         let entry = DailyTargetsEntry(date: Date(), snapshot: snapshot)
 
         // The app refreshes the timeline whenever reps change. As a safety net,

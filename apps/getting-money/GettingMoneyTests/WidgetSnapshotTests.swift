@@ -73,4 +73,32 @@ struct WidgetSnapshotTests {
         let decoded = try JSONDecoder().decode(WidgetSnapshot.self, from: data)
         #expect(decoded == original)
     }
+
+    @Test("A stale (yesterday) snapshot zeroes completed reps but keeps targets")
+    func staleSnapshotResetsForNewDay() throws {
+        let today = Date()
+        let yesterday = cal.date(byAdding: .day, value: -1, to: today)!
+        let stale = WidgetSnapshot(
+            dayKey: cal.startOfDay(for: yesterday),
+            exercises: [
+                WidgetExercise(key: "pushups", name: "Push-ups", glyph: "g", target: 100, completed: 100),
+                WidgetExercise(key: "squats", name: "Squats", glyph: "g", target: 150, completed: 150)
+            ]
+        )
+
+        let fresh = stale.zeroedIfStale(today: today)
+        #expect(fresh.dayKey == cal.startOfDay(for: today))
+        #expect(fresh.exercises.allSatisfy { $0.completed == 0 })
+        #expect(fresh.exercises.map(\.target) == [100, 150])
+    }
+
+    @Test("Today's snapshot is left unchanged by the staleness reset")
+    func todaySnapshotUnchanged() throws {
+        let today = Date()
+        let store = try LocalStore(inMemory: true, seedDate: today)
+        _ = try store.workoutRepository.addRepEntry(exerciseKey: "pushups", count: 20, sourceRoundNumber: nil, at: today)
+        let snapshot = try build(store, today: today)
+
+        #expect(snapshot.zeroedIfStale(today: today) == snapshot)
+    }
 }
