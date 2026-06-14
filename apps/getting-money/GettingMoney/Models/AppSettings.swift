@@ -12,6 +12,12 @@ final class AppSettings {
     var roundsPreference: Int = 3
     var lastProgressionDate: Date? = nil
 
+    // Packet 09 — debt day-close. `lastSettledDate` is the watermark through which
+    // past days have been settled into rep-debt; `debtCapMultiplier` is the 2-day
+    // ceiling (debt per exercise can't exceed this × that day's target).
+    var lastSettledDate: Date? = nil
+    var debtCapMultiplier: Int = 2
+
     init(lastProgressionDate: Date? = nil) {
         self.lastProgressionDate = lastProgressionDate
     }

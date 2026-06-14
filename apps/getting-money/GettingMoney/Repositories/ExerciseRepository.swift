@@ -13,7 +13,8 @@ protocol ExerciseRepositoryProtocol: AnyObject, Sendable {
     func setTarget(key: String, reps: Int, effectiveDate: Date, isManualOverride: Bool) throws
     func debtBalances() throws -> [DebtBalance]
     func setDebt(key: String, repsOwed: Int, updatedAt: Date) throws
-    func applyDebtSettlements(_ settlements: [DebtSettlement], updatedAt: Date) throws
+    func applyDebtSettlements(_ settlements: [DebtSettlement], capMultiplier: Int?, updatedAt: Date) throws
+    func markDayClosed(through date: Date) throws
     func setAutoProgressionEnabled(_ enabled: Bool) throws
     func setProgressionAmount(_ amount: Int) throws
     func setProgressionIntervalDays(_ days: Int) throws
@@ -99,10 +100,25 @@ final class ExerciseRepository: ExerciseRepositoryProtocol {
         try context.save()
     }
 
-    func applyDebtSettlements(_ settlements: [DebtSettlement], updatedAt: Date = Date()) throws {
+    /// Persists each settlement's `debtAfterClose`. When `capMultiplier` is set, an
+    /// exercise's debt is clamped to `capMultiplier × that day's target` (the day-close
+    /// 2-day ceiling) — but only when the day had a target, so a zero-target day never
+    /// wipes legitimately-owed debt.
+    func applyDebtSettlements(_ settlements: [DebtSettlement], capMultiplier: Int? = nil, updatedAt: Date = Date()) throws {
         for settlement in settlements {
-            try setDebt(key: settlement.key, repsOwed: settlement.debtAfterClose, updatedAt: updatedAt)
+            var owed = settlement.debtAfterClose
+            if let capMultiplier, settlement.targetReps > 0 {
+                owed = min(owed, max(1, capMultiplier) * settlement.targetReps)
+            }
+            try setDebt(key: settlement.key, repsOwed: owed, updatedAt: updatedAt)
         }
+    }
+
+    /// Advances the day-close watermark (start-of-day of `date`).
+    func markDayClosed(through date: Date) throws {
+        let settings = try appSettings()
+        settings.lastSettledDate = GMCalendar.dayKey(for: date)
+        try context.save()
     }
 
     func setAutoProgressionEnabled(_ enabled: Bool) throws {

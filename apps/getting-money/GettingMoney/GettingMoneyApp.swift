@@ -11,6 +11,11 @@ struct GettingMoneyApp: App {
         } catch {
             fatalError("Failed to create SwiftData container: \(error)")
         }
+        // Close out any completed days into rep-debt before the first screen loads.
+        try? DayCloseService(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        ).run()
     }
 
     var body: some Scene {

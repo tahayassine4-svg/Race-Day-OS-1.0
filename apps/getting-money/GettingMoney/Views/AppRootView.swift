@@ -9,6 +9,7 @@ struct AppRootView: View {
     @State private var repLoggerViewModel: RepLoggerViewModel
     @State private var debtViewModel: DebtViewModel
     @State private var roundsViewModel: RoundsViewModel
+    @Environment(\.scenePhase) private var scenePhase
     let store: LocalStore
 
     init(store: LocalStore) {
@@ -64,6 +65,25 @@ struct AppRootView: View {
         }
         .tint(GMColor.accent)
         .onChange(of: selection) { _, tab in reload(tab) }
+        .onChange(of: scenePhase) { _, phase in
+            // Returning to the foreground may have crossed a midnight: settle any
+            // newly-completed days into debt, then refresh what's on screen.
+            guard phase == .active else { return }
+            try? DayCloseService(
+                exerciseRepository: store.exerciseRepository,
+                workoutRepository: store.workoutRepository
+            ).run()
+            refreshAll()
+        }
+    }
+
+    /// Reloads every data-backed tab after a foreground day-close so debt, status,
+    /// and plans are consistent regardless of which tab is visible.
+    private func refreshAll() {
+        dashboardViewModel.load()
+        repLoggerViewModel.load()
+        roundsViewModel.load()
+        debtViewModel.load()
     }
 
     /// Reload the active tab's data when it becomes visible. SwiftUI keeps tab
