@@ -2,26 +2,51 @@ import SwiftUI
 
 struct DashboardView: View {
     let viewModel: DashboardViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
             ScreenBackground()
-            ScrollView {
-                VStack(alignment: .leading, spacing: GMSpacing.lg) {
-                    header
-                    balanceCard
-                    dailyTargetCard
-                    sectionHeader("Today's reps", action: "Log →")
-                    exerciseList
-                    debtStrip
-                }
-                .gmScreenPadding()
-                .padding(.top, GMSpacing.xs)
-                .padding(.bottom, GMSpacing.md)
+            if viewModel.hasActivity {
+                populated
+            } else {
+                EmptyDashboard()
             }
         }
-        .safeAreaInset(edge: .bottom) { startRoundsCTA }
         .onAppear { viewModel.load() }
+    }
+
+    private var populated: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: GMSpacing.lg) {
+                header
+                balanceCard
+                chartCard
+                dailyTargetCard
+                sectionHeader("Today's reps", action: "Log →")
+                exerciseList
+                debtStrip
+            }
+            .gmScreenPadding()
+            .padding(.top, GMSpacing.xs)
+            .padding(.bottom, GMSpacing.md)
+        }
+        .safeAreaInset(edge: .bottom) { startRoundsCTA }
+    }
+
+    private var chartCard: some View {
+        VStack(spacing: GMSpacing.sm) {
+            TrendChart(points: viewModel.history, metric: viewModel.chartMetric)
+            Picker("History metric", selection: Binding(
+                get: { viewModel.chartMetric },
+                set: { viewModel.chartMetric = $0 }
+            )) {
+                ForEach(DashboardViewModel.ChartMetric.allCases) { metric in
+                    Text(metric.label).tag(metric)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
     }
 
     private var header: some View {
@@ -47,16 +72,19 @@ struct DashboardView: View {
                     Spacer()
                     coin
                 }
-                Text(viewModel.bankBalance.gmMoney)
+                CountUpMoney(value: viewModel.bankBalance, reduceMotion: reduceMotion)
                     .font(.gmHero).monospacedDigit().foregroundStyle(GMColor.ink)
                     .padding(.top, GMSpacing.sm)
+                    .accessibilityLabel("Total balance, \(GMAccessibility.money(viewModel.bankBalance))")
                 HStack(spacing: 18) {
-                    Label("12 day streak", systemImage: "flame.fill")
+                    Label("\(viewModel.streakDays) day streak", systemImage: "flame.fill")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(GMColor.muted)
+                        .accessibilityLabel(GMAccessibility.streak(days: viewModel.streakDays))
                     (Text("Today ").foregroundStyle(GMColor.muted)
                      + Text("+" + viewModel.earnedToday.gmMoney).foregroundStyle(GMColor.accent))
                         .font(.system(size: 13, weight: .semibold)).monospacedDigit()
+                        .accessibilityLabel("Earned today, \(GMAccessibility.money(viewModel.earnedToday))")
                 }
                 .padding(.top, GMSpacing.md)
             }
@@ -101,6 +129,10 @@ struct DashboardView: View {
         .padding(14)
         .background(RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous).fill(GMColor.surface))
         .overlay(RoundedRectangle(cornerRadius: GMRadius.row, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(viewModel.totalDebt > 0
+            ? GMAccessibility.debt(reps: viewModel.totalDebt)
+            : "Bonus earned today, \(GMAccessibility.money(viewModel.bonusEarnedToday))")
     }
 
     private func sectionHeader(_ title: String, action: String) -> some View {
@@ -165,5 +197,63 @@ private struct DashboardExerciseRow: View {
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 12)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(
+            GMAccessibility.exerciseProgress(name: item.name, completed: item.completed, target: item.target)
+            + (item.debtOwed > 0 ? ", \(item.debtOwed) reps owed" : "")
+        )
+    }
+}
+
+/// Animated bank balance. The digits roll to the new value via a numeric content
+/// transition; Reduce Motion snaps straight to the value (Packet 08 a11y pass).
+private struct CountUpMoney: View {
+    let value: Int
+    let reduceMotion: Bool
+    @State private var shown = 0
+
+    var body: some View {
+        Text(shown.gmMoney)
+            .contentTransition(.numericText())
+            .onAppear { update(to: value) }
+            .onChange(of: value) { _, newValue in update(to: newValue) }
+    }
+
+    private func update(to newValue: Int) {
+        if reduceMotion {
+            shown = newValue
+        } else {
+            withAnimation(.easeOut(duration: 0.5)) { shown = newValue }
+        }
+    }
+}
+
+/// First-launch empty state — no reps logged yet, nothing owed.
+private struct EmptyDashboard: View {
+    var body: some View {
+        VStack(spacing: GMSpacing.md) {
+            ZStack {
+                Circle()
+                    .fill(RadialGradient(
+                        colors: [GMColor.accent.opacity(0.5), GMColor.accent.opacity(0.08)],
+                        center: .init(x: 0.35, y: 0.3), startRadius: 4, endRadius: 60))
+                    .overlay(Circle().stroke(GMColor.accent.opacity(0.3), lineWidth: 1))
+                    .frame(width: 84, height: 84)
+                Image(systemName: "building.columns.fill")
+                    .font(.system(size: 34, weight: .semibold))
+                    .foregroundStyle(GMColor.accent)
+            }
+            Text("Your bank is open.")
+                .font(.system(size: 24, weight: .heavy)).foregroundStyle(GMColor.ink)
+            Text("No reps logged yet, and nothing owed. Hit today's targets and every rep starts paying you.")
+                .font(.system(size: 14.5, weight: .medium))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(GMColor.muted)
+                .padding(.horizontal, 40)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, GMSpacing.lg)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Your bank is open. No reps logged yet. Go to the Log tab to start.")
     }
 }

@@ -3,6 +3,18 @@ import Foundation
 @Observable
 @MainActor
 final class DashboardViewModel {
+    enum ChartMetric: String, CaseIterable, Identifiable {
+        case balance, daily, streak
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .balance: "Balance"
+            case .daily: "Daily"
+            case .streak: "Streak"
+            }
+        }
+    }
+
     struct ExerciseRow: Identifiable {
         let id: String
         let name: String
@@ -26,21 +38,31 @@ final class DashboardViewModel {
     private(set) var rows: [ExerciseRow] = []
     private(set) var errorMessage: String?
 
+    private(set) var history: [HistoryPoint] = []
+    private(set) var streakDays = 0
+    private(set) var hasActivity = false
+    var chartMetric: ChartMetric = .balance
+
+    private let historyWindowDays = 14
+
     private let exerciseRepository: any ExerciseRepositoryProtocol
     private let workoutRepository: any WorkoutRepositoryProtocol
     private let earningsEngine: any EarningsEngineProtocol
     private let debtEngine: any DebtEngineProtocol
+    private let historyEngine: any HistoryEngineProtocol
 
     init(
         exerciseRepository: any ExerciseRepositoryProtocol,
         workoutRepository: any WorkoutRepositoryProtocol,
         earningsEngine: any EarningsEngineProtocol = EarningsEngine(),
-        debtEngine: any DebtEngineProtocol = DebtEngine()
+        debtEngine: any DebtEngineProtocol = DebtEngine(),
+        historyEngine: any HistoryEngineProtocol = HistoryEngine()
     ) {
         self.exerciseRepository = exerciseRepository
         self.workoutRepository = workoutRepository
         self.earningsEngine = earningsEngine
         self.debtEngine = debtEngine
+        self.historyEngine = historyEngine
     }
 
     func load(today: Date = Date()) {
@@ -88,6 +110,16 @@ final class DashboardViewModel {
             totalDebt = rows.reduce(0) { $0 + $1.debtOwed }
             bankBalance = earningsEngine.totalMoney(for: allEntries, repValue: settings.repValue)
             status = dashboardStatus
+
+            let snapshots = allEntries.map { RepEntrySnapshot(date: $0.timestamp, count: $0.count) }
+            hasActivity = !snapshots.isEmpty
+            history = historyEngine.dailySeries(
+                from: snapshots,
+                repValue: settings.repValue,
+                days: historyWindowDays,
+                today: today
+            )
+            streakDays = historyEngine.currentStreak(history)
             errorMessage = nil
         } catch {
             errorMessage = "Dashboard could not load."

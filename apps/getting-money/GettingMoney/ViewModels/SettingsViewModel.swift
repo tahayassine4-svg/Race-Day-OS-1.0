@@ -25,15 +25,22 @@ final class SettingsViewModel {
     private(set) var pullupCap = 10
     private(set) var daysUntilNextProgression = 14
     private(set) var errorMessage: String?
+
+    var showResetConfirmation = false
+    private(set) var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+
     private let repository: any ExerciseRepositoryProtocol
     private let progressionEngine: any TargetProgressionEngineProtocol
+    private weak var dataAdmin: (any LocalDataAdmin)?
 
     init(
         repository: any ExerciseRepositoryProtocol,
-        progressionEngine: any TargetProgressionEngineProtocol = TargetProgressionEngine()
+        progressionEngine: any TargetProgressionEngineProtocol = TargetProgressionEngine(),
+        dataAdmin: (any LocalDataAdmin)? = nil
     ) {
         self.repository = repository
         self.progressionEngine = progressionEngine
+        self.dataAdmin = dataAdmin
     }
 
     func load() {
@@ -139,6 +146,26 @@ final class SettingsViewModel {
             load()
         } catch {
             errorMessage = "Pull-up cap could not be saved."
+        }
+    }
+
+    // MARK: Beta data utilities (Packet 08)
+
+    func exportData() -> Data? {
+        do {
+            return try dataAdmin?.exportSnapshotData()
+        } catch {
+            errorMessage = "Export failed."
+            return nil
+        }
+    }
+
+    func resetAllData() {
+        do {
+            try dataAdmin?.resetAllLocalData()
+            load()
+        } catch {
+            errorMessage = "Reset failed."
         }
     }
 

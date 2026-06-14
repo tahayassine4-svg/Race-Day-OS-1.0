@@ -14,7 +14,7 @@ struct AppRootView: View {
     init(store: LocalStore) {
         self.store = store
         _selection = State(initialValue: Self.initialTab())
-        _settingsViewModel = State(initialValue: SettingsViewModel(repository: store.exerciseRepository))
+        _settingsViewModel = State(initialValue: SettingsViewModel(repository: store.exerciseRepository, dataAdmin: store))
         _dashboardViewModel = State(initialValue: DashboardViewModel(
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository
