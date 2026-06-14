@@ -1,7 +1,7 @@
 phase: REPORTER_COMPLETE
 app: getting-money
 packet: 14 — Home-Screen Widget (Daily Targets)
-status: TESTED — read-only daily-targets widget built; app publishes today's snapshot to App Group group.com.yassine.gettingmoney; 96/96 tests; widget UI + App Group write verified on simulator. Provisioning steps required before TestFlight (see packet-14-report).
+status: TESTED — read-only daily-targets widget built; app publishes today's snapshot to App Group group.com.yassine.gettingmoney; 98/98 tests; widget UI + App Group write verified on simulator; freshness hardened (publish on background + new-day reset). Provisioning steps required before TestFlight (see packet-14-report).
 last_action: Built WidgetKit extension + App Group snapshot publisher, future-proofed for optional Dips, ran 96/96 tests, screenshot-verified the widget content + on-disk App Group write.
 branch: packet-14-widget
 commit: —
