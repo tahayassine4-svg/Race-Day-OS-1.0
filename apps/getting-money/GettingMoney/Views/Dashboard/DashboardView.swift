@@ -2,6 +2,8 @@ import SwiftUI
 
 struct DashboardView: View {
     let viewModel: DashboardViewModel
+    var onStartRounds: () -> Void = {}
+    var onSetTargets: () -> Void = {}
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -10,7 +12,7 @@ struct DashboardView: View {
             if viewModel.hasActivity {
                 populated
             } else {
-                EmptyDashboard()
+                EmptyDashboard(onSetTargets: onSetTargets)
             }
         }
         .onAppear { viewModel.load() }
@@ -151,15 +153,16 @@ struct DashboardView: View {
     }
 
     private var startRoundsCTA: some View {
-        Button { } label: {
+        Button { onStartRounds() } label: {
             HStack(spacing: 9) {
                 Text("Start today's rounds").font(.system(size: 17, weight: .bold))
-                Text("· 3 circles").font(.system(size: 13, weight: .semibold)).opacity(0.62)
+                Text("· \(viewModel.plannedRoundCount) circles").font(.system(size: 13, weight: .semibold)).opacity(0.62)
             }
             .foregroundStyle(GMColor.onAccent)
             .frame(maxWidth: .infinity).frame(height: 56)
             .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(GMColor.accent))
         }
+        .accessibilityLabel("Start today's rounds, \(viewModel.plannedRoundCount) circles")
         .gmScreenPadding()
         .padding(.top, GMSpacing.md)
         .padding(.bottom, GMSpacing.sm)
@@ -230,6 +233,8 @@ private struct CountUpMoney: View {
 
 /// First-launch empty state — no reps logged yet, nothing owed.
 private struct EmptyDashboard: View {
+    var onSetTargets: () -> Void = {}
+
     var body: some View {
         VStack(spacing: GMSpacing.md) {
             ZStack {
@@ -243,6 +248,7 @@ private struct EmptyDashboard: View {
                     .font(.system(size: 34, weight: .semibold))
                     .foregroundStyle(GMColor.accent)
             }
+            .accessibilityHidden(true)
             Text("Your bank is open.")
                 .font(.system(size: 24, weight: .heavy)).foregroundStyle(GMColor.ink)
             Text("No reps logged yet, and nothing owed. Hit today's targets and every rep starts paying you.")
@@ -250,10 +256,18 @@ private struct EmptyDashboard: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(GMColor.muted)
                 .padding(.horizontal, 40)
+            Button { onSetTargets() } label: {
+                Text("Set today's targets")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(GMColor.onAccent)
+                    .frame(maxWidth: .infinity).frame(height: 54)
+                    .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(GMColor.accent))
+            }
+            .padding(.top, GMSpacing.xs)
+            .padding(.horizontal, 28)
+            .accessibilityHint("Opens Settings to review your daily targets")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, GMSpacing.lg)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Your bank is open. No reps logged yet. Go to the Log tab to start.")
     }
 }

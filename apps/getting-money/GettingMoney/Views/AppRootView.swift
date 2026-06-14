@@ -32,9 +32,13 @@ struct AppRootView: View {
 
     var body: some View {
         TabView(selection: $selection) {
-            DashboardView(viewModel: dashboardViewModel)
-                .tabItem { Label("Dashboard", systemImage: "chart.pie.fill") }
-                .tag(Tab.dashboard)
+            DashboardView(
+                viewModel: dashboardViewModel,
+                onStartRounds: { selection = .rounds },
+                onSetTargets: { selection = .settings }
+            )
+            .tabItem { Label("Dashboard", systemImage: "chart.pie.fill") }
+            .tag(Tab.dashboard)
 
             LogView(viewModel: repLoggerViewModel)
                 .tabItem { Label("Log", systemImage: "plus.circle.fill") }

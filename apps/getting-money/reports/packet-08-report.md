@@ -4,7 +4,8 @@
 
 ## What Was Built
 - **History charts (Swift Charts):** pure `HistoryEngine` builds a 14-day daily series (per-day reps/earnings + cumulative bank balance, with a baseline for entries older than the window) and a current-streak calc. `TrendChart` renders Balance (area+line), Daily (bars), and Streak (active/missed bars), switched by a segmented control on the Dashboard.
-- **Designed states:** first-launch empty Dashboard ("Your bank is open"); Debt and Rounds already show no-debt states from earlier packets; Settings empty-data still functions.
+- **Designed states:** first-launch empty Dashboard ("Your bank is open") with a **"Set today's targets"** CTA → Settings; Debt and Rounds already show no-debt states from earlier packets.
+- **Wired the home CTAs (review fix):** the Dashboard "Start today's rounds" button now navigates to Rounds and shows the real planned round count (was a dead button with a hardcoded "3 circles"); the empty-state CTA navigates to Settings.
 - **Settings beta utilities:** new **Data** section — Export my data (JSON snapshot via `ShareLink`) and Reset all local data (destructive, behind a `confirmationDialog`). New **About** section (version + privacy). Backed by a `LocalDataAdmin` protocol on `LocalStore` (`hasAnyActivity` / `resetAllLocalData` / `exportSnapshotData`).
 - **Accessibility pass:** `GMAccessibility` VoiceOver phrasing for balance/streak/debt/exercise rows; combined accessibility elements on key cards; Reduce-Motion-aware bank-balance count-up (numeric content transition that snaps under Reduce Motion).
 - **App icon + accent:** branded 1024² icon (lime "$" coin on graphite) in `Assets.xcassets/AppIcon.appiconset`; `AccentColor` colorset; wired via `ASSETCATALOG_COMPILER_*` in `project.yml`. Launch screen uses the generated dark launch surface.
@@ -12,7 +13,8 @@
 - Version bumped to `1.0.0`.
 
 ## Test Results
-- `xcodebuild ... test` on iPhone 17 Pro: PASS — **63 tests** (added 10 for Packet 08: history bucketing/baseline/streak, reset-clears-to-empty, export-decodable, dashboard history/empty flags).
+- `xcodebuild ... test` on iPhone 17 Pro: PASS — **66 tests** (added 10 for Packet 08 history/reset/export/dashboard, plus 3 cross-screen live-refresh integration tests).
+- Cross-screen live refresh (AC "recalculates when reps are logged") proven by integration tests that log reps / change debt through the real store, then call `load()` — exactly what `AppRootView.onChange(of: selection)` performs on tab switch — and assert balance/plan/payoff move and empty→populated flips.
 - `xcodebuild archive ... CODE_SIGNING_ALLOWED=NO`: **ARCHIVE SUCCEEDED** — the app archives cleanly; only signing + upload remain.
 - Visual verification on iPhone 17 Pro: PASS — Dashboard with charts `reports/artifacts/p08-dashboard.png`, first-launch empty state `p08-empty.png`, Settings `p08-settings.png`. Match `design/packet-08.png` / `design/packet-08-states.png`.
 
@@ -21,7 +23,7 @@
 - [x] Empty states for no reps / first launch (no-debt states from prior packets).
 - [x] Local data reset works after confirmation (unit-tested: reset → first-launch empty state; re-seeds defaults).
 - [x] Core controls have VoiceOver labels; Reduce Motion disables the count-up animation.
-- [x] App builds, all tests pass (63/63).
+- [x] App builds, all tests pass (66/66).
 - [x] Project archives for TestFlight (unsigned archive verified); signing blocker documented below.
 
 ## TestFlight archive & upload steps (for Yassine)

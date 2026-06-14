@@ -2,7 +2,7 @@ phase: REPORTER
 app: getting-money
 packet: 08
 status: PACKET_08_COMPLETE — v1 feature-complete; 63/63 tests green; unsigned archive verified; signing+upload handed to Yassine
-last_action: built history charts, empty states, Settings export/reset, accessibility, app icon, privacy manifest; captured p08 artifacts; wrote packet-08-report.md
+last_action: review fixes — wired Dashboard "Start today's rounds" CTA (real round count) + empty-state "Set today's targets" CTA; added 3 cross-screen live-refresh integration tests (66/66 green)
 branch: packet-08-history-polish
 commit: (committing now)
 next_step: Yassine configures DEVELOPMENT_TEAM + signing and archives to TestFlight (steps in reports/packet-08-report.md). Optional fast-follows: branded launch screen, stored daily-debt snapshot for a debt-trend chart.

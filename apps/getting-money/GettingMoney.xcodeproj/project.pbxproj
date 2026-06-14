@@ -31,6 +31,7 @@
 		85E3FA40988781625B0EE312 /* RepEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8881EEDEF0CC629C8DF675F5 /* RepEntry.swift */; };
 		8974C9172B34A8B94EC497F5 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A300AF7EB3F954A2814B771 /* HistoryTests.swift */; };
 		8CE692CEF8A5C71295D9A410 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2081897F8723FAD522BD5A2B /* LocalStore.swift */; };
+		92AEF263C1030ADF749C5A6D /* CrossScreenRefreshTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23486AEAD6DC68B29AB62E94 /* CrossScreenRefreshTests.swift */; };
 		96EE0AFA1BC52F48152F83BB /* DebtEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034B7AB96E44564C5D6F4AAE /* DebtEngine.swift */; };
 		9DD41FC407D01D01FED53B39 /* GMCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FBB4151760EE43AC4E120D /* GMCalendar.swift */; };
 		A44F611AEFAA94AAB7DA974E /* TrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47CCB213426788D0D92951E /* TrendChart.swift */; };
@@ -91,6 +92,7 @@
 		17A376E2E009DB7210E6EF2F /* ComingSoonScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonScreen.swift; sourceTree = "<group>"; };
 		1E07812FFF5811B241708FE0 /* RoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsView.swift; sourceTree = "<group>"; };
 		2081897F8723FAD522BD5A2B /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
+		23486AEAD6DC68B29AB62E94 /* CrossScreenRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossScreenRefreshTests.swift; sourceTree = "<group>"; };
 		33BA7784A3E5F68AD93E3927 /* RoundCircleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCircleCard.swift; sourceTree = "<group>"; };
 		398C2BD04E1E999801413E21 /* ExportLocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportLocalData.swift; sourceTree = "<group>"; };
 		3E335A29607D3C21385335B6 /* DailyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTarget.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		04C4DA6B7DAE2F3AD76620DA /* GettingMoneyTests */ = {
 			isa = PBXGroup;
 			children = (
+				23486AEAD6DC68B29AB62E94 /* CrossScreenRefreshTests.swift */,
 				8311B3FB1535DEBF649F821F /* DebtEngineTests.swift */,
 				94FC11FCC0D4179E18434918 /* EarningsEngineTests.swift */,
 				4A300AF7EB3F954A2814B771 /* HistoryTests.swift */,
@@ -498,6 +501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92AEF263C1030ADF749C5A6D /* CrossScreenRefreshTests.swift in Sources */,
 				B9E7B9049550F200E7552532 /* DebtEngineTests.swift in Sources */,
 				B3322303061EDC5032557B9A /* EarningsEngineTests.swift in Sources */,
 				8974C9172B34A8B94EC497F5 /* HistoryTests.swift in Sources */,

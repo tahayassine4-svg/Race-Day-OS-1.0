@@ -41,6 +41,7 @@ final class DashboardViewModel {
     private(set) var history: [HistoryPoint] = []
     private(set) var streakDays = 0
     private(set) var hasActivity = false
+    private(set) var plannedRoundCount = 3
     var chartMetric: ChartMetric = .balance
 
     private let historyWindowDays = 14
@@ -120,6 +121,9 @@ final class DashboardViewModel {
                 today: today
             )
             streakDays = historyEngine.currentStreak(history)
+            let savedRounds = try workoutRepository.roundPlans(on: today)
+            let roundNumbers = Set(savedRounds.map(\.roundNumber))
+            plannedRoundCount = roundNumbers.isEmpty ? 3 : roundNumbers.count
             errorMessage = nil
         } catch {
             errorMessage = "Dashboard could not load."
