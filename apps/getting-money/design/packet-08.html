@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — History &amp; Charts (Packet 08)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .balance{padding:15px 20px;}
+  .balance .top{display:flex;justify-content:space-between;align-items:center;}
+  .balance .label{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
+  .coin{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #d6ff66, var(--accent) 60%, #6f9b1f);display:flex;align-items:center;justify-content:center;color:#142000;font-weight:800;font-size:15px;}
+  .balance .big{font-size:42px;font-weight:800;letter-spacing:-1.5px;line-height:1;margin-top:8px;}
+  .balance .sub{display:flex;gap:18px;margin-top:11px;align-items:center;}
+  .chip{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:500;}
+  .chip b{color:var(--ink);font-weight:700;} .chip.up b{color:var(--accent);}
+  .streakdot{width:16px;height:16px;border-radius:5px;background:rgba(242,193,78,.18);display:inline-flex;align-items:center;justify-content:center;font-size:10px;}
+  .charth{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 6px;}
+  .charth .k{font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);}
+  .charth .v{font-size:12.5px;font-weight:700;color:var(--accent);}
+  .chartbox{padding:0 10px 12px;}
+  .seg{display:flex;gap:6px;background:var(--elevated);border:1px solid var(--hair);border-radius:12px;padding:5px;margin:0 6px 4px;}
+  .seg .o{flex:1;text-align:center;padding:8px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);}
+  .seg .o.active{background:rgba(174,230,61,.16);color:var(--accent);}
+  /* streak history bars */
+  .streakcard{padding:14px 16px;}
+  .streakcard .k{font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:64px;}
+  .bars .b{flex:1;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#8fd02b,var(--accent));opacity:.92;}
+  .bars .b.miss{background:rgba(255,106,90,.6);}
+  .bars .b.sm{opacity:.55;}
+  .axis{display:flex;justify-content:space-between;margin-top:8px;font-size:10.5px;color:var(--muted);font-weight:600;}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Calisthenics Bank · History</div>
+    <div class="headrow"><div class="headline">Your money,<br/>over time.</div><span class="pill ontrack"><span class="dot"></span>On track</span></div>
+  </div>
+  <div class="card balance">
+    <div class="top"><span class="label">Total balance</span><span class="coin">$</span></div>
+    <div class="big num">$1,284</div>
+    <div class="sub"><span class="chip"><span class="streakdot">🔥</span> <b class="num">12</b>&nbsp;day streak</span><span class="chip up">Today &nbsp;<b class="num">+$284</b></span></div>
+  </div>
+
+  <!-- Bank balance area chart -->
+  <div class="card">
+    <div class="charth"><span class="k">Bank balance · 14 days</span><span class="v num">▲ +$612</span></div>
+    <div class="chartbox">
+      <svg width="100%" height="120" viewBox="0 0 343 120" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#AEE63D" stop-opacity="0.35"/>
+            <stop offset="1" stop-color="#AEE63D" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,96 L26,92 L52,86 L78,88 L104,74 L130,70 L156,60 L182,64 L208,50 L234,44 L260,40 L286,30 L312,24 L343,14 L343,120 L0,120 Z" fill="url(#g)"/>
+        <path d="M0,96 L26,92 L52,86 L78,88 L104,74 L130,70 L156,60 L182,64 L208,50 L234,44 L260,40 L286,30 L312,24 L343,14" fill="none" stroke="#AEE63D" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="343" cy="14" r="3.5" fill="#AEE63D"/>
+      </svg>
+    </div>
+    <div class="seg"><div class="o">Balance</div><div class="o">Debt</div><div class="o active">Streak</div></div>
+  </div>
+
+  <!-- Streak history -->
+  <div class="card streakcard">
+    <div class="k">Streak · last 14 days</div>
+    <div class="bars">
+      <div class="b sm" style="height:30%"></div><div class="b" style="height:55%"></div><div class="b" style="height:48%"></div>
+      <div class="b miss" style="height:18%"></div><div class="b" style="height:62%"></div><div class="b" style="height:70%"></div>
+      <div class="b" style="height:58%"></div><div class="b" style="height:75%"></div><div class="b" style="height:66%"></div>
+      <div class="b" style="height:82%"></div><div class="b" style="height:78%"></div><div class="b" style="height:90%"></div>
+      <div class="b" style="height:85%"></div><div class="b" style="height:100%"></div>
+    </div>
+    <div class="axis"><span>2 wks ago</span><span>Today</span></div>
+  </div>
+</div>
+<div class="tabbar">
+  <div class="tab active"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab"><span class="gi">＋</span>Log</div>
+  <div class="tab"><span class="gi">◌</span>Rounds</div>
+  <div class="tab"><span class="gi">↺</span>Debt</div>
+  <div class="tab"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>

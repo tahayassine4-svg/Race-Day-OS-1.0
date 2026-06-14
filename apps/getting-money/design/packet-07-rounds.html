@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Rounds Payoff (Packet 07)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .seg{display:flex;gap:6px;background:var(--elevated);border:1px solid var(--hair);border-radius:12px;padding:5px;}
+  .seg .o{flex:1;text-align:center;padding:10px;border-radius:9px;font-size:15px;font-weight:700;color:var(--muted);}
+  .seg .o.active{background:rgba(174,230,61,.16);color:var(--accent);}
+  .payoff{padding:13px 16px;}
+  .payoff .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .payoff .k{font-size:16px;font-weight:700;}
+  .payoff .s{font-size:12.5px;color:var(--debt);font-weight:600;margin-top:2px;}
+  .pseg{display:flex;gap:6px;background:var(--elevated);border:1px solid var(--hair);border-radius:12px;padding:5px;}
+  .pseg .o{flex:1;text-align:center;padding:8px 4px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);}
+  .pseg .o.active{background:rgba(255,106,90,.16);color:var(--debt);}
+  .circle{padding:11px 14px;}
+  .ctop{display:flex;align-items:center;gap:11px;margin-bottom:8px;}
+  .ctop .n{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#13200a;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .ctop .t{font-size:15px;font-weight:700;flex:1;}
+  .ctop .tag{font-size:11px;font-weight:700;color:var(--debt);background:rgba(255,106,90,.14);border:1px solid rgba(255,106,90,.28);border-radius:999px;padding:3px 9px;}
+  .reps{display:flex;gap:8px;}
+  .rep{flex:1;background:var(--elevated);border:1px solid var(--hair);border-radius:11px;padding:8px;text-align:center;}
+  .rep .v{font-size:18px;font-weight:800;} .rep .l{font-size:11px;color:var(--muted);margin-top:2px;}
+  .rep .pay{font-size:10.5px;color:var(--debt);font-weight:700;margin-top:1px;}
+  .tot{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
+  .tot .k{font-size:15px;font-weight:600;} .tot .v{font-size:14px;font-weight:700;color:var(--muted);}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Rounds · Today</div>
+    <div class="headrow"><div class="headline">3 rounds<br/>to hit zero.</div></div>
+  </div>
+  <div class="seg"><div class="o">2</div><div class="o active">3</div><div class="o">4</div><div class="o">5</div></div>
+  <div class="card payoff">
+    <div class="top"><div><div class="k">Fold in debt payoff</div><div class="s">+36 reps owed · repaid in reps</div></div></div>
+    <div class="pseg"><div class="o">None</div><div class="o">Small</div><div class="o active">Half</div><div class="o">Full</div></div>
+  </div>
+  <div class="card tot"><span class="k">Planned today</span><span class="v num">278 / 260 reps · +18 payoff</span></div>
+  <div class="card circle">
+    <div class="ctop"><span class="n">1</span><span class="t">Circle 1</span><span class="tag">+ payoff</span></div>
+    <div class="reps">
+      <div class="rep"><div class="v num">52</div><div class="l">push-ups</div><div class="pay num">+4 owed</div></div>
+      <div class="rep"><div class="v num">5</div><div class="l">pull-ups</div><div class="pay num">+1 owed</div></div>
+      <div class="rep"><div class="v num">76</div><div class="l">squats</div><div class="pay num">+2 owed</div></div>
+    </div>
+  </div>
+  <div class="card circle">
+    <div class="ctop"><span class="n">2</span><span class="t">Circle 2</span><span class="tag">+ payoff</span></div>
+    <div class="reps">
+      <div class="rep"><div class="v num">52</div><div class="l">push-ups</div><div class="pay num">+4 owed</div></div>
+      <div class="rep"><div class="v num">4</div><div class="l">pull-ups</div><div class="pay num">+0 owed</div></div>
+      <div class="rep"><div class="v num">75</div><div class="l">squats</div><div class="pay num">+2 owed</div></div>
+    </div>
+  </div>
+</div>
+<div class="cta-wrap"><button class="cta">Start round 1 <span class="sub">· of 3</span></button></div>
+<div class="tabbar">
+  <div class="tab"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab"><span class="gi">＋</span>Log</div>
+  <div class="tab active"><span class="gi">◌</span>Rounds</div>
+  <div class="tab"><span class="gi">↺</span>Debt</div>
+  <div class="tab"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>

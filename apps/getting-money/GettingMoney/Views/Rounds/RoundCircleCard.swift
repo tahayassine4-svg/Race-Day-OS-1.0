@@ -17,7 +17,16 @@ struct RoundCircleCard: View {
                         .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(GMColor.ink)
                     Spacer()
-                    Text("Edit").font(.system(size: 15, weight: .bold)).foregroundStyle(GMColor.accent)
+                    if round.payoffReps > 0 {
+                        Text("+ payoff")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(GMColor.debt)
+                            .padding(.horizontal, 9).padding(.vertical, 4)
+                            .background(Capsule().fill(GMColor.debt.opacity(0.14)))
+                            .overlay(Capsule().stroke(GMColor.debt.opacity(0.28), lineWidth: 1))
+                    } else {
+                        Text("Edit").font(.system(size: 15, weight: .bold)).foregroundStyle(GMColor.accent)
+                    }
                 }
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: GMSpacing.sm), count: 3), spacing: GMSpacing.sm) {
@@ -32,6 +41,11 @@ struct RoundCircleCard: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.75)
                                 .foregroundStyle(GMColor.muted)
+                            if exercise.payoffReps > 0 {
+                                Text("+\(exercise.payoffReps) owed")
+                                    .font(.system(size: 10.5, weight: .bold)).monospacedDigit()
+                                    .foregroundStyle(GMColor.debt)
+                            }
                             HStack(spacing: 8) {
                                 adjustButton("minus") { viewModel.adjust(roundID: round.id, exerciseKey: exercise.key, by: -1) }
                                 adjustButton("plus") { viewModel.adjust(roundID: round.id, exerciseKey: exercise.key, by: 1) }

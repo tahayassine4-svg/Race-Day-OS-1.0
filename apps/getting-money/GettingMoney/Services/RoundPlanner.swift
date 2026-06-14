@@ -5,6 +5,8 @@ struct RoundTarget: Equatable, Sendable {
     let name: String
     let glyph: String
     let reps: Int
+    /// Portion of `reps` that is debt payoff folded into this round (Packet 07).
+    var payoffReps: Int = 0
 }
 
 struct PlannedRound: Equatable, Identifiable, Sendable {
@@ -12,6 +14,7 @@ struct PlannedRound: Equatable, Identifiable, Sendable {
     var exercises: [RoundTarget]
 
     var totalReps: Int { exercises.reduce(0) { $0 + $1.reps } }
+    var payoffReps: Int { exercises.reduce(0) { $0 + $1.payoffReps } }
 }
 
 protocol RoundPlannerProtocol: Sendable {

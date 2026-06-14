@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Empty States &amp; Settings (Packet 08)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body{flex-direction:row;width:806px;gap:20px;padding:0;align-items:stretch;background:#06080700;}
+  .frame{width:393px;height:852px;position:relative;display:flex;flex-direction:column;
+    background:radial-gradient(120% 55% at 80% -5%, rgba(174,230,61,.10), transparent 60%),radial-gradient(90% 50% at 0% 105%, rgba(255,106,90,.06), transparent 55%),var(--bg);
+    border:1px solid var(--hair);border-radius:30px;overflow:hidden;}
+  /* empty state */
+  .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 40px;text-align:center;}
+  .empty .orb{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 35% 30%, rgba(174,230,61,.5), rgba(174,230,61,.08) 65%);border:1px solid rgba(174,230,61,.3);display:flex;align-items:center;justify-content:center;font-size:36px;}
+  .empty .h{font-size:24px;font-weight:800;letter-spacing:-.3px;}
+  .empty .p{font-size:14.5px;color:var(--muted);line-height:1.5;font-weight:500;}
+  .empty .cta{margin-top:8px;width:100%;height:54px;border-radius:16px;border:none;background:linear-gradient(180deg,#c2f24f,var(--accent));color:#13200a;font-size:16px;font-weight:800;box-shadow:0 10px 24px rgba(174,230,61,.22);}
+  /* settings */
+  .shead{padding:18px 22px 6px;}
+  .shead .eyebrow{font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);}
+  .shead .h{font-size:26px;font-weight:800;letter-spacing:-.3px;margin-top:4px;}
+  .sgroup{margin:8px 18px;}
+  .sgroup .gl{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:8px 4px;}
+  .srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
+  .srow+.srow{border-top:1px solid var(--hair);}
+  .srow .l{display:flex;align-items:center;gap:12px;}
+  .srow .ic{width:34px;height:34px;border-radius:10px;background:var(--elevated);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .srow .ic.danger{background:rgba(255,106,90,.14);border-color:rgba(255,106,90,.3);}
+  .srow .nm{font-size:15.5px;font-weight:600;} .srow .nm.danger{color:var(--debt);}
+  .srow .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .srow .chev{color:var(--muted);font-size:15px;}
+  .tabbar{display:flex;justify-content:space-around;align-items:flex-start;padding:10px 12px 26px;border-top:1px solid var(--hair);background:rgba(10,13,11,.86);}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--muted);flex:1;}
+  .tab .gi{font-size:20px;line-height:1;} .tab.active{color:var(--accent);}
+  .cap{position:absolute;top:14px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+</style></head><body>
+  <!-- Empty / first launch -->
+  <div class="frame">
+    <div class="cap">First launch · no debt</div>
+    <div class="empty">
+      <div class="orb">🏦</div>
+      <div class="h">Your bank is open.</div>
+      <div class="p">No reps logged yet, and nothing owed. Hit today's targets and every rep starts paying you.</div>
+      <button class="cta">Set today's targets</button>
+    </div>
+    <div class="tabbar">
+      <div class="tab active"><span class="gi">◉</span>Dashboard</div>
+      <div class="tab"><span class="gi">＋</span>Log</div>
+      <div class="tab"><span class="gi">◌</span>Rounds</div>
+      <div class="tab"><span class="gi">↺</span>Debt</div>
+      <div class="tab"><span class="gi">⚙</span>Settings</div>
+    </div>
+  </div>
+
+  <!-- Settings: reset + export -->
+  <div class="frame">
+    <div class="cap">Settings · beta utilities</div>
+    <div class="shead"><div class="eyebrow">Settings</div><div class="h">Your bank, your rules.</div></div>
+    <div class="sgroup">
+      <div class="gl">Data</div>
+      <div class="card">
+        <div class="srow"><div class="l"><div class="ic">📤</div><div><div class="nm">Export my data</div><div class="sub">Share a JSON snapshot of all days &amp; logs</div></div></div><span class="chev">›</span></div>
+        <div class="srow"><div class="l"><div class="ic danger">🗑</div><div><div class="nm danger">Reset all local data</div><div class="sub">Wipes everything — asks to confirm first</div></div></div><span class="chev">›</span></div>
+      </div>
+    </div>
+    <div class="sgroup">
+      <div class="gl">About</div>
+      <div class="card">
+        <div class="srow"><div class="l"><div class="ic">ⓘ</div><div class="nm">Version</div></div><span class="sub">1.0 (beta)</span></div>
+        <div class="srow"><div class="l"><div class="ic">🔒</div><div class="nm">Privacy</div></div><span class="sub">No tracking · on-device</span></div>
+      </div>
+    </div>
+    <div style="flex:1"></div>
+    <div class="tabbar">
+      <div class="tab"><span class="gi">◉</span>Dashboard</div>
+      <div class="tab"><span class="gi">＋</span>Log</div>
+      <div class="tab"><span class="gi">◌</span>Rounds</div>
+      <div class="tab"><span class="gi">↺</span>Debt</div>
+      <div class="tab active"><span class="gi">⚙</span>Settings</div>
+    </div>
+  </div>
+</body></html>

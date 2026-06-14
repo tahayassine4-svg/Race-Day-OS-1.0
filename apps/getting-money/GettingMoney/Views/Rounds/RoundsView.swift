@@ -11,7 +11,7 @@ struct RoundsView: View {
                     header
                     roundSelector
                     logicCard
-                    debtPreview
+                    if viewModel.hasDebt { payoffCard }
                     totalPreview
                     ForEach(viewModel.rounds) { round in
                         RoundCircleCard(round: round, viewModel: viewModel)
@@ -73,17 +73,34 @@ struct RoundsView: View {
         }
     }
 
-    private var debtPreview: some View {
+    private var payoffCard: some View {
         GMCard {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Include debt payoff").font(.system(size: 17, weight: .bold)).foregroundStyle(GMColor.ink)
-                    Text(viewModel.totalDebt > 0 ? "+\(viewModel.totalDebt.gmGrouped) reps ready for Packet 07" : "No rep debt today")
+            VStack(alignment: .leading, spacing: GMSpacing.sm) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Fold in debt payoff").font(.system(size: 17, weight: .bold)).foregroundStyle(GMColor.ink)
+                    Text("+\(viewModel.totalDebt.gmGrouped) reps owed · repaid in reps")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(viewModel.totalDebt > 0 ? GMColor.debt : GMColor.muted)
+                        .foregroundStyle(GMColor.debt)
                 }
-                Spacer()
-                Image(systemName: "lock.fill").foregroundStyle(GMColor.muted)
+                HStack(spacing: 6) {
+                    ForEach(RoundsViewModel.Payoff.allCases) { option in
+                        Button { viewModel.choosePayoff(option) } label: {
+                            Text(option.label)
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundStyle(option == viewModel.payoff ? GMColor.debt : GMColor.muted)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 9)
+                                .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(GMColor.debt.opacity(option == viewModel.payoff ? 0.16 : 0)))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("\(option.label) debt payoff")
+                        .accessibilityAddTraits(option == viewModel.payoff ? .isSelected : [])
+                    }
+                }
+                .padding(5)
+                .background(RoundedRectangle(cornerRadius: 13, style: .continuous).fill(GMColor.elevated))
+                .overlay(RoundedRectangle(cornerRadius: 13, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
             }
         }
     }
@@ -93,14 +110,23 @@ struct RoundsView: View {
             HStack {
                 Text("Planned today").font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
                 Spacer()
-                Text("\(viewModel.plannedTotal.gmGrouped) / \(viewModel.dailyTarget.gmGrouped) reps")
+                Text(plannedSummary)
                     .font(.system(size: 14, weight: .bold)).monospacedDigit().foregroundStyle(GMColor.muted)
+            }
+            if viewModel.payoffReps > 0 {
+                Text("+\(viewModel.payoffReps.gmGrouped) reps go to debt payoff — not bonus money.")
+                    .font(.gmMeta).foregroundStyle(GMColor.debt)
             }
             if viewModel.extraReps > 0 {
                 Text("+\(viewModel.extraMoney.gmMoney) extra-money preview")
                     .font(.gmMeta).foregroundStyle(GMColor.accent)
             }
         }
+    }
+
+    private var plannedSummary: String {
+        let base = "\(viewModel.plannedTotal.gmGrouped) / \(viewModel.dailyTarget.gmGrouped) reps"
+        return viewModel.payoffReps > 0 ? base + " · +\(viewModel.payoffReps.gmGrouped) payoff" : base
     }
 
     private var startCTA: some View {

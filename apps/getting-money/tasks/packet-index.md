@@ -10,7 +10,7 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 | 04 | Rep Logging + EarningsEngine | UI | COMPLETE | packet-04-rep-logging | f741440 |
 | 05 | DebtEngine + Debt Dashboard | UI | COMPLETE | packet-05-debt-engine | 03b4122 |
 | 06 | Rounds / Circles Planner | UI | COMPLETE | packet-06-rounds-planner | 6cc00bb |
-| 07 | Dynamic Debt Payback Planner | UI | NOT_STARTED | — | — |
+| 07 | Dynamic Debt Payback Planner | UI | COMPLETE | packet-07-payback-planner | (pending) |
 | 08 | History, Polish + TestFlight Readiness | UI | NOT_STARTED | — | — |
 
 Source root: `apps/getting-money/GettingMoney/` · Tests: `apps/getting-money/GettingMoneyTests/` · Mockups: `apps/getting-money/design/packet-NN.png` (dark/lime/coral, from `design/reference-mockup.png`).

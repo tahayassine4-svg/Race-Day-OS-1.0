@@ -3,6 +3,8 @@ import Foundation
 @Observable
 @MainActor
 final class DebtViewModel {
+    enum PlanMode: Equatable { case oneGo, finance }
+
     struct Row: Identifiable {
         let id: String
         let name: String
@@ -14,6 +16,7 @@ final class DebtViewModel {
         let id: Int
         let title: String
         let summary: String
+        let repsTotal: Int
     }
 
     private(set) var totalDebt = 0
@@ -22,10 +25,19 @@ final class DebtViewModel {
     private(set) var status: GMStatus = .paidOff
     private(set) var errorMessage: String?
 
-    private let exerciseRepository: any ExerciseRepositoryProtocol
+    private(set) var planMode: PlanMode = .finance
+    private(set) var financeDays = 3
+    let financeDayOptions = [2, 3, 4, 5]
 
-    init(exerciseRepository: any ExerciseRepositoryProtocol) {
+    private let exerciseRepository: any ExerciseRepositoryProtocol
+    private let planner: any PaybackPlannerProtocol
+
+    init(
+        exerciseRepository: any ExerciseRepositoryProtocol,
+        planner: any PaybackPlannerProtocol = PaybackPlanner()
+    ) {
         self.exerciseRepository = exerciseRepository
+        self.planner = planner
     }
 
     func load() {
@@ -39,7 +51,7 @@ final class DebtViewModel {
                 }
             totalDebt = rows.reduce(0) { $0 + $1.repsOwed }
             status = totalDebt > 0 ? .activeDebt : .paidOff
-            planDays = makePlanDays(days: 3)
+            recompute()
             errorMessage = nil
         } catch {
             rows = []
@@ -50,21 +62,39 @@ final class DebtViewModel {
         }
     }
 
-    private func makePlanDays(days: Int) -> [PlanDay] {
-        guard totalDebt > 0 else { return [] }
-        return (0..<days).map { dayIndex in
+    func selectMode(_ mode: PlanMode) {
+        planMode = mode
+        recompute()
+    }
+
+    func selectFinanceDays(_ days: Int) {
+        financeDays = days
+        planMode = .finance
+        recompute()
+    }
+
+    private func recompute() {
+        guard totalDebt > 0 else { planDays = []; return }
+        let debts = rows.map { PaybackDebt(key: $0.id, name: $0.name, glyph: $0.glyph, repsOwed: $0.repsOwed) }
+        let plan = planMode == .oneGo
+            ? planner.oneGoPlan(debts: debts)
+            : planner.financePlan(debts: debts, over: financeDays)
+        planDays = plan.days.map { day in
             PlanDay(
-                id: dayIndex + 1,
-                title: dayIndex == 0 ? "Today" : dayIndex == 1 ? "Tomorrow" : "Day \(dayIndex + 1)",
-                summary: rows.map { "+\(split($0.repsOwed, over: days, dayIndex: dayIndex)) \(shortName($0.id))" }
-                    .joined(separator: " · ")
+                id: day.id,
+                title: dayTitle(day.id),
+                summary: day.allocations.map { "+\($0.reps) \(shortName($0.key))" }.joined(separator: " · "),
+                repsTotal: day.totalReps
             )
         }
     }
 
-    private func split(_ amount: Int, over days: Int, dayIndex: Int) -> Int {
-        guard days > 0 else { return 0 }
-        return amount / days + (dayIndex < amount % days ? 1 : 0)
+    private func dayTitle(_ id: Int) -> String {
+        switch id {
+        case 1: "Today"
+        case 2: "Tomorrow"
+        default: "Day \(id)"
+        }
     }
 
     private func shortName(_ key: String) -> String {

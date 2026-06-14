@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DebtView: View {
     let viewModel: DebtViewModel
+    var onAddPayoff: () -> Void = {}
 
     var body: some View {
         ZStack {
@@ -10,7 +11,10 @@ struct DebtView: View {
                 VStack(alignment: .leading, spacing: GMSpacing.lg) {
                     header
                     debtHero
-                    planToggle
+                    if viewModel.totalDebt > 0 {
+                        planToggle
+                        if viewModel.planMode == .finance { financeDaysRow }
+                    }
                     planCard
                     sectionHeader
                     breakdown
@@ -63,16 +67,54 @@ struct DebtView: View {
 
     private var planToggle: some View {
         HStack(spacing: 6) {
-            Text("Pay in one go").foregroundStyle(GMColor.muted)
-            Text("Finance plan · 3 days").foregroundStyle(viewModel.totalDebt > 0 ? GMColor.debt : GMColor.muted)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.debt.opacity(viewModel.totalDebt > 0 ? 0.16 : 0.06)))
+            planOption(title: "Pay in one go", isActive: viewModel.planMode == .oneGo) {
+                viewModel.selectMode(.oneGo)
+            }
+            planOption(title: "Finance plan", isActive: viewModel.planMode == .finance) {
+                viewModel.selectMode(.finance)
+            }
         }
-        .font(.system(size: 14, weight: .bold))
         .padding(5)
         .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(GMColor.elevated))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Payback strategy")
+    }
+
+    private func planOption(title: String, isActive: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(isActive ? GMColor.debt : GMColor.muted)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.debt.opacity(isActive ? 0.16 : 0)))
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isActive ? .isSelected : [])
+    }
+
+    private var financeDaysRow: some View {
+        HStack(spacing: 9) {
+            Text("SPREAD OVER")
+                .font(.system(size: 12, weight: .semibold)).tracking(0.5)
+                .foregroundStyle(GMColor.muted)
+            Spacer()
+            ForEach(viewModel.financeDayOptions, id: \.self) { days in
+                Button { viewModel.selectFinanceDays(days) } label: {
+                    Text("\(days)")
+                        .font(.system(size: 15, weight: .heavy)).monospacedDigit()
+                        .foregroundStyle(days == viewModel.financeDays ? GMColor.debt : GMColor.muted)
+                        .frame(width: 40, height: 36)
+                        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(GMColor.elevated))
+                        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .stroke(days == viewModel.financeDays ? GMColor.debt.opacity(0.4) : GMColor.hairline, lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Spread over \(days) days")
+                .accessibilityAddTraits(days == viewModel.financeDays ? .isSelected : [])
+            }
+        }
     }
 
     private var planCard: some View {
@@ -119,7 +161,7 @@ struct DebtView: View {
 
     private var bottomCTA: some View {
         VStack(spacing: 7) {
-            Button { } label: {
+            Button { onAddPayoff() } label: {
                 Text("Add payoff to today's rounds")
                     .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(GMColor.onAccent)
@@ -128,6 +170,7 @@ struct DebtView: View {
             }
             .disabled(viewModel.totalDebt == 0)
             .opacity(viewModel.totalDebt == 0 ? 0.55 : 1)
+            .accessibilityLabel("Add debt payoff to today's rounds")
             Text("Money can't clear debt — only reps can.")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(GMColor.muted)
@@ -151,14 +194,21 @@ private struct PlanDayRow: View {
                 .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
             Text(day.title).font(.system(size: 16, weight: .bold)).foregroundStyle(GMColor.ink)
             Spacer()
-            Text(day.summary)
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(GMColor.accent)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(day.summary)
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(GMColor.accent)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text("\(day.repsTotal) reps")
+                    .font(.system(size: 11, weight: .semibold)).monospacedDigit()
+                    .foregroundStyle(GMColor.muted)
+            }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.vertical, 11)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(day.title): \(day.repsTotal) reps. \(day.summary)")
     }
 }
 

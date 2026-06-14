@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=393, initial-scale=1"/>
+<title>Getting Money — Dynamic Payback (Packet 07)</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .debthero{padding:14px 18px;background:linear-gradient(180deg, rgba(255,106,90,.12), rgba(255,106,90,.03)), var(--surface);border-color:rgba(255,106,90,.28);text-align:center;}
+  .debthero .k{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
+  .debthero .big{font-size:44px;font-weight:800;color:var(--debt);letter-spacing:-1.5px;line-height:1;margin-top:4px;}
+  .debthero .s{font-size:13px;color:var(--muted);margin-top:5px;}
+  .debthero .s b{color:var(--ink);}
+  .seg{display:flex;gap:6px;background:var(--elevated);border:1px solid var(--hair);border-radius:12px;padding:5px;}
+  .seg .o{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:700;color:var(--muted);}
+  .seg .o.active{background:rgba(255,106,90,.16);color:var(--debt);}
+  .days{display:flex;align-items:center;gap:9px;padding:2px 2px;}
+  .days .lab{font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;}
+  .days .chips{display:flex;gap:6px;margin-left:auto;}
+  .days .chip{width:38px;height:34px;border-radius:10px;background:var(--elevated);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--muted);}
+  .days .chip.active{background:rgba(255,106,90,.16);border-color:rgba(255,106,90,.4);color:var(--debt);}
+  .plan{padding:6px 4px;}
+  .pday{display:flex;align-items:center;gap:13px;padding:11px 14px;}
+  .pday+.pday{border-top:1px solid var(--hair);}
+  .pday .d{width:30px;height:30px;border-radius:9px;background:var(--elevated);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);}
+  .pday .lbl{flex:1;font-size:15px;font-weight:600;}
+  .pday .reps{font-size:13.5px;font-weight:700;color:var(--accent);text-align:right;}
+  .pday .sub{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+  .note{font-size:11.5px;color:var(--muted);text-align:center;padding:2px 10px;}
+</style></head><body>
+<div class="statusbar"><span class="num">9:41</span><span class="dots">●●● &nbsp;5G&nbsp; ▮</span></div>
+<div class="content">
+  <div>
+    <div class="eyebrow">Debt · Pay it back</div>
+    <div class="headrow"><div class="headline">Pay back<br/>what you owe.</div><span class="pill debt"><span class="dot"></span>Active debt</span></div>
+  </div>
+  <div class="card debthero">
+    <div class="k">Current rep debt</div>
+    <div class="big num">$36</div>
+    <div class="s"><b class="num">36</b> reps owed · paid back in reps, not money</div>
+  </div>
+  <div class="seg"><div class="o">Pay in one go</div><div class="o active">Finance plan</div></div>
+  <div class="days"><span class="lab">Spread over</span><div class="chips"><div class="chip">2</div><div class="chip active">3</div><div class="chip">4</div><div class="chip">5</div></div></div>
+  <div class="card plan">
+    <div class="pday"><span class="d">1</span><span class="lbl">Today</span><span class="reps num">+8 push · +1 pull · +4 squat<span class="sub">13 reps</span></span></div>
+    <div class="pday"><span class="d">2</span><span class="lbl">Tomorrow</span><span class="reps num">+8 push · +1 pull · +3 squat<span class="sub">12 reps</span></span></div>
+    <div class="pday"><span class="d">3</span><span class="lbl">Day 3</span><span class="reps num">+8 push · +3 squat<span class="sub">11 reps</span></span></div>
+  </div>
+</div>
+<div class="cta-wrap"><button class="cta">Add payoff to today’s rounds</button>
+  <div class="note">Money can’t clear debt — only reps can.</div></div>
+<div class="tabbar">
+  <div class="tab"><span class="gi">◉</span>Dashboard</div>
+  <div class="tab"><span class="gi">＋</span>Log</div>
+  <div class="tab"><span class="gi">◌</span>Rounds</div>
+  <div class="tab active"><span class="gi">↺</span>Debt</div>
+  <div class="tab"><span class="gi">⚙</span>Settings</div>
+</div>
+<div class="home-ind"></div>
+</body></html>

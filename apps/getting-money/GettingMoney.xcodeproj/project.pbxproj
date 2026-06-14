@@ -15,6 +15,7 @@
 		33C34D921B68FEE40C339270 /* DebtViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC2FC6D891D1E31A840544B /* DebtViewModel.swift */; };
 		37CAFECCD0B5DBB422163E16 /* TargetProgressionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2577BB29BE1393FB0EAD39F /* TargetProgressionEngine.swift */; };
 		3AE46537B22A74E6CFC81A3E /* DashboardSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED535DADE76F61B744ED412B /* DashboardSample.swift */; };
+		42184AC4D2192577881C9368 /* PaybackPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D0047D49FBB32B034AF6E /* PaybackPlannerTests.swift */; };
 		477F0A94A6F3F85AD7F9221E /* RoundCircleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA7784A3E5F68AD93E3927 /* RoundCircleCard.swift */; };
 		4903179D9FA698BB17C23523 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC44BFCEB0CFD526B9C7C86 /* SettingsView.swift */; };
 		49D9F48BF1EC777CB96C8E88 /* ExerciseProgressRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCC411A8CFE3014BC32F663 /* ExerciseProgressRow.swift */; };
@@ -55,6 +56,7 @@
 		E78FEF0E4144E6E6FFEBFA24 /* ExerciseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981087FD266EA11EA454391F /* ExerciseRepository.swift */; };
 		EF752226B65957DFA569E6F5 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113863A7F8D222181E33533C /* AppRootView.swift */; };
 		F8345671336539454398233B /* DailyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E335A29607D3C21385335B6 /* DailyTarget.swift */; };
+		F83EFC0C211B93EAB42DBF67 /* PaybackPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FA5F4B47B3AB78BFC7A07E /* PaybackPlanner.swift */; };
 		F8D095F6AE86E519E471F4F1 /* EarningsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36BFED4711573951E1D4013 /* EarningsEngine.swift */; };
 		FC5F25FDC9A978FA880812C8 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D016052D8BA4E7EAE99C1F /* Color+Hex.swift */; };
 		FC863314CBB94DF4028BB38C /* RepLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE38D80640AC1C499C93F79 /* RepLoggingTests.swift */; };
@@ -100,6 +102,7 @@
 		6BCC411A8CFE3014BC32F663 /* ExerciseProgressRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseProgressRow.swift; sourceTree = "<group>"; };
 		6CF71691AB05CAE3788B44AC /* DebtBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtBalance.swift; sourceTree = "<group>"; };
 		6F142AD5517A671BCC2FDBF6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		73FA5F4B47B3AB78BFC7A07E /* PaybackPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaybackPlanner.swift; sourceTree = "<group>"; };
 		8311B3FB1535DEBF649F821F /* DebtEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtEngineTests.swift; sourceTree = "<group>"; };
 		856B42AF899F1BF3F23C07FB /* GMTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMTypography.swift; sourceTree = "<group>"; };
 		8881EEDEF0CC629C8DF675F5 /* RepEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepEntry.swift; sourceTree = "<group>"; };
@@ -116,6 +119,7 @@
 		C32885A46E154336003BB447 /* ScreenBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenBackground.swift; sourceTree = "<group>"; };
 		CC07701DD15914B6C922C28B /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
 		D2577BB29BE1393FB0EAD39F /* TargetProgressionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetProgressionEngine.swift; sourceTree = "<group>"; };
+		D33D0047D49FBB32B034AF6E /* PaybackPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaybackPlannerTests.swift; sourceTree = "<group>"; };
 		DC2EC8B38083A621205DACD2 /* GettingMoney.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GettingMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF3CC94F0763115D6AD00EF6 /* TargetSettingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetSettingsList.swift; sourceTree = "<group>"; };
 		E36BFED4711573951E1D4013 /* EarningsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsEngine.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 			children = (
 				8311B3FB1535DEBF649F821F /* DebtEngineTests.swift */,
 				94FC11FCC0D4179E18434918 /* EarningsEngineTests.swift */,
+				D33D0047D49FBB32B034AF6E /* PaybackPlannerTests.swift */,
 				E800472A863F53F4597A5828 /* PersistenceTests.swift */,
 				ABE38D80640AC1C499C93F79 /* RepLoggingTests.swift */,
 				6B394E7708598C4702EB80A4 /* RoundPlannerTests.swift */,
@@ -216,6 +221,7 @@
 				E36BFED4711573951E1D4013 /* EarningsEngine.swift */,
 				05FBB4151760EE43AC4E120D /* GMCalendar.swift */,
 				2081897F8723FAD522BD5A2B /* LocalStore.swift */,
+				73FA5F4B47B3AB78BFC7A07E /* PaybackPlanner.swift */,
 				F4A838EC51F58E98B29D0639 /* Persistence.swift */,
 				FF43324DE6B016E1DD37E32E /* RoundPlanner.swift */,
 				D2577BB29BE1393FB0EAD39F /* TargetProgressionEngine.swift */,
@@ -421,6 +427,7 @@
 				CBD73F943FD8D32FD7288C6A /* LogExerciseCard.swift in Sources */,
 				FECD55934803319DE2AE5944 /* LogView.swift in Sources */,
 				743ACDEBAC2C9520D3FD15EE /* NumberFormatting.swift in Sources */,
+				F83EFC0C211B93EAB42DBF67 /* PaybackPlanner.swift in Sources */,
 				D71D07CCE288484F89B60751 /* Persistence.swift in Sources */,
 				0B14CAC1D36530553E182ECB /* ProgressionSettingsCard.swift in Sources */,
 				85E3FA40988781625B0EE312 /* RepEntry.swift in Sources */,
@@ -447,6 +454,7 @@
 			files = (
 				B9E7B9049550F200E7552532 /* DebtEngineTests.swift in Sources */,
 				B3322303061EDC5032557B9A /* EarningsEngineTests.swift in Sources */,
+				42184AC4D2192577881C9368 /* PaybackPlannerTests.swift in Sources */,
 				2CCEA1652117F2336AB53BD8 /* PersistenceTests.swift in Sources */,
 				FC863314CBB94DF4028BB38C /* RepLoggingTests.swift in Sources */,
 				C38EF7533E26F0D6B1D3B08F /* RoundPlannerTests.swift in Sources */,
