@@ -125,4 +125,31 @@ struct DashboardHistoryTests {
         #expect(vm.hasActivity == false)
         #expect(vm.history.count == 14)
     }
+
+    @Test("Dashboard daily selector reloads the selected day's reps and balance")
+    func dailySelectorLoadsSelectedDay() throws {
+        let today = GMCalendar.dayKey()
+        let yesterday = try #require(GMCalendar.calendar.date(byAdding: .day, value: -1, to: today))
+        let store = try LocalStore(inMemory: true, seedDate: yesterday)
+
+        _ = try store.workoutRepository.addRepEntry(exerciseKey: "pushups", count: 15, at: yesterday)
+        _ = try store.workoutRepository.addRepEntry(exerciseKey: "pushups", count: 5, at: today)
+
+        let vm = DashboardViewModel(exerciseRepository: store.exerciseRepository, workoutRepository: store.workoutRepository)
+        vm.load(today: today)
+        #expect(vm.selectedDate == today)
+        #expect(vm.dailyCompleted == 5)
+        #expect(vm.bankBalance == 20)
+
+        vm.showPreviousDay()
+        #expect(vm.selectedDate == yesterday)
+        #expect(vm.dailyCompleted == 15)
+        #expect(vm.rows.first { $0.id == "pushups" }?.completed == 15)
+        #expect(vm.bankBalance == 15)
+
+        vm.showNextDay()
+        #expect(vm.selectedDate == today)
+        #expect(vm.dailyCompleted == 5)
+        #expect(vm.bankBalance == 20)
+    }
 }

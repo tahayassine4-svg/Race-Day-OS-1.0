@@ -4,6 +4,7 @@ struct DashboardView: View {
     let viewModel: DashboardViewModel
     var onStartRounds: () -> Void = {}
     var onSetTargets: () -> Void = {}
+    var onLogDate: (Date) -> Void = { _ in }
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -15,7 +16,7 @@ struct DashboardView: View {
                 EmptyDashboard(onSetTargets: onSetTargets)
             }
         }
-        .onAppear { viewModel.load() }
+        .onAppear { viewModel.load(today: viewModel.selectedDate) }
     }
 
     private var populated: some View {
@@ -25,7 +26,9 @@ struct DashboardView: View {
                 balanceCard
                 chartCard
                 dailyTargetCard
-                sectionHeader("Today's reps", action: "Log →")
+                sectionHeader(viewModel.dailyRepsTitle, action: "Log →") {
+                    onLogDate(viewModel.selectedDate)
+                }
                 exerciseList
                 debtStrip
             }
@@ -53,9 +56,13 @@ struct DashboardView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: GMSpacing.xs) {
-            Text("CALISTHENICS BANK · TODAY")
-                .font(.system(size: 12, weight: .semibold)).tracking(1.4)
-                .foregroundStyle(GMColor.muted)
+            HStack(spacing: GMSpacing.sm) {
+                Text(viewModel.selectedDateEyebrow)
+                    .font(.system(size: 12, weight: .semibold)).tracking(1.4)
+                    .foregroundStyle(GMColor.muted)
+                Spacer()
+                daySwitcher
+            }
             HStack(alignment: .top) {
                 Text("Make reps.\nStack money.")
                     .font(.gmTitle).foregroundStyle(GMColor.ink)
@@ -63,6 +70,47 @@ struct DashboardView: View {
                 GMStatusPill(status: viewModel.status)
             }
         }
+    }
+
+    private var daySwitcher: some View {
+        HStack(spacing: 6) {
+            dayButton(systemImage: "chevron.left", enabled: viewModel.canGoToPreviousDay) {
+                viewModel.showPreviousDay()
+            }
+            Button { viewModel.showToday() } label: {
+                Text(viewModel.selectedDateTitle)
+                    .font(.system(size: 12, weight: .bold))
+                    .monospacedDigit()
+                    .foregroundStyle(viewModel.isToday ? GMColor.onAccent : GMColor.ink)
+                    .frame(minWidth: 64, minHeight: 32)
+                    .padding(.horizontal, GMSpacing.xs)
+                    .background(
+                        Capsule(style: .continuous)
+                            .fill(viewModel.isToday ? GMColor.accent : GMColor.elevated)
+                    )
+                    .overlay(
+                        Capsule(style: .continuous)
+                            .stroke(viewModel.isToday ? GMColor.accent.opacity(0.35) : GMColor.hairline, lineWidth: 1)
+                    )
+            }
+            .accessibilityLabel(viewModel.isToday ? "Showing today" : "Jump to today")
+            dayButton(systemImage: "chevron.right", enabled: viewModel.canGoToNextDay) {
+                viewModel.showNextDay()
+            }
+        }
+    }
+
+    private func dayButton(systemImage: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(enabled ? GMColor.ink : GMColor.muted.opacity(0.45))
+                .frame(width: 32, height: 32)
+                .background(Circle().fill(GMColor.elevated))
+                .overlay(Circle().stroke(GMColor.hairline, lineWidth: 1))
+        }
+        .disabled(!enabled)
+        .accessibilityLabel(systemImage == "chevron.left" ? "Previous day" : "Next day")
     }
 
     private var balanceCard: some View {
@@ -83,10 +131,10 @@ struct DashboardView: View {
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(GMColor.muted)
                         .accessibilityLabel(GMAccessibility.streak(days: viewModel.streakDays))
-                    (Text("Today ").foregroundStyle(GMColor.muted)
+                    (Text("\(viewModel.earnedDateLabel) ").foregroundStyle(GMColor.muted)
                      + Text("+" + viewModel.earnedToday.gmMoney).foregroundStyle(GMColor.accent))
                         .font(.system(size: 13, weight: .semibold)).monospacedDigit()
-                        .accessibilityLabel("Earned today, \(GMAccessibility.money(viewModel.earnedToday))")
+                        .accessibilityLabel("Earned \(viewModel.earnedDateLabel), \(GMAccessibility.money(viewModel.earnedToday))")
                 }
                 .padding(.top, GMSpacing.md)
             }
@@ -113,7 +161,9 @@ struct DashboardView: View {
             VStack(spacing: 0) {
                 ForEach(Array(viewModel.rows.enumerated()), id: \.element.id) { index, item in
                     if index > 0 { Divider().overlay(GMColor.hairline) }
-                    DashboardExerciseRow(item: item)
+                    DashboardExerciseRow(item: item) {
+                        onLogDate(viewModel.selectedDate)
+                    }
                 }
             }
         }
@@ -137,11 +187,14 @@ struct DashboardView: View {
             : "Bonus earned today, \(GMAccessibility.money(viewModel.bonusEarnedToday))")
     }
 
-    private func sectionHeader(_ title: String, action: String) -> some View {
+    private func sectionHeader(_ title: String, action: String, perform: @escaping () -> Void) -> some View {
         HStack {
             Text(title.uppercased()).font(.gmSection).tracking(0.4).foregroundStyle(GMColor.muted)
             Spacer()
-            Text(action).font(.system(size: 13, weight: .semibold)).foregroundStyle(GMColor.accent)
+            Button(action, action: perform)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(GMColor.accent)
+                .buttonStyle(.plain)
         }
     }
 
@@ -172,34 +225,38 @@ struct DashboardView: View {
 
 private struct DashboardExerciseRow: View {
     let item: DashboardViewModel.ExerciseRow
+    var onEdit: () -> Void = {}
 
     var body: some View {
-        HStack(spacing: GMSpacing.md + 2) {
-            Image(systemName: item.glyph)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(GMColor.ink)
-                .frame(width: 38, height: 38)
-                .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.elevated))
-                .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
-            VStack(alignment: .leading, spacing: 8) {
-                Text(item.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
-                GMProgressBar(fraction: item.fraction, height: 7)
-            }
-            VStack(alignment: .trailing, spacing: 2) {
-                (Text(item.completed.gmGrouped).foregroundStyle(GMColor.ink)
-                 + Text("/\(item.target.gmGrouped)").foregroundStyle(GMColor.muted))
-                    .font(.gmValue).monospacedDigit()
-                Text("\(item.remaining) to go").font(.gmMeta).foregroundStyle(GMColor.muted)
-                if item.debtOwed > 0 {
-                    Label("\(item.debtOwed) debt", systemImage: "exclamationmark.circle.fill")
-                        .font(.gmMeta)
-                        .foregroundStyle(GMColor.debt)
+        Button(action: onEdit) {
+            HStack(spacing: GMSpacing.md + 2) {
+                Image(systemName: item.glyph)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(GMColor.ink)
+                    .frame(width: 38, height: 38)
+                    .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.elevated))
+                    .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(item.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(GMColor.ink)
+                    GMProgressBar(fraction: item.fraction, height: 7)
                 }
+                VStack(alignment: .trailing, spacing: 2) {
+                    (Text(item.completed.gmGrouped).foregroundStyle(GMColor.ink)
+                     + Text("/\(item.target.gmGrouped)").foregroundStyle(GMColor.muted))
+                        .font(.gmValue).monospacedDigit()
+                    Text("\(item.remaining) to go").font(.gmMeta).foregroundStyle(GMColor.muted)
+                    if item.debtOwed > 0 {
+                        Label("\(item.debtOwed) debt", systemImage: "exclamationmark.circle.fill")
+                            .font(.gmMeta)
+                            .foregroundStyle(GMColor.debt)
+                    }
+                }
+                .frame(minWidth: 74, alignment: .trailing)
             }
-            .frame(minWidth: 74, alignment: .trailing)
+            .padding(.horizontal, 18)
+            .padding(.vertical, 12)
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 12)
+        .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(
             GMAccessibility.exerciseProgress(name: item.name, completed: item.completed, target: item.target)

@@ -44,7 +44,7 @@
 None. No backend, no auth, no third-party API.
 
 ## Distribution
-- Bundle ID: `com.<yassine>.gettingmoney` (set at project creation)
+- Bundle ID: `com.yassine.gettingmoney`
 - TestFlight/App Store status: not yet shipped
 - Privacy manifest: minimal — declare UserDefaults required-reason (`CA92.1`) if used; no tracking, no data collection. Account-deletion path N/A (no accounts).
 

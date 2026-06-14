@@ -45,7 +45,8 @@ struct AppRootView: View {
             DashboardView(
                 viewModel: dashboardViewModel,
                 onStartRounds: { selection = .rounds },
-                onSetTargets: { selection = .settings }
+                onSetTargets: { selection = .settings },
+                onLogDate: openLog
             )
             .tabItem { Label("Dashboard", systemImage: "chart.pie.fill") }
             .tag(Tab.dashboard)
@@ -83,8 +84,8 @@ struct AppRootView: View {
     /// Reloads every data-backed tab after a foreground day-close so debt, status,
     /// and plans are consistent regardless of which tab is visible.
     private func refreshAll() {
-        dashboardViewModel.load()
-        repLoggerViewModel.load()
+        dashboardViewModel.load(today: dashboardViewModel.selectedDate)
+        repLoggerViewModel.load(today: repLoggerViewModel.selectedDate)
         roundsViewModel.load()
         debtViewModel.load()
     }
@@ -94,7 +95,7 @@ struct AppRootView: View {
     /// debt/rounds/dashboard in sync after reps are logged elsewhere.
     private func reload(_ tab: Tab) {
         switch tab {
-        case .dashboard: dashboardViewModel.load()
+        case .dashboard: dashboardViewModel.load(today: dashboardViewModel.selectedDate)
         case .rounds: roundsViewModel.load()
         case .debt: debtViewModel.load()
         case .log, .settings: break
@@ -123,6 +124,11 @@ struct AppRootView: View {
     private func addPayoffToRounds() {
         roundsViewModel.requestPayoff(.full)
         selection = .rounds
+    }
+
+    private func openLog(on date: Date) {
+        repLoggerViewModel.load(today: date, preservingDrafts: false)
+        selection = .log
     }
 }
 

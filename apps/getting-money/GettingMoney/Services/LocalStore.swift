@@ -24,6 +24,16 @@ final class LocalStore {
             try exerciseRepository.setDebt(key: "pullups", repsOwed: 2, updatedAt: seedDate)
             try exerciseRepository.setDebt(key: "squats", repsOwed: 10, updatedAt: seedDate)
         }
+        if ProcessInfo.processInfo.arguments.contains("-GMSeedOneMissedDayFixture") {
+            // One clean missed-yesterday scenario: launch day-close should turn
+            // exactly yesterday's targets into debt (100 push, 10 pull, 150 squat).
+            let calendar = GMCalendar.calendar
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: seedDate) ?? seedDate
+            for seed in AppDataSeeder.defaults where seed.isEnabled {
+                try exerciseRepository.setTarget(key: seed.key, reps: seed.target, effectiveDate: yesterday, isManualOverride: false)
+            }
+            try exerciseRepository.markDayClosed(through: yesterday)
+        }
         if ProcessInfo.processInfo.arguments.contains("-GMSeedMissedDaysFixture") {
             // Pretend the user set targets a week ago, last opened the app 5 days
             // ago, and logged nothing since — so the launch day-close accrues debt

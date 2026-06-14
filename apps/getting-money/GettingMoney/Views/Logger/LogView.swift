@@ -25,12 +25,12 @@ struct LogView: View {
         }
         .safeAreaInset(edge: .bottom) { saveCTA }
         .sensoryFeedback(.selection, trigger: viewModel.feedbackTick)
-        .task { viewModel.load() }
+        .task { viewModel.load(today: viewModel.selectedDate) }
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: GMSpacing.xs) {
-            Text("LOG · TODAY")
+            Text(viewModel.logEyebrow)
                 .font(.system(size: 12, weight: .semibold)).tracking(1.4)
                 .foregroundStyle(GMColor.muted)
             HStack(alignment: .top) {
@@ -46,7 +46,7 @@ struct LogView: View {
         GMCard {
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("EARNED TODAY")
+                    Text(viewModel.earnedTitle)
                         .font(.system(size: 12, weight: .semibold)).tracking(1.2)
                         .foregroundStyle(GMColor.muted)
                     Text("+" + viewModel.earnedToday.gmMoney)
@@ -68,16 +68,16 @@ struct LogView: View {
     private var saveCTA: some View {
         Button { viewModel.save() } label: {
             HStack(spacing: 8) {
-                Text("Save reps").font(.system(size: 17, weight: .bold))
-                Text("· +\(viewModel.draftTotal.gmMoney) today")
+                Text(viewModel.saveTitle).font(.system(size: 17, weight: .bold))
+                Text("· \(viewModel.saveSubtitle)")
                     .font(.system(size: 13, weight: .semibold)).opacity(0.62)
             }
             .foregroundStyle(GMColor.onAccent)
             .frame(maxWidth: .infinity).frame(height: 56)
             .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(GMColor.accent))
         }
-        .disabled(viewModel.draftTotal == 0)
-        .opacity(viewModel.draftTotal == 0 ? 0.55 : 1)
+        .disabled(!viewModel.hasPendingChanges)
+        .opacity(viewModel.hasPendingChanges ? 1 : 0.55)
         .gmScreenPadding()
         .padding(.top, GMSpacing.md)
         .padding(.bottom, GMSpacing.sm)

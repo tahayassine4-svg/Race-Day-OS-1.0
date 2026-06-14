@@ -6,6 +6,7 @@ protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
     func day(for date: Date) throws -> WorkoutDay
     func addRepEntry(exerciseKey: String, count: Int, sourceRoundNumber: Int?, at timestamp: Date) throws -> RepEntry
     func deleteRoundEntries(roundNumber: Int, on date: Date) throws
+    func replaceManualRepEntries(on date: Date, totalsByExercise: [String: Int]) throws
     func entries(on date: Date) throws -> [RepEntry]
     func allEntries() throws -> [RepEntry]
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
@@ -51,6 +52,34 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
         for entry in (workoutDay.repEntries ?? []) where entry.sourceRoundNumber == roundNumber {
             context.delete(entry)
         }
+        try context.save()
+    }
+
+    /// Replaces hand-entered reps for a day while preserving round-tagged entries.
+    /// The incoming totals are desired whole-day totals; reps already logged by
+    /// completed rounds are subtracted so round completion remains reversible.
+    func replaceManualRepEntries(on date: Date = Date(), totalsByExercise: [String: Int]) throws {
+        let workoutDay = try day(for: date)
+        let entries = workoutDay.repEntries ?? []
+        let roundTotals = Dictionary(grouping: entries.filter { $0.sourceRoundNumber != nil }, by: \.exerciseKey)
+            .mapValues { $0.reduce(0) { $0 + $1.count } }
+
+        for entry in entries where entry.sourceRoundNumber == nil {
+            context.delete(entry)
+        }
+
+        for (exerciseKey, desiredTotal) in totalsByExercise {
+            let manualTotal = max(0, desiredTotal - (roundTotals[exerciseKey] ?? 0))
+            guard manualTotal > 0 else { continue }
+            context.insert(RepEntry(
+                timestamp: GMCalendar.dayKey(for: date),
+                exerciseKey: exerciseKey,
+                count: manualTotal,
+                sourceRoundNumber: nil,
+                day: workoutDay
+            ))
+        }
+
         try context.save()
     }
 

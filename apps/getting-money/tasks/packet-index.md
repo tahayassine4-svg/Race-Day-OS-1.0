@@ -15,5 +15,7 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 | 09 | Debt Day-Close Engine (rep-debt now accrues) | backend | COMPLETE | packet-09-debt-day-close | aa1d94d |
 | 10 | Live Debt Payback (immediate on-screen feedback) | backend | COMPLETE | packet-09-debt-day-close | (this branch) |
 | 11 | Actionable Rounds + Settings fixes | UI | COMPLETE | packet-09-debt-day-close | (this branch) |
+| 12 | Dashboard Daily Date Selector | UI | TESTED | packet-09-debt-day-close | — |
+| 13 | Past-Day Rep Corrections | UI + backend | TESTED | packet-09-debt-day-close | — |
 
 Source root: `apps/getting-money/GettingMoney/` · Tests: `apps/getting-money/GettingMoneyTests/` · Mockups: `apps/getting-money/design/packet-NN.png` (dark/lime/coral, from `design/reference-mockup.png`).
