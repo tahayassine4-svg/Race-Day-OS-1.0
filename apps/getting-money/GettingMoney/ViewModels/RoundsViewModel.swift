@@ -40,6 +40,7 @@ final class RoundsViewModel {
 
     private var targets: [RoundTarget] = []
     private var debts: [PaybackDebt] = []
+    private var requestedPayoff: Payoff?
     private var repValue = 1
     private let exerciseRepository: any ExerciseRepositoryProtocol
     private let workoutRepository: any WorkoutRepositoryProtocol
@@ -93,6 +94,12 @@ final class RoundsViewModel {
                 rounds = makeRounds(from: saved)
                 recalculateFromSaved(saved)
             }
+            // An explicit payoff request (e.g. the Debt screen's "Add payoff to
+            // today's rounds") survives this reload and overrides the saved plan.
+            if let requested = requestedPayoff {
+                requestedPayoff = nil
+                choosePayoff(requested)
+            }
             errorMessage = nil
         } catch {
             rounds = []
@@ -108,6 +115,12 @@ final class RoundsViewModel {
     func choosePayoff(_ payoff: Payoff) {
         self.payoff = hasDebt ? payoff : .none
         rebuild()
+    }
+
+    /// Records a payoff to apply on the next `load()` — lets navigation into the
+    /// Rounds tab (which triggers a reload) keep an externally-chosen payoff.
+    func requestPayoff(_ payoff: Payoff) {
+        requestedPayoff = payoff
     }
 
     func adjust(roundID: Int, exerciseKey: String, by delta: Int) {

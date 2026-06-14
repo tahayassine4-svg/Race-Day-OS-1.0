@@ -60,4 +60,24 @@ struct CrossScreenRefreshTests {
         rounds.choosePayoff(.full)
         #expect(rounds.payoffReps == 18)
     }
+
+    @Test("Requested payoff survives the tab-switch reload over an already-saved plain plan")
+    func requestedPayoffSurvivesReload() throws {
+        let store = try LocalStore(inMemory: true)
+        try store.exerciseRepository.setDebt(key: "pushups", repsOwed: 24, updatedAt: Date())
+        let rounds = RoundsViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
+        rounds.load()
+        rounds.save() // a plain plan (no payoff) is now saved for today
+
+        // Debt screen "Add payoff to today's rounds": request, then the reload
+        // that AppRootView.onChange(of: selection) performs on tab switch.
+        rounds.requestPayoff(.full)
+        rounds.load()
+
+        #expect(rounds.payoff == .full)
+        #expect(rounds.payoffReps == 24)
+    }
 }

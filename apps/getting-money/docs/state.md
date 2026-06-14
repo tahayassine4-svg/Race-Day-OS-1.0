@@ -2,7 +2,7 @@ phase: REPORTER
 app: getting-money
 packet: 08
 status: PACKET_08_COMPLETE — v1 feature-complete; 63/63 tests green; unsigned archive verified; signing+upload handed to Yassine
-last_action: review fixes — wired Dashboard "Start today's rounds" CTA (real round count) + empty-state "Set today's targets" CTA; added 3 cross-screen live-refresh integration tests (66/66 green)
+last_action: review round 2 — fixed payoff-clobber on the Debt→Rounds shortcut via requestPayoff(.full) that survives the tab-switch reload; rendered payoff-active Rounds state; 67/67 green
 branch: packet-08-history-polish
 commit: (committing now)
 next_step: Yassine configures DEVELOPMENT_TEAM + signing and archives to TestFlight (steps in reports/packet-08-report.md). Optional fast-follows: branded launch screen, stored daily-debt snapshot for a debt-trend chart.

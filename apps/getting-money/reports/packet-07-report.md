@@ -19,7 +19,8 @@
 - `xcodebuild ... test` on iPhone 17 Pro: PASS — **53 tests** (added 11 planner + 6 view-model tests for Packet 07).
 - Coverage: one-go single/mixed debt; finance spread + exercise-aware independence + total conservation across 1–7 days; payoff levels (none/small/half/full/custom + clamp); debt VM mode switch + repayment-reduces-plan; rounds full-payoff folds to matching exercise, round-count change conserves total, no-debt → payoff None.
 - Money-to-debt grep: PASS — no affordance pays debt with money; reassurance copy present ("paid back in reps, not money", "Money can't clear debt — only reps can", "repaid in reps").
-- Visual verification on iPhone 17 Pro simulator (debt fixture): PASS — Debt screen at `reports/artifacts/p07-debt.png`, Rounds at `reports/artifacts/p07-rounds.png`; both match `design/packet-07.png` / `design/packet-07-rounds.png`.
+- Visual verification on iPhone 17 Pro simulator (debt fixture): PASS — Debt screen at `reports/artifacts/p07-debt.png`, Rounds (default) at `reports/artifacts/p07-rounds.png`, Rounds with Full payoff folded in at `reports/artifacts/p07-rounds-payoff.png`; all match `design/packet-07.png` / `design/packet-07-rounds.png`.
+- Post-review fix: the Debt "Add payoff to today's rounds" shortcut now uses `requestPayoff(.full)` so the chosen payoff survives the tab-switch reload (previously a saved plain plan reset it to None). Covered by `requestedPayoffSurvivesReload`.
 
 ## Acceptance Criteria
 - [x] One-go and finance-plan options appear when debt exists.

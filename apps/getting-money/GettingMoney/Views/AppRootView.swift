@@ -24,10 +24,16 @@ struct AppRootView: View {
             workoutRepository: store.workoutRepository
         ))
         _debtViewModel = State(initialValue: DebtViewModel(exerciseRepository: store.exerciseRepository))
-        _roundsViewModel = State(initialValue: RoundsViewModel(
+        let rounds = RoundsViewModel(
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository
-        ))
+        )
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-GMPayoffFull") {
+            rounds.requestPayoff(.full)
+        }
+#endif
+        _roundsViewModel = State(initialValue: rounds)
     }
 
     var body: some View {
@@ -88,10 +94,11 @@ struct AppRootView: View {
         return .dashboard
     }
 
-    /// Debt screen → Rounds tab with the full owed amount folded into today's rounds.
+    /// Debt screen → Rounds tab with the full owed amount folded into today's
+    /// rounds. The payoff is *requested* so it survives the tab-switch reload
+    /// that `onChange(of: selection)` triggers.
     private func addPayoffToRounds() {
-        roundsViewModel.load()
-        roundsViewModel.choosePayoff(.full)
+        roundsViewModel.requestPayoff(.full)
         selection = .rounds
     }
 }

@@ -13,7 +13,7 @@
 - Version bumped to `1.0.0`.
 
 ## Test Results
-- `xcodebuild ... test` on iPhone 17 Pro: PASS — **66 tests** (added 10 for Packet 08 history/reset/export/dashboard, plus 3 cross-screen live-refresh integration tests).
+- `xcodebuild ... test` on iPhone 17 Pro: PASS — **67 tests** (added 10 for Packet 08 history/reset/export/dashboard, plus 3 cross-screen live-refresh integration tests).
 - Cross-screen live refresh (AC "recalculates when reps are logged") proven by integration tests that log reps / change debt through the real store, then call `load()` — exactly what `AppRootView.onChange(of: selection)` performs on tab switch — and assert balance/plan/payoff move and empty→populated flips.
 - `xcodebuild archive ... CODE_SIGNING_ALLOWED=NO`: **ARCHIVE SUCCEEDED** — the app archives cleanly; only signing + upload remain.
 - Visual verification on iPhone 17 Pro: PASS — Dashboard with charts `reports/artifacts/p08-dashboard.png`, first-launch empty state `p08-empty.png`, Settings `p08-settings.png`. Match `design/packet-08.png` / `design/packet-08-states.png`.
@@ -23,7 +23,7 @@
 - [x] Empty states for no reps / first launch (no-debt states from prior packets).
 - [x] Local data reset works after confirmation (unit-tested: reset → first-launch empty state; re-seeds defaults).
 - [x] Core controls have VoiceOver labels; Reduce Motion disables the count-up animation.
-- [x] App builds, all tests pass (66/66).
+- [x] App builds, all tests pass (67/67).
 - [x] Project archives for TestFlight (unsigned archive verified); signing blocker documented below.
 
 ## TestFlight archive & upload steps (for Yassine)
