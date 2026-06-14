@@ -27,6 +27,22 @@ struct RoundsCompletionTests {
         #expect(dash.dailyCompleted == 88)
     }
 
+    @Test("The bottom CTA completes the next round and moves the balance")
+    func completeNextRoundButton() throws {
+        let store = try LocalStore(inMemory: true)
+        let rounds = makeRounds(store)
+        rounds.load()
+        #expect(rounds.nextIncompleteRound == 1)
+
+        rounds.completeNextRound() // what the "Complete round 1" button calls
+        #expect(rounds.isCompleted(1))
+        #expect(rounds.nextIncompleteRound == 2)
+
+        let dash = dashboard(store)
+        dash.load()
+        #expect(dash.bankBalance == 88) // round 1: 34 + 4 + 50
+    }
+
     @Test("Un-ticking a round removes exactly its reps")
     func untickRemovesReps() throws {
         let store = try LocalStore(inMemory: true)
