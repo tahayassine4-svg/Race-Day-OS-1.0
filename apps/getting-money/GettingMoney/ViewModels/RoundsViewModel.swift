@@ -46,6 +46,7 @@ final class RoundsViewModel {
     private let workoutRepository: any WorkoutRepositoryProtocol
     private let planner: any RoundPlannerProtocol
     private let paybackPlanner: any PaybackPlannerProtocol
+    private let debtEngine: any DebtEngineProtocol = DebtEngine()
 
     init(
         exerciseRepository: any ExerciseRepositoryProtocol,
@@ -73,15 +74,26 @@ final class RoundsViewModel {
                         reps: exerciseRepository.currentTarget(for: exercise, on: today)
                     )
                 }
-            let balances = try exerciseRepository.debtBalances()
-            totalDebt = balances.reduce(0) { $0 + $1.repsOwed }
+            // Fold only the debt that remains after today's payback reps (live),
+            // so payoff never folds reps the user already did today.
+            let entries = try workoutRepository.entries(on: today)
+            let completedByKey = Dictionary(grouping: entries, by: \.exerciseKey)
+                .mapValues { $0.reduce(0) { $0 + $1.count } }
             debts = try exerciseRepository.allOrdered()
                 .filter(\.isEnabled)
                 .compactMap { exercise in
-                    let owed = exercise.debt?.repsOwed ?? 0
-                    guard owed > 0 else { return nil }
-                    return PaybackDebt(key: exercise.key, name: exercise.name, glyph: exercise.glyph, repsOwed: owed)
+                    let persisted = exercise.debt?.repsOwed ?? 0
+                    guard persisted > 0 else { return nil }
+                    let remaining = debtEngine.liveDebt(
+                        key: exercise.key,
+                        targetReps: exerciseRepository.currentTarget(for: exercise, on: today),
+                        completedReps: completedByKey[exercise.key] ?? 0,
+                        persistedDebt: persisted
+                    )
+                    guard remaining > 0 else { return nil }
+                    return PaybackDebt(key: exercise.key, name: exercise.name, glyph: exercise.glyph, repsOwed: remaining)
                 }
+            totalDebt = debts.reduce(0) { $0 + $1.repsOwed }
             dailyTarget = targets.reduce(0) { $0 + $1.reps }
             if !hasDebt { payoff = .none }
 

@@ -35,6 +35,19 @@ protocol DebtEngineProtocol: Sendable {
     func settleDay(inputs: [DebtExerciseInput]) -> DebtSummary
 }
 
+extension DebtEngineProtocol {
+    /// Debt remaining for one exercise after today's surplus repayment ONLY.
+    /// Today's *misses* are not counted as debt yet — that accrual happens at
+    /// day-close (today stays live). So this = persistedDebt − today's repaid,
+    /// which is what the Dashboard/Debt/Rounds screens show during the day.
+    func liveDebt(key: String, targetReps: Int, completedReps: Int, persistedDebt: Int) -> Int {
+        let settlement = settleDay(inputs: [
+            DebtExerciseInput(key: key, targetReps: targetReps, completedReps: completedReps, existingDebt: persistedDebt)
+        ]).settlements.first
+        return max(0, persistedDebt - (settlement?.debtRepaid ?? 0))
+    }
+}
+
 struct DebtEngine: DebtEngineProtocol {
     func settleDay(inputs: [DebtExerciseInput]) -> DebtSummary {
         DebtSummary(settlements: inputs.map(settle))

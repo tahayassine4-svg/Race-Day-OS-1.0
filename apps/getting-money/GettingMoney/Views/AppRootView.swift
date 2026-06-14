@@ -24,7 +24,10 @@ struct AppRootView: View {
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository
         ))
-        _debtViewModel = State(initialValue: DebtViewModel(exerciseRepository: store.exerciseRepository))
+        _debtViewModel = State(initialValue: DebtViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        ))
         let rounds = RoundsViewModel(
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository

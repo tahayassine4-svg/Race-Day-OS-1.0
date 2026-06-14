@@ -30,24 +30,42 @@ final class DebtViewModel {
     let financeDayOptions = [2, 3, 4, 5]
 
     private let exerciseRepository: any ExerciseRepositoryProtocol
+    private let workoutRepository: any WorkoutRepositoryProtocol
     private let planner: any PaybackPlannerProtocol
+    private let debtEngine: any DebtEngineProtocol
 
     init(
         exerciseRepository: any ExerciseRepositoryProtocol,
-        planner: any PaybackPlannerProtocol = PaybackPlanner()
+        workoutRepository: any WorkoutRepositoryProtocol,
+        planner: any PaybackPlannerProtocol = PaybackPlanner(),
+        debtEngine: any DebtEngineProtocol = DebtEngine()
     ) {
         self.exerciseRepository = exerciseRepository
+        self.workoutRepository = workoutRepository
         self.planner = planner
+        self.debtEngine = debtEngine
     }
 
-    func load() {
+    func load(today: Date = Date()) {
         do {
+            let entries = try workoutRepository.entries(on: today)
+            let completedByKey = Dictionary(grouping: entries, by: \.exerciseKey)
+                .mapValues { $0.reduce(0) { $0 + $1.count } }
+            // Show debt remaining after today's payback reps (live), so the number
+            // and the plan shrink as the user logs and hit "Paid off" when cleared.
             rows = try exerciseRepository.allOrdered()
                 .filter(\.isEnabled)
                 .compactMap { exercise in
-                    let owed = exercise.debt?.repsOwed ?? 0
-                    guard owed > 0 else { return nil }
-                    return Row(id: exercise.key, name: exercise.name, glyph: exercise.glyph, repsOwed: owed)
+                    let persisted = exercise.debt?.repsOwed ?? 0
+                    guard persisted > 0 else { return nil }
+                    let remaining = debtEngine.liveDebt(
+                        key: exercise.key,
+                        targetReps: exerciseRepository.currentTarget(for: exercise, on: today),
+                        completedReps: completedByKey[exercise.key] ?? 0,
+                        persistedDebt: persisted
+                    )
+                    guard remaining > 0 else { return nil }
+                    return Row(id: exercise.key, name: exercise.name, glyph: exercise.glyph, repsOwed: remaining)
                 }
             totalDebt = rows.reduce(0) { $0 + $1.repsOwed }
             status = totalDebt > 0 ? .activeDebt : .paidOff

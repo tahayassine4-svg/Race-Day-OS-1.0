@@ -60,6 +60,7 @@
 		CBD73F943FD8D32FD7288C6A /* LogExerciseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F42E771E933043C822D4A /* LogExerciseCard.swift */; };
 		D1851E52551480A5822D558E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FAFDC23925D8A423D49107 /* AppSettings.swift */; };
 		D516449D5BFE36A479CF3E2E /* RoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E07812FFF5811B241708FE0 /* RoundsView.swift */; };
+		D64FB31EA5CA088EA0EB0774 /* LivePaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4024C6474E22B8D7FDF75452 /* LivePaybackTests.swift */; };
 		D672306F1B2E0E64820C5668 /* GMTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856B42AF899F1BF3F23C07FB /* GMTypography.swift */; };
 		D71D07CCE288484F89B60751 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A838EC51F58E98B29D0639 /* Persistence.swift */; };
 		E292E9D54FE5D756EED83C7F /* RoundPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C95A733BBD225B34BCEFBA /* RoundPlan.swift */; };
@@ -98,6 +99,7 @@
 		33BA7784A3E5F68AD93E3927 /* RoundCircleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCircleCard.swift; sourceTree = "<group>"; };
 		398C2BD04E1E999801413E21 /* ExportLocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportLocalData.swift; sourceTree = "<group>"; };
 		3E335A29607D3C21385335B6 /* DailyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTarget.swift; sourceTree = "<group>"; };
+		4024C6474E22B8D7FDF75452 /* LivePaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePaybackTests.swift; sourceTree = "<group>"; };
 		49772163341EA80A34C4D35A /* GMSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSpacing.swift; sourceTree = "<group>"; };
 		4A300AF7EB3F954A2814B771 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4C0FAFC88DF0AAB23A591A12 /* GMProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMProgressBar.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				8311B3FB1535DEBF649F821F /* DebtEngineTests.swift */,
 				94FC11FCC0D4179E18434918 /* EarningsEngineTests.swift */,
 				4A300AF7EB3F954A2814B771 /* HistoryTests.swift */,
+				4024C6474E22B8D7FDF75452 /* LivePaybackTests.swift */,
 				D33D0047D49FBB32B034AF6E /* PaybackPlannerTests.swift */,
 				E800472A863F53F4597A5828 /* PersistenceTests.swift */,
 				ABE38D80640AC1C499C93F79 /* RepLoggingTests.swift */,
@@ -513,6 +516,7 @@
 				B9E7B9049550F200E7552532 /* DebtEngineTests.swift in Sources */,
 				B3322303061EDC5032557B9A /* EarningsEngineTests.swift in Sources */,
 				8974C9172B34A8B94EC497F5 /* HistoryTests.swift in Sources */,
+				D64FB31EA5CA088EA0EB0774 /* LivePaybackTests.swift in Sources */,
 				42184AC4D2192577881C9368 /* PaybackPlannerTests.swift in Sources */,
 				2CCEA1652117F2336AB53BD8 /* PersistenceTests.swift in Sources */,
 				FC863314CBB94DF4028BB38C /* RepLoggingTests.swift in Sources */,

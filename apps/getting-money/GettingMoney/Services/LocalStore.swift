@@ -36,6 +36,12 @@ final class LocalStore {
             }
             try exerciseRepository.markDayClosed(through: fiveDaysAgo)
         }
+        if ProcessInfo.processInfo.arguments.contains("-GMSeedPaybackFixture") {
+            // 50 reps of standing pushup debt, with 30 payback reps already logged
+            // today (130 = 100 target + 30 payback) → Debt should read 20 live.
+            try exerciseRepository.setDebt(key: "pushups", repsOwed: 50, updatedAt: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pushups", count: 130, at: seedDate)
+        }
         if ProcessInfo.processInfo.arguments.contains("-GMSeedHistoryFixture") {
             let calendar = GMCalendar.calendar
             // Two weeks of climbing activity so the trend charts have data.

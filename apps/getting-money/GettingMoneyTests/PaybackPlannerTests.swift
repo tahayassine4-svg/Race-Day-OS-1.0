@@ -112,7 +112,7 @@ struct DebtPlanViewModelTests {
     func modeSwitch() throws {
         let store = try LocalStore(inMemory: true)
         try store.exerciseRepository.setDebt(key: "pushups", repsOwed: 30, updatedAt: Date())
-        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository)
+        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository, workoutRepository: store.workoutRepository)
         vm.load()
 
         vm.selectMode(.oneGo)
@@ -128,7 +128,7 @@ struct DebtPlanViewModelTests {
     func repaymentReduces() throws {
         let store = try LocalStore(inMemory: true)
         try store.exerciseRepository.setDebt(key: "pushups", repsOwed: 30, updatedAt: Date())
-        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository)
+        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository, workoutRepository: store.workoutRepository)
         vm.load()
         #expect(vm.totalDebt == 30)
 
@@ -142,7 +142,7 @@ struct DebtPlanViewModelTests {
     @Test("No debt → no plan and paid-off status")
     func noDebt() throws {
         let store = try LocalStore(inMemory: true)
-        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository)
+        let vm = DebtViewModel(exerciseRepository: store.exerciseRepository, workoutRepository: store.workoutRepository)
         vm.load()
         #expect(vm.totalDebt == 0)
         #expect(vm.planDays.isEmpty)

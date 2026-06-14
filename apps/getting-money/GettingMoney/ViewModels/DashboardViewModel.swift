@@ -108,6 +108,15 @@ final class DashboardViewModel {
             let debtSummary = debtEngine.settleDay(inputs: dailyInputs)
             earnedToday = debtSummary.settlements.reduce(0) { $0 + $1.earnedMoney(repValue: settings.repValue) }
             bonusEarnedToday = rows.reduce(0) { $0 + $1.bonusEarned }
+            // Live payback: today's surplus reps repay debt immediately. (Today's
+            // misses are NOT counted as debt yet — that happens at day-close.)
+            rows = rows.map { row in
+                ExerciseRow(id: row.id, name: row.name, glyph: row.glyph,
+                            completed: row.completed, target: row.target,
+                            debtOwed: debtEngine.liveDebt(key: row.id, targetReps: row.target,
+                                                          completedReps: row.completed, persistedDebt: row.debtOwed),
+                            bonusEarned: row.bonusEarned)
+            }
             totalDebt = rows.reduce(0) { $0 + $1.debtOwed }
             bankBalance = earningsEngine.totalMoney(for: allEntries, repValue: settings.repValue)
             status = dashboardStatus

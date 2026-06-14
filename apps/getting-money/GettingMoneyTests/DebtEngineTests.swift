@@ -73,7 +73,10 @@ struct DebtViewModelTests {
         try store.exerciseRepository.setDebt(key: "pullups", repsOwed: 2, updatedAt: Date())
         try store.exerciseRepository.setDebt(key: "squats", repsOwed: 10, updatedAt: Date())
 
-        let debtViewModel = DebtViewModel(exerciseRepository: store.exerciseRepository)
+        let debtViewModel = DebtViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
         debtViewModel.load()
 
         #expect(debtViewModel.totalDebt == 36)

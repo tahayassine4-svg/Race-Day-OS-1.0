@@ -30,7 +30,10 @@ struct CrossScreenRefreshTests {
     @Test("Revisiting Debt after debt changes recomputes the payback plan")
     func debtReflectsChange() throws {
         let store = try LocalStore(inMemory: true)
-        let debt = DebtViewModel(exerciseRepository: store.exerciseRepository)
+        let debt = DebtViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
         debt.load()
         #expect(debt.totalDebt == 0)
         #expect(debt.planDays.isEmpty)
