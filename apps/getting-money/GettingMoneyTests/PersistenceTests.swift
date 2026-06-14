@@ -91,6 +91,11 @@ struct PersistenceTests {
 
         viewModel.setEnabled("dips", true)
         #expect(viewModel.rows.first { $0.id == "dips" }?.isEnabled == true)
+
+        // Regression: an enabled optional exercise must be turn-off-able again
+        // (the Settings toggle used to vanish once dips was on).
+        viewModel.setEnabled("dips", false)
+        #expect(viewModel.rows.first { $0.id == "dips" }?.isEnabled == false)
     }
 
     @Test("Schema and views keep SwiftData below the repository layer")

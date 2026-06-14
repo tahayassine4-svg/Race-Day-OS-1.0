@@ -7,7 +7,6 @@ struct TargetProgressionInput: Sendable {
     let autoProgressionEnabled: Bool
     let progressionAmount: Int
     let progressionIntervalDays: Int
-    let pullupCap: Int
     let lastProgressionDate: Date?
     let today: Date
 }
@@ -44,13 +43,6 @@ struct TargetProgressionEngine: TargetProgressionEngineProtocol {
         }
 
         let rawTarget = input.currentReps + (amount * intervals)
-
-        if input.exerciseKey == "pullups" {
-            let cap = max(1, input.pullupCap)
-            let capped = input.currentReps >= cap ? input.currentReps : min(rawTarget, cap)
-            return TargetProgressionResult(reps: capped, didProgress: capped != input.currentReps, intervalsApplied: intervals)
-        }
-
         return TargetProgressionResult(reps: rawTarget, didProgress: true, intervalsApplied: intervals)
     }
 

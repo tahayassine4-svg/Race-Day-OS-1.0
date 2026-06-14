@@ -13,7 +13,6 @@ final class SettingsViewModel {
         let target: Int
         let isOptional: Bool
         var isEnabled: Bool
-        let cap: Int?
 
         var isEditable: Bool { isEnabled || !isOptional }
     }
@@ -22,7 +21,6 @@ final class SettingsViewModel {
     private(set) var autoProgressionEnabled = true
     private(set) var progressionAmount = 5
     private(set) var progressionIntervalDays = 14
-    private(set) var pullupCap = 10
     private(set) var daysUntilNextProgression = 14
     private(set) var errorMessage: String?
 
@@ -49,7 +47,6 @@ final class SettingsViewModel {
             autoProgressionEnabled = settings.autoProgressionEnabled
             progressionAmount = settings.progressionAmount
             progressionIntervalDays = settings.progressionIntervalDays
-            pullupCap = settings.pullupCap
             daysUntilNextProgression = progressionEngine.daysUntilNextProgression(
                 lastProgressionDate: settings.lastProgressionDate,
                 intervalDays: settings.progressionIntervalDays,
@@ -63,8 +60,7 @@ final class SettingsViewModel {
                     glyph: ex.glyph,
                     target: repository.currentTarget(for: ex, on: Date()),
                     isOptional: ex.isOptional,
-                    isEnabled: ex.isEnabled,
-                    cap: ex.key == "pullups" ? settings.pullupCap : nil
+                    isEnabled: ex.isEnabled
                 )
             }
             errorMessage = nil
@@ -140,15 +136,6 @@ final class SettingsViewModel {
         }
     }
 
-    func adjustPullupCap(by delta: Int) {
-        do {
-            try repository.setPullupCap(pullupCap + delta)
-            load()
-        } catch {
-            errorMessage = "Pull-up cap could not be saved."
-        }
-    }
-
     // MARK: Beta data utilities (Packet 08)
 
     func exportData() -> Data? {
@@ -183,7 +170,6 @@ final class SettingsViewModel {
                     autoProgressionEnabled: settings.autoProgressionEnabled,
                     progressionAmount: settings.progressionAmount,
                     progressionIntervalDays: settings.progressionIntervalDays,
-                    pullupCap: settings.pullupCap,
                     lastProgressionDate: settings.lastProgressionDate,
                     today: today
                 ))

@@ -40,8 +40,6 @@ struct ProgressionSettingsCard: View {
                 progressionRow("Increase", value: viewModel.progressionAmount, suffix: "reps", minus: { viewModel.adjustProgressionAmount(by: -1) }, plus: { viewModel.adjustProgressionAmount(by: 1) })
                 Divider().overlay(GMColor.hairline)
                 progressionRow("Frequency", value: viewModel.progressionIntervalDays, suffix: "days", minus: { viewModel.adjustProgressionIntervalDays(by: -1) }, plus: { viewModel.adjustProgressionIntervalDays(by: 1) })
-                Divider().overlay(GMColor.hairline)
-                progressionRow("Pull-up cap", value: viewModel.pullupCap, suffix: "auto max", minus: { viewModel.adjustPullupCap(by: -1) }, plus: { viewModel.adjustPullupCap(by: 1) })
             }
         }
     }

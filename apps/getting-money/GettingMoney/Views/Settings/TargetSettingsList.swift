@@ -29,21 +29,9 @@ private struct TargetSettingsRow: View {
                 .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
 
             VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: GMSpacing.sm) {
-                    Text(row.name)
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(GMColor.ink)
-
-                    if let cap = row.cap {
-                        Text("cap \(cap)")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(GMColor.warning)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Capsule().fill(GMColor.warning.opacity(0.12)))
-                            .overlay(Capsule().stroke(GMColor.warning.opacity(0.28), lineWidth: 1))
-                    }
-                }
+                Text(row.name)
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(GMColor.ink)
 
                 Text(subtitle)
                     .font(.gmMeta)
@@ -52,16 +40,21 @@ private struct TargetSettingsRow: View {
 
             Spacer()
 
-            if row.isOptional && !row.isEnabled {
-                Toggle("", isOn: Binding(
-                    get: { row.isEnabled },
-                    set: { viewModel.setEnabled(row.id, $0) }
-                ))
-                .labelsHidden()
-                .tint(GMColor.accent)
-                .accessibilityLabel("Enable \(row.name)")
-            } else {
-                TargetStepper(row: row, viewModel: viewModel)
+            // The target stepper shows whenever the exercise is on; optional
+            // exercises always keep a toggle so they can be turned back OFF.
+            HStack(spacing: GMSpacing.md) {
+                if row.isEnabled {
+                    TargetStepper(row: row, viewModel: viewModel)
+                }
+                if row.isOptional {
+                    Toggle("", isOn: Binding(
+                        get: { row.isEnabled },
+                        set: { viewModel.setEnabled(row.id, $0) }
+                    ))
+                    .labelsHidden()
+                    .tint(GMColor.accent)
+                    .accessibilityLabel("\(row.isEnabled ? "Disable" : "Enable") \(row.name)")
+                }
             }
         }
         .padding(.horizontal, 18)
@@ -71,7 +64,7 @@ private struct TargetSettingsRow: View {
 
     private var subtitle: String {
         if row.isOptional && !row.isEnabled { return "optional · off" }
-        if let cap = row.cap { return "auto-progression stops at \(cap)" }
+        if row.isOptional { return "optional · on" }
         return "reps / day"
     }
 }

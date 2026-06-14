@@ -18,7 +18,6 @@ struct TargetProgressionEngineTests {
             autoProgressionEnabled: true,
             progressionAmount: 5,
             progressionIntervalDays: 14,
-            pullupCap: 10,
             lastProgressionDate: last,
             today: today
         ))
@@ -28,8 +27,8 @@ struct TargetProgressionEngineTests {
         #expect(result.intervalsApplied == 1)
     }
 
-    @Test("Pull-up auto-progression caps at 10")
-    func pullupCap() throws {
+    @Test("Pull-ups progress unbounded like every other exercise (cap removed)")
+    func pullupsProgressUnbounded() throws {
         let last = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 1)))
         let today = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 15)))
 
@@ -40,33 +39,12 @@ struct TargetProgressionEngineTests {
             autoProgressionEnabled: true,
             progressionAmount: 5,
             progressionIntervalDays: 14,
-            pullupCap: 10,
             lastProgressionDate: last,
             today: today
         ))
 
-        #expect(result.reps == 10)
-    }
-
-    @Test("Manual pull-up override may exceed the auto cap")
-    func manualPullupOverrideCanExceedCap() throws {
-        let last = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 1)))
-        let today = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 15)))
-
-        let result = engine.progressedTarget(for: TargetProgressionInput(
-            exerciseKey: "pullups",
-            currentReps: 12,
-            isManualOverride: true,
-            autoProgressionEnabled: true,
-            progressionAmount: 5,
-            progressionIntervalDays: 14,
-            pullupCap: 10,
-            lastProgressionDate: last,
-            today: today
-        ))
-
-        #expect(result.reps == 12)
-        #expect(result.didProgress == false)
+        #expect(result.reps == 13) // 8 + 5, no cap
+        #expect(result.didProgress)
     }
 
     @Test("Auto-progression off never forces a target change")
@@ -81,7 +59,6 @@ struct TargetProgressionEngineTests {
             autoProgressionEnabled: false,
             progressionAmount: 10,
             progressionIntervalDays: 14,
-            pullupCap: 10,
             lastProgressionDate: last,
             today: today
         ))
@@ -133,13 +110,13 @@ struct TargetPersistenceTests {
         #expect(reopened.exerciseRepository.currentTarget(for: pushups, on: Date()) == 50)
     }
 
-    @Test("ViewModel applies due auto-progression and respects the pull-up cap")
+    @Test("ViewModel applies due auto-progression (pull-ups now uncapped)")
     func viewModelAppliesDueProgression() throws {
         let store = try LocalStore(inMemory: true)
         let last = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 1)))
         let today = try #require(GMCalendar.calendar.date(from: DateComponents(year: 2026, month: 6, day: 15)))
 
-        try store.exerciseRepository.setTarget(key: "pullups", reps: 8, effectiveDate: last, isManualOverride: true)
+        try store.exerciseRepository.setTarget(key: "pullups", reps: 8, effectiveDate: today, isManualOverride: true)
         try store.exerciseRepository.markProgressionRun(on: last)
         try store.exerciseRepository.setProgressionAmount(5)
 
@@ -147,6 +124,6 @@ struct TargetPersistenceTests {
         viewModel.applyDueProgression(today: today)
 
         let pullups = try #require(try store.exerciseRepository.allOrdered().first { $0.key == "pullups" })
-        #expect(store.exerciseRepository.currentTarget(for: pullups, on: today) == 10)
+        #expect(store.exerciseRepository.currentTarget(for: pullups, on: today) == 13) // 8 + 5, no cap
     }
 }

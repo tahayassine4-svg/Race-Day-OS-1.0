@@ -18,7 +18,6 @@ protocol ExerciseRepositoryProtocol: AnyObject, Sendable {
     func setAutoProgressionEnabled(_ enabled: Bool) throws
     func setProgressionAmount(_ amount: Int) throws
     func setProgressionIntervalDays(_ days: Int) throws
-    func setPullupCap(_ cap: Int) throws
     func markProgressionRun(on date: Date) throws
 }
 
@@ -136,12 +135,6 @@ final class ExerciseRepository: ExerciseRepositoryProtocol {
     func setProgressionIntervalDays(_ days: Int) throws {
         let settings = try appSettings()
         settings.progressionIntervalDays = max(1, days)
-        try context.save()
-    }
-
-    func setPullupCap(_ cap: Int) throws {
-        let settings = try appSettings()
-        settings.pullupCap = max(1, cap)
         try context.save()
     }
 
