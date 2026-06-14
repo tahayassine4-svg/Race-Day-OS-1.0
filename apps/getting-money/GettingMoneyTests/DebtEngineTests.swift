@@ -88,6 +88,9 @@ struct DebtViewModelTests {
 
         #expect(dashboard.totalDebt == 36)
         #expect(dashboard.status == .activeDebt)
+        // Debt counts as activity, so the dashboard shows the populated view and
+        // never the empty state that falsely claims "nothing owed".
+        #expect(dashboard.hasActivity)
     }
 
     @Test("Debt settlements persist per exercise")

@@ -37,7 +37,7 @@ struct LogView: View {
                 Text("Log your reps.")
                     .font(.gmTitle).foregroundStyle(GMColor.ink)
                 Spacer()
-                GMStatusPill(status: .onTrack)
+                GMStatusPill(status: viewModel.status)
             }
         }
     }

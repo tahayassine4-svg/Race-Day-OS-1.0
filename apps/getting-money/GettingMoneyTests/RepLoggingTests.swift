@@ -55,6 +55,39 @@ struct RepLoggingTests {
         #expect(logger.rows.contains { $0.id == "dips" })
     }
 
+    @Test("Log status pill reflects real state and matches the dashboard")
+    func logStatusMatchesState() throws {
+        let store = try LocalStore(inMemory: true)
+        // Small, fully-clearable targets so the test can hit the target exactly.
+        try store.exerciseRepository.setTarget(key: "pushups", reps: 10, effectiveDate: Date(), isManualOverride: true)
+        try store.exerciseRepository.setTarget(key: "pullups", reps: 0, effectiveDate: Date(), isManualOverride: true)
+        try store.exerciseRepository.setTarget(key: "squats", reps: 0, effectiveDate: Date(), isManualOverride: true)
+
+        let logger = RepLoggerViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
+        logger.load()
+        // Under target, no debt → behind (NOT a hardcoded "on track").
+        #expect(logger.status == .behind)
+
+        // Pending draft that meets the target flips it to profit immediately.
+        logger.adjust("pushups", by: 10)
+        #expect(logger.status == .profit)
+
+        // Any outstanding debt dominates → active debt, matching the Dashboard.
+        try store.exerciseRepository.setDebt(key: "pushups", repsOwed: 5, updatedAt: Date())
+        logger.load()
+        #expect(logger.status == .activeDebt)
+
+        let dashboard = DashboardViewModel(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
+        dashboard.load()
+        #expect(logger.status == dashboard.status)
+    }
+
     @Test("Over-target reps increase total money and bonus is reported separately")
     func overTargetLoggingCreatesBonus() throws {
         let store = try LocalStore(inMemory: true)

@@ -113,7 +113,10 @@ final class DashboardViewModel {
             status = dashboardStatus
 
             let snapshots = allEntries.map { RepEntrySnapshot(date: $0.timestamp, count: $0.count) }
-            hasActivity = !snapshots.isEmpty
+            // The empty state claims both "no reps logged" AND "nothing owed", so
+            // outstanding debt must also count as activity — otherwise debt is
+            // hidden behind a screen that falsely says nothing is owed.
+            hasActivity = !snapshots.isEmpty || totalDebt > 0
             history = historyEngine.dailySeries(
                 from: snapshots,
                 repValue: settings.repValue,

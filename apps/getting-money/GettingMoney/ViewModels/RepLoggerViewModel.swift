@@ -21,8 +21,17 @@ final class RepLoggerViewModel {
     private(set) var loggedToday = 0
     private(set) var earnedToday = 0
     private(set) var draftTotal = 0
+    private(set) var totalDebt = 0
     private(set) var errorMessage: String?
     var feedbackTick = 0
+
+    /// Same three-way rule the Dashboard uses, so the status pill never
+    /// contradicts the Dashboard for the same day. Reflects pending drafts too.
+    var status: GMStatus {
+        if totalDebt > 0 { return .activeDebt }
+        if dailyTarget > 0 && loggedToday < dailyTarget { return .behind }
+        return .profit
+    }
 
     private var repValue = 1
     private let exerciseRepository: any ExerciseRepositoryProtocol
@@ -64,6 +73,7 @@ final class RepLoggerViewModel {
             loggedToday = rows.reduce(0) { $0 + $1.displayed }
             earnedToday = earningsEngine.summary(completedReps: loggedToday, targetReps: dailyTarget, repValue: settings.repValue).earned
             draftTotal = rows.reduce(0) { $0 + $1.draft }
+            totalDebt = exercises.reduce(0) { $0 + ($1.debt?.repsOwed ?? 0) }
             errorMessage = nil
         } catch {
             rows = []
