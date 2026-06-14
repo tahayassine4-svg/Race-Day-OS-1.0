@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0293DF4146C0889746001A1D /* RoundsCompletionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE509EBCE9B7E1C993E24FE8 /* RoundsCompletionTests.swift */; };
 		04818C09701EF641C2CC9550 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */; };
 		0A2CEC2992FFF8017F427052 /* RepLoggerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0A3C70EA6126F275B5A9C /* RepLoggerViewModel.swift */; };
 		0B14CAC1D36530553E182ECB /* ProgressionSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FE1724D5E8193130091E7A /* ProgressionSettingsCard.swift */; };
@@ -139,6 +140,7 @@
 		C118D7D3B2A81835600A0564 /* GMStatusPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMStatusPill.swift; sourceTree = "<group>"; };
 		C32885A46E154336003BB447 /* ScreenBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenBackground.swift; sourceTree = "<group>"; };
 		CC07701DD15914B6C922C28B /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
+		CE509EBCE9B7E1C993E24FE8 /* RoundsCompletionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsCompletionTests.swift; sourceTree = "<group>"; };
 		D2577BB29BE1393FB0EAD39F /* TargetProgressionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetProgressionEngine.swift; sourceTree = "<group>"; };
 		D33D0047D49FBB32B034AF6E /* PaybackPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaybackPlannerTests.swift; sourceTree = "<group>"; };
 		DC2EC8B38083A621205DACD2 /* GettingMoney.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = GettingMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +172,7 @@
 				E800472A863F53F4597A5828 /* PersistenceTests.swift */,
 				ABE38D80640AC1C499C93F79 /* RepLoggingTests.swift */,
 				6B394E7708598C4702EB80A4 /* RoundPlannerTests.swift */,
+				CE509EBCE9B7E1C993E24FE8 /* RoundsCompletionTests.swift */,
 				B56BC87B28FA8E7BAFB8AF58 /* SmokeTests.swift */,
 				F0D3ACC20524957A53CEE663 /* TargetProgressionEngineTests.swift */,
 			);
@@ -521,6 +524,7 @@
 				2CCEA1652117F2336AB53BD8 /* PersistenceTests.swift in Sources */,
 				FC863314CBB94DF4028BB38C /* RepLoggingTests.swift in Sources */,
 				C38EF7533E26F0D6B1D3B08F /* RoundPlannerTests.swift in Sources */,
+				0293DF4146C0889746001A1D /* RoundsCompletionTests.swift in Sources */,
 				CBB4828E5225456A729D9EAA /* SmokeTests.swift in Sources */,
 				BC6EA290E4981F3D0BA5D453 /* TargetProgressionEngineTests.swift in Sources */,
 			);

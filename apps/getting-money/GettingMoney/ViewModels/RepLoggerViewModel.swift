@@ -94,7 +94,7 @@ final class RepLoggerViewModel {
     func save(today: Date = Date()) {
         do {
             for row in rows where row.draft > 0 {
-                _ = try workoutRepository.addRepEntry(exerciseKey: row.id, count: row.draft, at: today)
+                _ = try workoutRepository.addRepEntry(exerciseKey: row.id, count: row.draft, sourceRoundNumber: nil, at: today)
             }
             load(today: today, preservingDrafts: false)
             feedbackTick += 1

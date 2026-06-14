@@ -32,17 +32,19 @@ private struct TargetSettingsRow: View {
                 Text(row.name)
                     .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(GMColor.ink)
+                    .lineLimit(1)
 
                 Text(subtitle)
                     .font(.gmMeta)
                     .foregroundStyle(GMColor.muted)
+                    .lineLimit(1)
             }
 
-            Spacer()
+            Spacer(minLength: GMSpacing.sm)
 
             // The target stepper shows whenever the exercise is on; optional
             // exercises always keep a toggle so they can be turned back OFF.
-            HStack(spacing: GMSpacing.md) {
+            HStack(spacing: GMSpacing.sm) {
                 if row.isEnabled {
                     TargetStepper(row: row, viewModel: viewModel)
                 }
@@ -74,16 +76,18 @@ private struct TargetStepper: View {
     let viewModel: SettingsViewModel
 
     var body: some View {
-        HStack(spacing: GMSpacing.md) {
+        HStack(spacing: GMSpacing.sm) {
             SettingsStepButton(systemName: "minus", label: "Decrease \(row.name)") {
                 viewModel.adjustTarget(row.id, by: -5)
             }
 
             Text("\(row.target.gmGrouped)")
-                .font(.system(size: 20, weight: .bold))
+                .font(.system(size: 19, weight: .bold))
                 .monospacedDigit()
                 .foregroundStyle(GMColor.ink)
-                .frame(minWidth: 44)
+                .lineLimit(1)
+                .fixedSize()
+                .frame(minWidth: 40)
 
             SettingsStepButton(systemName: "plus", label: "Increase \(row.name)") {
                 viewModel.adjustTarget(row.id, by: 5)

@@ -36,6 +36,17 @@ final class LocalStore {
             }
             try exerciseRepository.markDayClosed(through: fiveDaysAgo)
         }
+        if ProcessInfo.processInfo.arguments.contains("-GMEnableDips") {
+            try exerciseRepository.setEnabled(key: "dips", true) // verify the toggle stays turn-off-able
+        }
+        if ProcessInfo.processInfo.arguments.contains("-GMSeedRoundDoneFixture") {
+            // Round 1 of the default 3-round split already ticked off (34 push, 4
+            // pull, 50 squat tagged to round 1) so the completed-round UI + the
+            // dashboard progress can be screenshotted.
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pushups", count: 34, sourceRoundNumber: 1, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pullups", count: 4, sourceRoundNumber: 1, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "squats", count: 50, sourceRoundNumber: 1, at: seedDate)
+        }
         if ProcessInfo.processInfo.arguments.contains("-GMSeedPaybackFixture") {
             // 50 reps of standing pushup debt, with 30 payback reps already logged
             // today (130 = 100 target + 30 payback) → Debt should read 20 live.

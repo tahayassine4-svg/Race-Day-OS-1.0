@@ -25,7 +25,8 @@ final class RoundsViewModel {
     }
 
     private(set) var rounds: [PlannedRound] = []
-    private(set) var availableRoundCounts = [2, 3, 4, 5]
+    let minRoundCount = 1
+    let maxRoundCount = 10
     private(set) var selectedRoundCount = 3
     private(set) var dailyTarget = 0
     private(set) var plannedTotal = 0
@@ -34,9 +35,20 @@ final class RoundsViewModel {
     private(set) var totalDebt = 0
     private(set) var payoff: Payoff = .none
     private(set) var payoffReps = 0
+    private(set) var completedRounds: Set<Int> = []
+    private(set) var roundsLoggedMoney = 0
     private(set) var errorMessage: String?
 
     var hasDebt: Bool { totalDebt > 0 }
+
+    // MARK: Completion state (derived from reps tagged with their source round)
+    func isCompleted(_ roundID: Int) -> Bool { completedRounds.contains(roundID) }
+    var completedCount: Int { completedRounds.count }
+    /// Round count can only change before any round is ticked off (changing it
+    /// would renumber rounds and orphan already-logged reps).
+    var canChangeRoundCount: Bool { completedRounds.isEmpty }
+    var nextIncompleteRound: Int? { rounds.first { !completedRounds.contains($0.id) }?.id }
+    var allRoundsComplete: Bool { !rounds.isEmpty && completedRounds.count == rounds.count }
 
     private var targets: [RoundTarget] = []
     private var debts: [PaybackDebt] = []
@@ -97,6 +109,12 @@ final class RoundsViewModel {
             dailyTarget = targets.reduce(0) { $0 + $1.reps }
             if !hasDebt { payoff = .none }
 
+            // Which rounds are ticked off = which round numbers have logged reps today.
+            completedRounds = Set(entries.compactMap { $0.sourceRoundNumber })
+            roundsLoggedMoney = entries
+                .filter { $0.sourceRoundNumber != nil }
+                .reduce(0) { $0 + $1.count } * repValue
+
             let saved = try workoutRepository.roundPlans(on: today)
             if saved.isEmpty {
                 rebuild()
@@ -120,13 +138,20 @@ final class RoundsViewModel {
     }
 
     func chooseRoundCount(_ count: Int) {
-        selectedRoundCount = count
+        guard canChangeRoundCount else { return }
+        selectedRoundCount = min(maxRoundCount, max(minRoundCount, count))
         rebuild()
+        persistPlan()
     }
 
+    func incrementRoundCount() { chooseRoundCount(selectedRoundCount + 1) }
+    func decrementRoundCount() { chooseRoundCount(selectedRoundCount - 1) }
+
     func choosePayoff(_ payoff: Payoff) {
+        guard canChangeRoundCount else { return } // locked once rounds are ticked off
         self.payoff = hasDebt ? payoff : .none
         rebuild()
+        persistPlan()
     }
 
     /// Records a payoff to apply on the next `load()` — lets navigation into the
@@ -136,6 +161,8 @@ final class RoundsViewModel {
     }
 
     func adjust(roundID: Int, exerciseKey: String, by delta: Int) {
+        // A ticked-off round is locked; the user reopens it with "Edit" first.
+        guard !completedRounds.contains(roundID) else { return }
         guard let roundIndex = rounds.firstIndex(where: { $0.id == roundID }),
               let exerciseIndex = rounds[roundIndex].exercises.firstIndex(where: { $0.key == exerciseKey }) else { return }
         let current = rounds[roundIndex].exercises[exerciseIndex]
@@ -147,9 +174,38 @@ final class RoundsViewModel {
             payoffReps: current.payoffReps
         )
         recalculate()
+        persistPlan()
     }
 
-    func save(today: Date = Date()) {
+    /// Tick a round on/off. Ticking logs its reps to the daily balance (tagged with
+    /// the round); un-ticking removes exactly those reps. "Edit" on a card un-ticks.
+    func toggleRoundCompleted(_ roundID: Int, today: Date = Date()) {
+        do {
+            if completedRounds.contains(roundID) {
+                try workoutRepository.deleteRoundEntries(roundNumber: roundID, on: today)
+            } else {
+                guard let round = rounds.first(where: { $0.id == roundID }) else { return }
+                try workoutRepository.replaceRoundPlans(rounds, includesDebtPayoff: payoff != .none, on: today)
+                for exercise in round.exercises where exercise.reps > 0 {
+                    _ = try workoutRepository.addRepEntry(
+                        exerciseKey: exercise.key, count: exercise.reps,
+                        sourceRoundNumber: roundID, at: today
+                    )
+                }
+            }
+            load(today: today)
+        } catch {
+            errorMessage = "Round could not be updated."
+        }
+    }
+
+    /// Bottom CTA: tick off the next round that isn't done yet.
+    func completeNextRound(today: Date = Date()) {
+        guard let next = nextIncompleteRound else { return }
+        toggleRoundCompleted(next, today: today)
+    }
+
+    private func persistPlan(today: Date = Date()) {
         do {
             try workoutRepository.replaceRoundPlans(rounds, includesDebtPayoff: payoff != .none, on: today)
             errorMessage = nil

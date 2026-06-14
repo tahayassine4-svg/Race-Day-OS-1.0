@@ -70,8 +70,7 @@ struct RoundsViewModelTests {
             )
             viewModel.load()
             viewModel.chooseRoundCount(4)
-            viewModel.adjust(roundID: 1, exerciseKey: "pushups", by: 3)
-            viewModel.save()
+            viewModel.adjust(roundID: 1, exerciseKey: "pushups", by: 3) // auto-persists
         }
 
         let reopened = try LocalStore(url: url)

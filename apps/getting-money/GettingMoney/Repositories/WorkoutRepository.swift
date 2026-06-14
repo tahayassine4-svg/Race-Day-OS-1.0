@@ -4,7 +4,8 @@ import SwiftData
 @MainActor
 protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
     func day(for date: Date) throws -> WorkoutDay
-    func addRepEntry(exerciseKey: String, count: Int, at timestamp: Date) throws -> RepEntry
+    func addRepEntry(exerciseKey: String, count: Int, sourceRoundNumber: Int?, at timestamp: Date) throws -> RepEntry
+    func deleteRoundEntries(roundNumber: Int, on date: Date) throws
     func entries(on date: Date) throws -> [RepEntry]
     func allEntries() throws -> [RepEntry]
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
@@ -36,12 +37,21 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
         return day
     }
 
-    func addRepEntry(exerciseKey: String, count: Int, at timestamp: Date = Date()) throws -> RepEntry {
+    func addRepEntry(exerciseKey: String, count: Int, sourceRoundNumber: Int? = nil, at timestamp: Date = Date()) throws -> RepEntry {
         let workoutDay = try day(for: timestamp)
-        let entry = RepEntry(timestamp: timestamp, exerciseKey: exerciseKey, count: count, day: workoutDay)
+        let entry = RepEntry(timestamp: timestamp, exerciseKey: exerciseKey, count: count, sourceRoundNumber: sourceRoundNumber, day: workoutDay)
         context.insert(entry)
         try context.save()
         return entry
+    }
+
+    /// Removes the reps logged by ticking off a given round (used when it's un-ticked).
+    func deleteRoundEntries(roundNumber: Int, on date: Date = Date()) throws {
+        let workoutDay = try day(for: date)
+        for entry in (workoutDay.repEntries ?? []) where entry.sourceRoundNumber == roundNumber {
+            context.delete(entry)
+        }
+        try context.save()
     }
 
     func entries(on date: Date = Date()) throws -> [RepEntry] {

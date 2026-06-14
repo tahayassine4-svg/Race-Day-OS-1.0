@@ -73,7 +73,7 @@ struct CrossScreenRefreshTests {
             workoutRepository: store.workoutRepository
         )
         rounds.load()
-        rounds.save() // a plain plan (no payoff) is now saved for today
+        rounds.chooseRoundCount(3) // persists a plain plan (no payoff) for today
 
         // Debt screen "Add payoff to today's rounds": request, then the reload
         // that AppRootView.onChange(of: selection) performs on tab switch.
