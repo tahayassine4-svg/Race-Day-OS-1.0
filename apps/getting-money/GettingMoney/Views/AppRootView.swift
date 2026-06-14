@@ -68,7 +68,11 @@ struct AppRootView: View {
                 .tag(Tab.settings)
         }
         .tint(GMColor.accent)
-        .onChange(of: selection) { _, tab in reload(tab) }
+        .task { publishWidget() }
+        .onChange(of: selection) { _, tab in
+            reload(tab)
+            publishWidget()
+        }
         .onChange(of: scenePhase) { _, phase in
             // Returning to the foreground may have crossed a midnight: settle any
             // newly-completed days into debt, then refresh what's on screen.
@@ -78,7 +82,17 @@ struct AppRootView: View {
                 workoutRepository: store.workoutRepository
             ).run()
             refreshAll()
+            publishWidget()
         }
+    }
+
+    /// Push today's targets/progress to the home-screen widget. Always today,
+    /// regardless of the dashboard's selected day.
+    private func publishWidget() {
+        WidgetSnapshotPublisher.publish(
+            exerciseRepository: store.exerciseRepository,
+            workoutRepository: store.workoutRepository
+        )
     }
 
     /// Reloads every data-backed tab after a foreground day-close so debt, status,

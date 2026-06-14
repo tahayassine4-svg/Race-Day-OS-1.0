@@ -16,9 +16,13 @@ targets:
     platform: iOS
     sources:
       - path: GettingMoney
+      - path: Shared
+    dependencies:
+      - target: GettingMoneyWidgetExtension
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yassine.gettingmoney
+        CODE_SIGN_ENTITLEMENTS: GettingMoney/GettingMoney.entitlements
         GENERATE_INFOPLIST_FILE: "YES"
         INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: "YES"
@@ -29,6 +33,30 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         ENABLE_PREVIEWS: "YES"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+
+  GettingMoneyWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: GettingMoneyWidget
+      - path: Shared
+    info:
+      path: GettingMoneyWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Getting Money
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yassine.gettingmoney.widget
+        CODE_SIGN_ENTITLEMENTS: GettingMoneyWidget/GettingMoneyWidget.entitlements
+        TARGETED_DEVICE_FAMILY: "1"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ENABLE_PREVIEWS: "YES"
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
 
   GettingMoneyTests:
@@ -48,6 +76,7 @@ schemes:
     build:
       targets:
         GettingMoney: all
+        GettingMoneyWidgetExtension: all
         GettingMoneyTests: [test]
     test:
       targets:

@@ -17,5 +17,6 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 | 11 | Actionable Rounds + Settings fixes | UI | COMPLETE | packet-09-debt-day-close | (this branch) |
 | 12 | Dashboard Daily Date Selector | UI | TESTED | packet-09-debt-day-close | — |
 | 13 | Past-Day Rep Corrections | UI + backend | TESTED | packet-09-debt-day-close | — |
+| 14 | Home-Screen Widget (Daily Targets) | UI + small backend | TESTED | packet-14-widget | — |
 
 Source root: `apps/getting-money/GettingMoney/` · Tests: `apps/getting-money/GettingMoneyTests/` · Mockups: `apps/getting-money/design/packet-NN.png` (dark/lime/coral, from `design/reference-mockup.png`).

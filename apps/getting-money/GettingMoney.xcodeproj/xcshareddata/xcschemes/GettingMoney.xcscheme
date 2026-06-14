@@ -35,6 +35,20 @@
                ReferencedContainer = "container:GettingMoney.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "254D06590CD0492C067D3E87"
+               BuildableName = "GettingMoneyWidgetExtension.appex"
+               BlueprintName = "GettingMoneyWidgetExtension"
+               ReferencedContainer = "container:GettingMoney.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
