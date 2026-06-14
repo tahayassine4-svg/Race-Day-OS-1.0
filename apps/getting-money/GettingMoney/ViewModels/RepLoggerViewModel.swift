@@ -34,9 +34,11 @@ final class RepLoggerViewModel {
     }
 
     private var repValue = 1
+    private var persistedDebtByKey: [String: Int] = [:]
     private let exerciseRepository: any ExerciseRepositoryProtocol
     private let workoutRepository: any WorkoutRepositoryProtocol
     private let earningsEngine: any EarningsEngineProtocol
+    private let debtEngine: any DebtEngineProtocol = DebtEngine()
 
     init(
         exerciseRepository: any ExerciseRepositoryProtocol,
@@ -73,7 +75,8 @@ final class RepLoggerViewModel {
             loggedToday = rows.reduce(0) { $0 + $1.displayed }
             earnedToday = earningsEngine.summary(completedReps: loggedToday, targetReps: dailyTarget, repValue: settings.repValue).earned
             draftTotal = rows.reduce(0) { $0 + $1.draft }
-            totalDebt = exercises.reduce(0) { $0 + ($1.debt?.repsOwed ?? 0) }
+            persistedDebtByKey = Dictionary(uniqueKeysWithValues: exercises.map { ($0.key, $0.debt?.repsOwed ?? 0) })
+            recomputeLiveDebt()
             errorMessage = nil
         } catch {
             rows = []
@@ -105,5 +108,19 @@ final class RepLoggerViewModel {
         dailyTarget = rows.reduce(0) { $0 + $1.target }
         draftTotal = rows.reduce(0) { $0 + $1.draft }
         earnedToday = loggedToday * repValue
+        recomputeLiveDebt()
+    }
+
+    /// Live debt across all rows (persisted minus today's surplus repayment, using
+    /// displayed reps incl. drafts), so the status pill matches the Dashboard.
+    private func recomputeLiveDebt() {
+        totalDebt = rows.reduce(0) { sum, row in
+            sum + debtEngine.liveDebt(
+                key: row.id,
+                targetReps: row.target,
+                completedReps: row.displayed,
+                persistedDebt: persistedDebtByKey[row.id] ?? 0
+            )
+        }
     }
 }

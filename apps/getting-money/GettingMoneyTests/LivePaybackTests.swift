@@ -29,6 +29,23 @@ struct LivePaybackTests {
         #expect(dashboard.rows.first { $0.id == "pushups" }?.debtOwed == 0)
     }
 
+    @Test("Log status pill uses live debt and still matches the Dashboard after a paydown")
+    func logStatusUsesLiveDebt() throws {
+        let store = try LocalStore(inMemory: true)
+        try store.exerciseRepository.setDebt(key: "pushups", repsOwed: 50, updatedAt: Date())
+
+        let logger = makeLogger(store)
+        logger.load()
+        logger.adjust("pushups", by: 160) // 100 target + 60 surplus repays the 50 debt
+        logger.save()
+
+        let dashboard = DashboardViewModel(exerciseRepository: store.exerciseRepository, workoutRepository: store.workoutRepository)
+        dashboard.load()
+
+        #expect(logger.status != .activeDebt)          // debt cleared live, not stuck on persisted
+        #expect(logger.status == dashboard.status)      // both "Behind" (160 < 260 target)
+    }
+
     @Test("Debt screen + payback plan shrink as today's payback reps are logged")
     func debtScreenShrinksLive() throws {
         let store = try LocalStore(inMemory: true)
