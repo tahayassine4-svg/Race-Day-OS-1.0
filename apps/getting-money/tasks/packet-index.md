@@ -14,5 +14,6 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 | 08 | History, Polish + TestFlight Readiness | UI | COMPLETE | packet-08-history-polish | e33a58f |
 | 09 | Debt Day-Close Engine (rep-debt now accrues) | backend | COMPLETE | packet-09-debt-day-close | aa1d94d |
 | 10 | Live Debt Payback (immediate on-screen feedback) | backend | COMPLETE | packet-09-debt-day-close | (this branch) |
+| 11 | Actionable Rounds + Settings fixes | UI | COMPLETE | packet-09-debt-day-close | (this branch) |
 
 Source root: `apps/getting-money/GettingMoney/` · Tests: `apps/getting-money/GettingMoneyTests/` · Mockups: `apps/getting-money/design/packet-NN.png` (dark/lime/coral, from `design/reference-mockup.png`).
