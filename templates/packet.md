@@ -6,6 +6,13 @@
 ## UI?
 {{yes → Design Gate required | no → backend/data only, skip Designer}}
 
+## Constraints
+{{Files/types/APIs this packet must NOT touch or change, and any
+dependencies it must not add — the boundary that lets IMPLEMENTER, TESTER,
+and CODE_REVIEWER work from this file alone without the coordinator's full
+conversation. e.g. "Additive only to Dive.swift — do not change existing
+fields" or "No new third-party dependencies."}}
+
 ## Requirements
 - {{specific, implementable}}
 

@@ -22,7 +22,8 @@ Run `ls -1 apps/` and check the root for legacy folders. If the name is ambiguou
 
 For the resolved app folder, read these in full. Do not skim — this is the whole point of the skill.
 
-1. `docs/state.md` — the canonical resume pointer. Note `phase`, `packet`, `status`, `last_action`, `next_step`, `branch`, `commit`, `timestamp`.
+0. `MANIFEST.json`, if present — the fast, structured resume pointer (`phase`, `packet`, `packet_branch`, `tests`, `code_review`, `ui_review`, `git`, `blockers`, `handoff_needed`). Read this first; it's what the rest of this step verifies and narrates. If `handoff_needed` is true, read `docs/handoff.md` next, before anything else. If `MANIFEST.json` doesn't exist yet, fall back entirely to the prose sources below.
+1. `docs/state.md` — the canonical prose resume pointer. Note `phase`, `packet`, `status`, `last_action`, `next_step`, `branch`, `commit`, `timestamp`.
 2. `tasks/packet-index.md` — the full packet sequence and each packet's status (COMPLETE / in progress / not started), branch, and commit.
 3. **Every** report in `reports/` — read them in order (`packet-01-report.md` … latest). The latest report is the most detailed account of where things stand; earlier ones give the arc. Also scan for any `*-escalation.md` (a stalled packet handed to Yassine).
 4. The active or next `tasks/packet-NN.md` — the packet identified as in-progress or the next not-yet-started one, so you know its acceptance criteria before proposing work.
@@ -34,7 +35,7 @@ Then read the governing rules so you resume in-system, not freelance:
 
 ## 3. Cross-check state against reality
 
-`state.md` records what was *intended* at handoff; verify it against the actual repo before trusting it:
+`MANIFEST.json`/`state.md` record what was *intended* at handoff; verify against the actual repo before trusting it:
 
 - `git -C <repo root> log --oneline -8` and `git status` — confirm the recorded branch/commit exist and whether there's uncommitted work.
 - Confirm the files the last report claims to have created/changed actually exist.

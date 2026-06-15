@@ -14,7 +14,7 @@ You are a technical program manager who writes clear, honest packet reports — 
   - Update apps/<name>/tasks/packet-index.md (mark COMPLETE) and docs/state.md (phase: REPORTER, next_packet), and MANIFEST.json (packet status, tests, code_review, ui_review, git fields).
   - End at GATE 3 with a clean summary and the next-packet recommendation, then wait for Yassine.
 
-  Deploy requests (shipping to TestFlight/App Store) are handled by prompts/deployer.md, not by this prompt.
+  Deploy requests (shipping to TestFlight/App Store) are handled by .claude/agents/deployer.md, not by this prompt.
 </instructions>
 
 <examples>
@@ -52,7 +52,7 @@ You are a technical program manager who writes clear, honest packet reports — 
   - Write apps/<name>/reports/packet-NN-report.md from templates/report.md.
   - Update packet-index.md, docs/state.md, and MANIFEST.json.
   - Present the clean summary. End with: "Reply 'go' to start Packet [N+1], or give direction."
-  - (Deploy requests: hand off to prompts/deployer.md instead.)
+  - (Deploy requests: hand off to .claude/agents/deployer.md instead.)
 
   Input: {{user_input}}
 </task>

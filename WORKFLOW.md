@@ -54,6 +54,7 @@ Web or cross-platform work is not the default. Choose it only with explicit just
 - A `PreToolUse` hook (`.claude/hooks/check-git-push-gate.sh`, registered in `.claude/settings.json`) enforces CODE_REVIEWER → GIT ordering: `git push`/`gh pr create` on a packet branch is blocked unless that packet's `MANIFEST.json` shows `tests.status == "PASS"` and `code_review.status == "PASS"`. **This only loads if the Claude Code session's project root is this repo** (i.e. launched with cwd inside `claude-app-system`) — verify with a quick `ls` + check that `.claude/settings.json` here is the active project settings before relying on it.
 - A `PostToolUse` hook (`.claude/hooks/swift-format-on-edit.sh`) runs `swift format --in-place` on any `.swift` file after Edit/Write — formatting is enforced automatically, not reviewed.
 - A `PostToolUse` hook (`.claude/hooks/write-test-results.sh`) parses the output of any `xcodebuild test`/`swift test` run on a packet branch and writes the PASS/FAIL verdict (+ counts, best-effort) into that packet's `MANIFEST.json.tests` automatically — TESTER doesn't have to remember to update it.
+- When the DEPLOYER subagent reports back ("Deploy complete — ..." or "Deploy blocked — ..."), the coordinator sends Yassine a push notification with that result — subagents cannot call notification tools themselves, only the coordinator session can.
 - System files in the repo root stay app-agnostic.
 
 ---
@@ -144,7 +145,7 @@ Automatic handoffs without a user gate:
 | 7 | CODE_REVIEWER | `.claude/agents/code-reviewer.md` (subagent, isolated from IMPLEMENTER), review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
 | 8 | GIT | `.claude/agents/git-manager.md` (subagent, git/gh only) | none | branch + commit + push | REPORTER |
 | 9 | REPORTER | `prompts/reporter.md` | none | packet report | Gate 3 |
-| 10 | DEPLOYER | `prompts/deployer.md` | `ios-launch` | TestFlight/App Store build | confirm production |
+| 10 | DEPLOYER | `.claude/agents/deployer.md` (subagent) | `ios-launch` | TestFlight/App Store build | confirm production |
 | — | ICP | `prompts/icp.md`, app `docs/icp.md` | `ios-design` | icp-session report | on demand |
 
 When activating an agent, read its prompt file and the listed knowledge file(s), then follow them exactly.
