@@ -26,7 +26,7 @@ Used by the **Designer** (creating mockups) and the **UI-Reviewer** (validating 
 
 ## Layout, structure & ergonomics
 - [ ] One strong structural move per screen; no box-in-box-in-box nesting.
-- [ ] Primary actions in the thumb zone (bottom third / tab bar / sheet); 44pt touch targets with ~12pt padding.
+- [ ] Primary actions in the thumb zone, touch targets sized per `knowledge/ios-design.md` § Ergonomics & touch.
 - [ ] Native navigation patterns: tab bar (iPhone top-level), sheets with detents for secondary flows, sidebar (iPad/Mac).
 - [ ] No three identical equal-width cards by default; cards only where elevation means real hierarchy — otherwise group with spacing + hairlines.
 - [ ] Consistent corner-radius + spacing scales; the UI breathes.
@@ -42,9 +42,7 @@ Used by the **Designer** (creating mockups) and the **UI-Reviewer** (validating 
 - [ ] Physics-based spring/press feedback aligned to native SwiftUI behavior; tasteful completion feedback + haptics on native.
 
 ## Accessibility
-- [ ] Dynamic Type scales without breaking layout; body ≥ 4.5:1 / large ≥ 3:1 contrast.
-- [ ] VoiceOver labels on interactive elements; reading order matches visual order.
-- [ ] Color is never the sole status indicator; Reduced Motion has a cross-fade fallback.
+- [ ] Meets `knowledge/ios-design.md` § Accessibility from the start (Dynamic Type, contrast, VoiceOver, color independence, Reduced Motion, haptics).
 
 ## Anti-AI-tells (avoid unless the brief asks)
 - [ ] No neon outer glows, oversaturated accents, or gradient text by default.

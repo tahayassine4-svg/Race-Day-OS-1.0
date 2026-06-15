@@ -16,12 +16,8 @@ Used by the Code-Reviewer for SwiftUI/view code. Mark each PASS / FAIL / N/A. Ba
 - [ ] **Matches the approved mockup** — layout, hierarchy, and accent usage match `design/packet-NN.png`.
 - [ ] **Light + dark** both render with correct hierarchy (no pure #000/#fff).
 
-## Ergonomics & accessibility (knowledge/ios-design.md)
-- [ ] **44pt touch targets**, primary actions thumb-reachable (bottom third / tab bar / sheet).
-- [ ] **Dynamic Type** — layout survives large accessibility sizes.
-- [ ] **VoiceOver** — interactive elements have descriptive `accessibilityLabel`; reading order matches visual order.
-- [ ] **Contrast holds** — incl. over varied/translucent (Liquid Glass) backgrounds; color is not the sole status cue.
-- [ ] **Reduced Motion** — deep/spring transitions have a cross-fade fallback.
+## Ergonomics & accessibility
+- [ ] Meets `knowledge/ios-design.md` § Ergonomics & touch and § Accessibility from the start (touch targets, Dynamic Type, VoiceOver, contrast incl. Liquid Glass, Reduced Motion, color independence).
 
 ## States & motion
 - [ ] **Empty / loading / error states** are designed and present, not silent.

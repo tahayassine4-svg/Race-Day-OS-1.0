@@ -18,12 +18,9 @@ View  →(binds)→  ViewModel  →(calls)→  Service  →(requests)→  Reposi
 
 ## Hard rules (these are review-blocking)
 
-- **No database queries in Views.** Do not use `@Query` in a view as the app grows — it couples UI to the schema and blocks migration. Wrap queries in a Repository. (`@Query` is acceptable only in a throwaway prototype, never past the foundation packet.)
-- **No I/O in view construction.** SwiftUI recreates views constantly; a network/DB call in `init` or `body` causes frame drops. Move it to the ViewModel / a `.task` modifier.
-- **ViewModels do not instantiate their own dependencies.** Define dependencies as `protocol`s, configure at the app entry point, inject via `init`. This is what makes them testable.
-- **Swift 6, strict concurrency on.** Never disable concurrency warnings. Mark ViewModels `@MainActor`. Make dependency protocols `Sendable`.
-- **async/await, not Combine.** Use `async`/`await` and `AsyncSequence`. Avoid legacy Combine pipelines in new code.
-- **No UIKit / Storyboards** unless a specific capability genuinely requires it (and then isolate it). SwiftUI-first.
+See `.claude/rules/swift6.md` for the enforceable, per-edit checklist
+(no `@Query` in Views, no I/O in view construction, DI for ViewModels,
+strict concurrency, async/await, SwiftUI-first).
 
 ## Reference shape — DI + @Observable ViewModel
 

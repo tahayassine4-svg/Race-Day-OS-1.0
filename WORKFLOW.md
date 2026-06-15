@@ -40,15 +40,17 @@ Web or cross-platform work is not the default. Choose it only with explicit just
 - If later work changes scope or introduces a new screen/state not covered by the approved design, produce a design addendum and get approval before implementing that delta.
 - Never skip a gate. Each gate needs Yassine's explicit "approved" or "go."
 - One agent runs at a time within a packet.
-- Read before acting. Always read the active app's `docs/vision.md`, `docs/stack.md`, `docs/ui-system.md`, active `tasks/packet-NN.md`, and the relevant `knowledge/` file.
+- Read before acting. Always read the active app's `MANIFEST.json` (structured state — phase, packet, tests, review, git status, blockers), `docs/vision.md`, `docs/stack.md`, `docs/ui-system.md`, active `tasks/packet-NN.md`, and the relevant `knowledge/` file.
+- If `MANIFEST.json.handoff_needed` is true, read `docs/handoff.md` before doing anything else — this applies to SESSION_INIT and to any mid-session phase transition after a restart (e.g. IMPLEMENTER → TESTER).
 - Implement only what the current packet defines.
 - Baseline first. Confirm a green build and passing tests before editing unless the task is explicitly triage-only or the baseline cannot run.
 - Verify visually. UI is confirmed by a real Simulator screenshot against the approved mockup, never only by reading source.
 - Protect user data. If an app is shipped with real data, every persistence/schema/migration change must be proven safe by a migration test that loads an old-schema store with data.
 - Use the advisor before committing to a non-trivial approach and before declaring substantial work done.
 - Surface blockers. When blocked or uncertain, stop and ask Yassine. Do not improvise silently.
-- Every agent writes the active app's `docs/state.md` before handing off.
+- Every agent writes the active app's `docs/state.md` and `MANIFEST.json` before handing off.
 - REPORTER updates the app's `tasks/packet-index.md`.
+- GIT pushes the packet branch and opens a PR but leaves it **unmerged** — "pushed" never means "merged to main." Merging happens after Yassine reviews the REPORTER output at Gate 3.
 - System files in the repo root stay app-agnostic.
 
 ---
@@ -139,7 +141,7 @@ Automatic handoffs without a user gate:
 | 7 | CODE_REVIEWER | `prompts/code-reviewer.md`, review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
 | 8 | GIT | `prompts/git-manager.md` | none | branch + commit + push | REPORTER |
 | 9 | REPORTER | `prompts/reporter.md` | none | packet report | Gate 3 |
-| 10 | DEPLOYER | `prompts/reporter.md` deploy section | `ios-launch` | TestFlight/App Store build | confirm production |
+| 10 | DEPLOYER | `prompts/deployer.md` | `ios-launch` | TestFlight/App Store build | confirm production |
 | — | ICP | `prompts/icp.md`, app `docs/icp.md` | `ios-design` | icp-session report | on demand |
 
 When activating an agent, read its prompt file and the listed knowledge file(s), then follow them exactly.
