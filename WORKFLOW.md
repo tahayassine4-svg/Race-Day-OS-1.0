@@ -51,6 +51,7 @@ Web or cross-platform work is not the default. Choose it only with explicit just
 - Every agent writes the active app's `docs/state.md` and `MANIFEST.json` before handing off.
 - REPORTER updates the app's `tasks/packet-index.md`.
 - GIT pushes the packet branch and opens a PR but leaves it **unmerged** — "pushed" never means "merged to main." Merging happens after Yassine reviews the REPORTER output at Gate 3.
+- A `PreToolUse` hook (`.claude/hooks/check-git-push-gate.sh`, registered in `.claude/settings.json`) enforces CODE_REVIEWER → GIT ordering: `git push`/`gh pr create` on a packet branch is blocked unless that packet's `MANIFEST.json` shows `tests.status == "PASS"` and `code_review.status == "PASS"`. **This only loads if the Claude Code session's project root is this repo** (i.e. launched with cwd inside `claude-app-system`) — verify with a quick `ls` + check that `.claude/settings.json` here is the active project settings before relying on it.
 - System files in the repo root stay app-agnostic.
 
 ---
@@ -138,8 +139,8 @@ Automatic handoffs without a user gate:
 | 4 | IMPLEMENTER | `prompts/implementer.md` | `ios-architecture`, `ios-launch` | SwiftUI code | TESTER |
 | 5 | TESTER | `prompts/tester.md` | `ios-testing` | tests + screenshots + verdict | reviewer |
 | 6 | UI_REVIEWER | `prompts/ui-reviewer.md`, `reviews/design.md` | `ios-design` | UI verdict | CODE_REVIEWER |
-| 7 | CODE_REVIEWER | `prompts/code-reviewer.md`, review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
-| 8 | GIT | `prompts/git-manager.md` | none | branch + commit + push | REPORTER |
+| 7 | CODE_REVIEWER | `.claude/agents/code-reviewer.md` (subagent, isolated from IMPLEMENTER), review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
+| 8 | GIT | `.claude/agents/git-manager.md` (subagent, git/gh only) | none | branch + commit + push | REPORTER |
 | 9 | REPORTER | `prompts/reporter.md` | none | packet report | Gate 3 |
 | 10 | DEPLOYER | `prompts/deployer.md` | `ios-launch` | TestFlight/App Store build | confirm production |
 | — | ICP | `prompts/icp.md`, app `docs/icp.md` | `ios-design` | icp-session report | on demand |
