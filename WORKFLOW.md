@@ -53,6 +53,7 @@ Web or cross-platform work is not the default. Choose it only with explicit just
 - GIT pushes the packet branch and opens a PR but leaves it **unmerged** — "pushed" never means "merged to main." Merging happens after Yassine reviews the REPORTER output at Gate 3.
 - A `PreToolUse` hook (`.claude/hooks/check-git-push-gate.sh`, registered in `.claude/settings.json`) enforces CODE_REVIEWER → GIT ordering: `git push`/`gh pr create` on a packet branch is blocked unless that packet's `MANIFEST.json` shows `tests.status == "PASS"` and `code_review.status == "PASS"`. **This only loads if the Claude Code session's project root is this repo** (i.e. launched with cwd inside `claude-app-system`) — verify with a quick `ls` + check that `.claude/settings.json` here is the active project settings before relying on it.
 - A `PostToolUse` hook (`.claude/hooks/swift-format-on-edit.sh`) runs `swift format --in-place` on any `.swift` file after Edit/Write — formatting is enforced automatically, not reviewed.
+- A `PostToolUse` hook (`.claude/hooks/write-test-results.sh`) parses the output of any `xcodebuild test`/`swift test` run on a packet branch and writes the PASS/FAIL verdict (+ counts, best-effort) into that packet's `MANIFEST.json.tests` automatically — TESTER doesn't have to remember to update it.
 - System files in the repo root stay app-agnostic.
 
 ---
@@ -138,8 +139,8 @@ Automatic handoffs without a user gate:
 | 2 | PLANNER | `prompts/planner.md` | `ios-architecture` | packet-index + packet files | Gate 2 |
 | 3 | DESIGNER | `.claude/agents/designer.md` (subagent), `.claude/skills/render-mockups`, `reviews/design.md` | `ios-design` | ui-system + full app screen set | Full-App Design Gate |
 | 4 | IMPLEMENTER | `.claude/agents/implementer.md` (subagent) | `ios-architecture`, `ios-launch`, `.claude/rules/swift6.md` | SwiftUI code | TESTER |
-| 5 | TESTER | `prompts/tester.md` | `ios-testing` | tests + screenshots + verdict | reviewer |
-| 6 | UI_REVIEWER | `prompts/ui-reviewer.md`, `reviews/design.md` | `ios-design` | UI verdict | CODE_REVIEWER |
+| 5 | TESTER | `.claude/agents/tester.md` (subagent), `.claude/skills/swiftdata-migration-test` | `ios-testing` | tests + screenshots + verdict | reviewer |
+| 6 | UI_REVIEWER | `.claude/agents/ui-reviewer.md` (subagent, fresh context from IMPLEMENTER), `reviews/design.md` | `ios-design` | UI verdict | CODE_REVIEWER |
 | 7 | CODE_REVIEWER | `.claude/agents/code-reviewer.md` (subagent, isolated from IMPLEMENTER), review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
 | 8 | GIT | `.claude/agents/git-manager.md` (subagent, git/gh only) | none | branch + commit + push | REPORTER |
 | 9 | REPORTER | `prompts/reporter.md` | none | packet report | Gate 3 |

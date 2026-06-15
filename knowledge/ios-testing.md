@@ -33,16 +33,7 @@ struct UsernameTests {
 
 If the app is live on TestFlight/App Store with real data, a schema change is **guilty until proven innocent**. A passing build does NOT prove data safety. A Swift default value is NOT a store-level default.
 
-The required test:
-1. Build a store using the **previous shipped schema** (`VersionedSchema` / the prior `@Model` shape).
-2. Insert representative real data.
-3. Reopen with the **new schema + the `SchemaMigrationPlan`**.
-4. Assert **every record survives** and new fields default cleanly.
-
-If the old-schema store cannot migrate, that is a **FAILED** criterion — shipping it would wipe users.
-
-- SwiftData migrations use `VersionedSchema` + `SchemaMigrationPlan` (lightweight for additive changes, custom stages otherwise).
-- **CloudKit-synced stores are add-only:** you may add optional fields; you may not rename/delete destructively. Design models so new fields are optional or have defaults.
+For the full recipe (old-schema store → insert real data → migrate → assert no loss), load `.claude/skills/swiftdata-migration-test` — it only needs to be in context for packets that actually touch the schema.
 
 ## Visual verification (MANDATORY when UI changed)
 
