@@ -31,7 +31,7 @@ For the resolved app folder, read these in full. Do not skim — this is the who
 
 Then read the governing rules so you resume in-system, not freelance:
 - The repo `CLAUDE.md` (workflow loop, gates, agent roster) — already in context, re-check the relevant parts.
-- The prompt for whatever phase comes next, from `prompts/` (e.g. `prompts/implementer.md` if the next step is building a packet), plus the `knowledge/` file that prompt lists.
+- The definition for whatever phase comes next, per `WORKFLOW.md`'s Agent Roster table — either a coordinator prompt in `prompts/` (e.g. `prompts/planner.md`) or a `.claude/agents/<name>.md` subagent (e.g. `.claude/agents/implementer.md`) — plus the `knowledge/` file it lists.
 
 ## 3. Cross-check state against reality
 
