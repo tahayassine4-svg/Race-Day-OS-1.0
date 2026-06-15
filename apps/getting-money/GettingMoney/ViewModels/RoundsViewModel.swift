@@ -89,8 +89,9 @@ final class RoundsViewModel {
             // Fold only the debt that remains after today's payback reps (live),
             // so payoff never folds reps the user already did today.
             let entries = try workoutRepository.entries(on: today)
-            let completedByKey = Dictionary(grouping: entries, by: \.exerciseKey)
-                .mapValues { $0.reduce(0) { $0 + $1.count } }
+            // Reconciled per-exercise reps (Log + Rounds counted once) so live
+            // payback never double-credits the same reps.
+            let completedByKey = try workoutRepository.completedReps(on: today)
             debts = try exerciseRepository.allOrdered()
                 .filter(\.isEnabled)
                 .compactMap { exercise in

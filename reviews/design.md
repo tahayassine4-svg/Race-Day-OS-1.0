@@ -1,43 +1,55 @@
-# Design Review Checklist — Premium, Anti-Slop UI
+# Design Review Checklist — Premium, Native, Anti-Slop iOS UI
 
-Used by the Designer (when creating mockups) and the UI-Reviewer (when validating the built UI). The goal is interfaces that look intentional and expensive, not templated. Every item is contextual — apply what fits the brief.
+Used by the **Designer** (creating mockups) and the **UI-Reviewer** (validating the built UI). Goal: interfaces that feel native and intentional — like an Apple Design Award winner, not an AI template. Backed by `knowledge/ios-design.md`. Every item is contextual — apply what fits the brief.
 
 ## The one-line Design Read
 - [ ] Stated before any pixels: "Reading this as: <app kind> for <audience>, with a <vibe> language, leaning <direction>." The audience picks the aesthetic, not the agent's taste.
 
+## The concept (anti-generic)
+- [ ] There is ONE specific concept driving the design (the ADA-winner throughline), not "clean and modern." Progressive disclosure, an ambient/contextual idea, or a humane framing — something a competitor couldn't copy with a recolor.
+
+## HIG foundations
+- [ ] **Clarity** — every element's purpose is immediate; high contrast, legible type, precise spacing.
+- [ ] **Deference** — UI is subordinate to content; minimal chrome, no gratuitous borders/gradients.
+- [ ] **Depth** — layers/translucency/motion create spatial hierarchy (iOS flat surfaces + structured translucency, not Material drop-shadow stacks).
+
 ## Color
-- [ ] ONE controlled accent doing real work. Semantic colors (warning/destructive/success) reserved for feedback only.
-- [ ] Accent used consistently across the whole product — no surprise second accent in a later section.
-- [ ] No generic AI-default palettes: avoid purple/blue startup gradients and warm beige+brass "luxury" tropes unless the brand explicitly calls for them.
-- [ ] Light AND dark values defined; dark mode mirrors the hierarchy, not a different theme. No pure #000 / #fff — use off-black / off-white.
+- [ ] ONE controlled accent doing real work; semantic colors (success/warning/destructive) reserved for feedback only, consistent across the whole product.
+- [ ] Light AND dark defined; dark mirrors the hierarchy. No pure #000/#fff — off-black/off-white.
+- [ ] **Liquid Glass contrast** — on translucent surfaces, color/text stays legible over varied (light AND dark) background content; adaptive, not a single static value.
+- [ ] No AI-default palettes: no purple/blue startup gradient, no beige+brass "luxury" trope unless the brand calls for it.
 
 ## Typography
-- [ ] Real hierarchy through weight, size, and color — not one weight everywhere.
-- [ ] Native system font or a deliberate brand font. Inter only when a neutral/standard feel is explicitly wanted. Serif only when genuinely editorial/luxury and justified.
-- [ ] Numbers that matter (counts, progress, metrics) use tabular/monospaced figures.
+- [ ] Real hierarchy via weight + size + color — not one weight everywhere.
+- [ ] San Francisco / Dynamic Type by default; a brand font only when justified. Serif only if genuinely editorial.
+- [ ] Metrics/counts/progress use tabular figures.
 
-## Layout & structure
-- [ ] One strong structural move per screen, not many noisy ones. No box-in-box-in-box nesting.
-- [ ] Cards used only where elevation communicates real hierarchy; otherwise group with spacing and hairlines.
-- [ ] No three identical equal-width feature cards as a default. Vary composition.
-- [ ] Consistent corner-radius scale across the screen.
-- [ ] Generous, consistent spacing scale. The UI breathes.
+## Layout, structure & ergonomics
+- [ ] One strong structural move per screen; no box-in-box-in-box nesting.
+- [ ] Primary actions in the thumb zone (bottom third / tab bar / sheet); 44pt touch targets with ~12pt padding.
+- [ ] Native navigation patterns: tab bar (iPhone top-level), sheets with detents for secondary flows, sidebar (iPad/Mac).
+- [ ] No three identical equal-width cards by default; cards only where elevation means real hierarchy — otherwise group with spacing + hairlines.
+- [ ] Consistent corner-radius + spacing scales; the UI breathes.
+- [ ] Don't just shrink a desktop/web layout — re-tune for the hand.
 
-## Data & progress visuals (the "how much is done" moment)
-- [ ] Progress/completion shown visually (rings, bars, gauges) where the product is about tracking — not just raw numbers.
+## Data & progress visuals
+- [ ] "How much is done" shown visually (rings/bars/gauges) where the product tracks progress — not just raw numbers.
 - [ ] Charts/visuals are real and meaningful, not decorative filler or fake dashboards.
-- [ ] Empty, loading, and error states are designed, not afterthoughts.
+- [ ] Empty, loading, and error states are designed.
 
-## Motion (when in scope)
-- [ ] Every animation is motivated: hierarchy, storytelling, feedback, or state transition. No motion for show.
-- [ ] Spring/ease transitions on state changes; subtle press feedback on repeated controls; tasteful completion feedback (and haptics on native).
-- [ ] Honors reduced-motion / accessibility settings.
+## Motion
+- [ ] Every animation is motivated: hierarchy, feedback, continuity, or state change. No motion for show.
+- [ ] Physics-based spring/press feedback aligned to native SwiftUI behavior; tasteful completion feedback + haptics on native.
+
+## Accessibility
+- [ ] Dynamic Type scales without breaking layout; body ≥ 4.5:1 / large ≥ 3:1 contrast.
+- [ ] VoiceOver labels on interactive elements; reading order matches visual order.
+- [ ] Color is never the sole status indicator; Reduced Motion has a cross-fade fallback.
 
 ## Anti-AI-tells (avoid unless the brief asks)
-- [ ] No neon outer glows by default, no oversaturated accents, no excessive gradient text.
-- [ ] No generic placeholder names ("John Doe"), no "Acme/Nexus" brand-slop, no fake-perfect numbers (50%, 99.99%).
+- [ ] No neon outer glows, oversaturated accents, or gradient text by default.
+- [ ] No placeholder names ("John Doe"), brand-slop ("Acme/Nexus"), fake-perfect numbers (99.99%).
 - [ ] No filler verbs ("Elevate", "Seamless", "Unleash", "Next-gen").
-- [ ] No decorative scroll cues, version stamps, or locale/weather strips as ornament.
 
-## Native-app note
-- [ ] For iOS/Android, the HTML mockup is a visual spec only. The built native UI is verified against it with a real device/simulator screenshot before the packet passes.
+## Native-app rule
+- [ ] The HTML mockup is a VISUAL SPEC only. The built SwiftUI is verified against the approved `design/packet-NN.png` with a real Simulator screenshot before the packet passes.

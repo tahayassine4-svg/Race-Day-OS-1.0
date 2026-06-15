@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Claude: From Enthusiast to Architect</title>
+    <style>
+        :root {
+            --bg-color: #f7f5f0;
+            --card-bg: #ffffff;
+            --primary-color: #d97706;
+            --primary-hover: #b45309;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: #e5e7eb;
+            --level-1: #3b82f6;
+            --level-2: #10b981;
+            --level-3: #8b5cf6;
+            --level-4: #f59e0b;
+            --level-5: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+        }
+
+        /* Progress Dashboard */
+        .dashboard {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .dashboard-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-container {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #d97706, #f59e0b);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-translate(-50%, -50%));
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: #1f2937;
+            mix-blend-mode: multiply;
+        }
+
+        .level-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .badge {
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            opacity: 0.4;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .badge.active {
+            opacity: 1;
+            transform: scale(1.03);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Levels Accordion */
+        .level-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .level-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+        .level-header:hover {
+            background-color: #fafafa;
+        }
+
+        .level-title-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .level-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .level-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .level-completion {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background-color: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .level-content {
+            display: none;
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+            background-color: #fcfcf9;
+        }
+
+        .level-content.open {
+            display: block;
+        }
+
+        /* Tabs inside Levels */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn.active {
+            color: var(--text-main);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Material Content Styling */
+        .material-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .material-section h4 {
+            margin-bottom: 12px;
+            color: #111827;
+            font-size: 1.1rem;
+        }
+
+        .material-section p {
+            margin-bottom: 12px;
+            color: var(--text-muted);
+        }
+
+        .material-section ul, .material-section ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        .material-section li {
+            margin-bottom: 6px;
+        }
+
+        code {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+            margin: 15px 0;
+        }
+
+        /* Checklist Task Box Component */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .task-card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            transition: box-shadow 0.2s;
+        }
+
+        .task-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .task-checkbox-wrapper {
+            padding-top: 3px;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .task-body {
+            flex-grow: 1;
+        }
+
+        .task-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #111827;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .task-interactive-box {
+            background-color: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-action {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #1e293b;
+        }
+
+        .task-feedback {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            display: none;
+            font-family: monospace;
+        }
+
+        .task-feedback.success {
+            display: block;
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .reset-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Claude Mastery Matrix</h1>
+        <p>An interactive enterprise-grade curriculum tracking your journey from foundational prompt enthusiast to complex multi-agent system architect.</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="dashboard-title">
+            <span>Overall Course Curriculum Tracking</span>
+            <button class="reset-btn" onclick="resetProgress()">Reset Progress</button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="master-progress-bar"></div>
+            <div class="progress-text" id="master-progress-text">0% Complete</div>
+        </div>
+        <div class="level-badges">
+            <div class="badge" id="badge-1" style="background-color: var(--level-1)">L1: Enthusiast</div>
+            <div class="badge" id="badge-2" style="background-color: var(--level-2)">L2: Project Manager</div>
+            <div class="badge" id="badge-3" style="background-color: var(--level-3)">L3: Operator</div>
+            <div class="badge" id="badge-4" style="background-color: var(--level-4)">L4: Engineer</div>
+            <div class="badge" id="badge-5" style="background-color: var(--level-5)">L5: Architect</div>
+        </div>
+    </div>
+
+    <div id="curriculum-accordion">
+        
+        <div class="level-card" id="level-1-card">
+            <div class="level-header" onclick="toggleLevel(1)">
+                <div class="level-title-area">
+                    <div class="level-number" style="background-color: var(--level-1)">1</div>
+                    <div class="level-name">The Enthusiast: Core Fundamentals & Multimodal Input</div>
+                </div>
+                <div class="level-completion" id="level-1-progress">0/2 Completed</div>
+            </div>
+            <div class="level-content" id="level-1-content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'l1-material')">Training Material</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'l1-tasks')">Interactive Tasks</button>
+                </div>
+                
+                <div class="tab-panel active" id="l1-material">
+                    <div class="material-section">
+                        <h4>Transitioning From Chat Box to Reasoning Engine</h4>
+                        <p>Most novice users get stuck at Level 1 because they treat advanced large language models like standard search engines. They submit single-turn queries, expect conversational summaries, and leave immediately.</p>
+                        <p><strong>Key Concepts to Master:</strong></p>
+                        <ul>
+                            <li><strong>Context Preservation:</strong> Claude can retain context throughout lengthy message blocks, allowing you to establish background criteria step by step instead of cramming everything into one message.</li>
+                            <li><strong>Multimodal Ingestion (Vision):</strong> Over half of the users at this level type long textual descriptions of interfaces, error logs, or code layouts when they could simply upload a high-resolution screenshot. Claude treats spatial information, tables, and UI frames with high native processing capability.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="l1-tasks">
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="1" id="t1-1" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 1.1: Multi-turn Refinement & Vision Injection</div>
+                                <div class="task-desc">Simulate a scenario where you avoid over-describing. Take an application's visual wireframe or error screen, drag-and-drop it directly into Claude Chat, and request structural debugging without raw text transcription.</div>
+                                <div class="task-interactive-box">
+                                    <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;">Interactive Lab: Simulated Vision Input</p>
+                                    <button class="btn-action" onclick="simulateTask('t1-1', 'Successfully evaluated visual layout. Identified structural grid misalignment in CSS lines 42-48.')">Simulate Image Drop & Parse</button>
+                                    <div class="task-feedback" id="feedback-t1-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="1" id="t1-2" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 1.2: Context Retention Strategy</div>
+                                <div class="task-desc">Execute an ongoing chat session where you build a raw Python script. Refuse to accept the first code sample. Command Claude to update the script incrementally across 3 turns to inject error logging and validation rules.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card" id="level-2-card">
+            <div class="level-header" onclick="toggleLevel(2)">
+                <div class="level-title-area">
+                    <div class="level-number" style="background-color: var(--level-2)">2</div>
+                    <div class="level-name">The Project Manager: Context Pinning & Custom Environments</div>
+                </div>
+                <div class="level-completion" id="level-2-progress">0/2 Completed</div>
+            </div>
+            <div class="level-content" id="level-2-content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'l2-material')">Training Material</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'l2-tasks')">Interactive Tasks</button>
+                </div>
+                
+                <div class="tab-panel active" id="l2-material">
+                    <div class="material-section">
+                        <h4>Leveraging Claude Projects for Persistent Architectures</h4>
+                        <p>To break past Level 1, you must use the <strong>Claude Projects</strong> ecosystem. Projects allow you to isolate persistent enterprise or side-hustle domain knowledge, preventing context rot across distinct chat instances.</p>
+                        <p><strong>Key Mechanics:</strong></p>
+                        <ul>
+                            <li><strong>Reference Files:</strong> Upload functional codebase schemas, business requirements documents (BRDs), or brand manuals. These files are pinned to the context window of every chat thread created inside the project boundaries.</li>
+                            <li><strong>Custom System Instructions:</strong> Define an explicit professional persona, technical stack configurations, formatting constraints, and error response standards. Every thread starts preloaded with this system prompt layer.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="l2-tasks">
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="2" id="t2-1" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 2.1: Spin Up a Pinned Knowledge Workspace</div>
+                                <div class="task-desc">Initialize a new project within Claude.ai. Upload three target architectural documents: your API specifications, DB layout schema, and style rules document. Set the system prompt to explicitly reject passive-voice commentary.</div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="2" id="t2-2" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 2.2: Context Boundary Testing</div>
+                                <div class="task-desc">Verify that Claude leverages your background documents seamlessly. Ask an ambiguous structural question that can only be accurately answered if Claude utilizes your preloaded reference files.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card" id="level-3-card">
+            <div class="level-header" onclick="toggleLevel(3)">
+                <div class="level-title-area">
+                    <div class="level-number" style="background-color: var(--level-3)">3</div>
+                    <div class="level-name">The Operator: Desktop Automation & Custom Document Skills</div>
+                </div>
+                <div class="level-completion" id="level-3-progress">0/3 Completed</div>
+            </div>
+            <div class="level-content" id="level-3-content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'l3-material')">Training Material</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'l3-tasks')">Interactive Tasks</button>
+                </div>
+                
+                <div class="tab-panel active" id="l3-material">
+                    <div class="material-section">
+                        <h4>Claude Cowork & Custom Markdown Capability Extensions</h4>
+                        <p>Level 3 transitions from web-bounded text chats into local environment workflow execution using <strong>Claude Cowork</strong> via the Claude Desktop client.</p>
+                        <p><strong>Core Elements of Level 3 Operations:</strong></p>
+                        <ul>
+                            <li><strong>Claude Cowork:</strong> An autonomous task runner executing locally on your desktop machine (macOS/Windows). It handles document mutations, folder refactoring, and multi-step tasks natively in the background, notifying you upon task completion.</li>
+                            <li><strong>The Dispatch Mechanism:</strong> Allows you to offload workflows from your mobile device or terminal directly to the persistent background runtime execution loop on your primary work machine.</li>
+                            <li><strong>Custom Skills Architecture:</strong> Procedural expertise packages built inside your system. You design a file called <code>SKILL.md</code> consisting of YAML frontmatter metadata and explicit execution frameworks. It must live in your system directory at <code>~/.claude/skills/[skill-name]/SKILL.md</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="l3-tasks">
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="3" id="t3-1" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 3.1: Construct an Enterprise SKILL.md Extension</div>
+                                <div class="task-desc">Create a custom automation skill directory layout. Author a valid <code>SKILL.md</code> file that outlines precise procedural guidelines for compiling weekly financial audits. Include frontmatter configurations.</div>
+                                <div class="task-interactive-box">
+                                    <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;">YAML Frontmatter Code Check</p>
+                                    <pre>---
+name: "audit-compiler"
+description: "Formats and validates spreadsheet entries"
+commands:
+  - /audit
+---</pre>
+                                    <button class="btn-action" onclick="simulateTask('t3-1', 'Skill successfully validated by Claude Desktop engine. Slash command /audit is active.')">Deploy Local Skill</button>
+                                    <div class="task-feedback" id="feedback-t3-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="3" id="t3-2" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 3.2: Initiate Background Cowork Routines</div>
+                                <div class="task-desc">Fire up the Cowork environment. Assign a multi-step background operations instruction: <i>"Locate all raw CSV logs in this folder, reformat timestamps to ISO 8601, and compile a standardized document summary."</i></div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="3" id="t3-3" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 3.3: Mobile Dispatch Execution</div>
+                                <div class="task-desc">Use the mobile client to trigger a complex text-processing task that pipes updates to your desktop context, utilizing background computational execution threads.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card" id="level-4-card">
+            <div class="level-header" onclick="toggleLevel(4)">
+                <div class="level-title-area">
+                    <div class="level-number" style="background-color: var(--level-4)">4</div>
+                    <div class="level-name">The Engineer: Agentic Coding CLI & Workspace Orchestration</div>
+                </div>
+                <div class="level-completion" id="level-4-progress">0/3 Completed</div>
+            </div>
+            <div class="level-content" id="level-4-content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'l4-material')">Training Material</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'l4-tasks')">Interactive Tasks</button>
+                </div>
+                
+                <div class="tab-panel active" id="l4-material">
+                    <div class="material-section">
+                        <h4>Terminal Mastery via Claude Code and CLAUDE.md Hierarchies</h4>
+                        <p>Level 4 represents a profound paradigm shift: utilizing <strong>Claude Code</strong>, the raw, low-level command-line engineering agent loop. This phase relies on explicit code interaction workflows and targeted verification cycles.</p>
+                        <p><strong>Key Principles & Frameworks:</strong></p>
+                        <ul>
+                            <li><strong>The 4-Phase Operational Cycle:</strong> <i>Explore</i> (inspecting logs and layouts), <i>Plan</i> (mapping out modular structural edits), <i>Implement</i> (precise file mutations), and <i>Commit</i> (verifying changes with terminal testing loops).</li>
+                            <li><strong>Constitutional CLAUDE.md Design:</strong> Rather than filling a local <code>CLAUDE.md</code> file with rigid, brittle instructions (e.g., "Keep outputs brief"), you must specify project engineering values, development philosophies, architecture configurations, and exact test execution commands.</li>
+                            <li><strong>Slash Commands & Custom Git Hooks:</strong> Build commands in <code>.claude/commands/</code>. Configure <code>PostToolUse</code> lifecycle hooks to execute formatters (Prettier, Black) or linters automatically right after Claude edits files, preventing continuous integration pipeline failures.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="l4-tasks">
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="4" id="t4-1" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 4.1: Establish Workspace via /init & CLAUDE.md</div>
+                                <div class="task-desc">Initialize a code repository using the Claude Code terminal engine. Construct a highly efficient <code>CLAUDE.md</code> mapping architecture, exact test runner execution hooks, and underlying workspace constraints.</div>
+                                <div class="task-interactive-box">
+                                    <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;">Claude Code CLI Workspace Initialization</p>
+                                    <button class="btn-action" onclick="simulateTask('t4-1', '$ claude /init\nAnalyzing repository layout...\nDetected Framework: Next.js / TypeScript\nCreated structural baseline configuration .claude/settings.json')">Execute /init Hook</button>
+                                    <div class="task-feedback" id="feedback-t4-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="4" id="t4-2" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 4.2: Program a Custom PostToolUse Formatter Hook</div>
+                                <div class="task-desc">Create a local hook file to watch tool invocations. Write a bash sequence that intercepts file-writes to force codebase style rules seamlessly.</div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="4" id="t4-3" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 4.3: Parallel Agent Splitting & Verification Loops</div>
+                                <div class="task-desc">Spawn multiple terminal instances running Claude sessions concurrently to work on independent feature flags. Constrain them to self-correct codebase errors through isolated terminal testing runs.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card" id="level-5-card">
+            <div class="level-header" onclick="toggleLevel(5)">
+                <div class="level-title-area">
+                    <div class="level-number" style="background-color: var(--level-5)">5</div>
+                    <div class="level-name">The Architect: Programmatic Agent SDK & Model Context Protocol (MCP)</div>
+                </div>
+                <div class="level-completion" id="level-5-progress">0/3 Completed</div>
+            </div>
+            <div class="level-content" id="level-5-content">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'l4-material')">Training Material</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'l4-tasks')">Interactive Tasks</button>
+                </div>
+                
+                <div class="tab-panel active" id="l5-material">
+                    <div class="material-section">
+                        <h4>Enterprise Infrastructure & Standardization Layers</h4>
+                        <p>The pinnacle of AI implementation requires discarding existing application wrappers entirely. You develop software architectures directly on top of the programmatic <strong>Claude Agent SDK</strong> and unify global systems using the <strong>Model Context Protocol (MCP)</strong>.</p>
+                        <p><strong>Core Technical Stacks:</strong></p>
+                        <ul>
+                            <li><strong>Claude Agent SDK:</strong> An explicit engineering library (<code>npm install @anthropic-ai/claude-agent-sdk</code>) available in TypeScript and Python. It exposes the raw agentic loop via the <code>query()</code> asynchronous generator function, handling file evaluation, error trapping, and state persistence natively.</li>
+                            <li><strong>Deterministic Lifecycle Hooks:</strong> Programmatic code callbacks like <code>PreToolUse</code> and <code>PostToolUse</code>. These provide strict infrastructure control over cost, permissions, tool boundaries, and data masking.</li>
+                            <li><strong>Model Context Protocol (MCP):</strong> A two-way communication protocol standardizing how AI systems connect to tools, data sources, and services. It separates components into an <i>MCP Host</i> (the calling agent runtime), an <i>MCP Client</i>, and an <i>MCP Server</i> (exposing resources over standard I/O <code>stdio</code> or Server-Sent Events <code>SSE</code>).</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tab-panel" id="l5-tasks">
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="5" id="t5-1" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 5.1: Build an Agent via the Claude Agent SDK</div>
+                                <div class="task-desc">Write a production script utilizing the Agent SDK library. Leverage the async iterator loop over <code>query()</code> to scan code directories and isolate TODO markers completely autonomously.</div>
+                                <div class="task-interactive-box">
+                                    <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;">Agent SDK Script Environment Ingestion</p>
+                                    <button class="btn-action" onclick="simulateTask('t5-1', 'import { query } from \'@anthropic-ai/claude-agent-sdk\';\nLoop initialized successfully. Executed custom file verification checks across 14 modules.')">Compile SDK Routine</button>
+                                    <div class="task-feedback" id="feedback-t5-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="5" id="t5-2" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 5.2: Architect an MCP Server Configuration</div>
+                                <div class="task-desc">Set up a functional Model Context Protocol bridge. Expose an internal company Postgres database safely as an external tool definitions contract via <code>stdio</code> channels.</div>
+                            </div>
+                        </div>
+                        <div class="task-card">
+                            <div class="task-checkbox-wrapper">
+                                <input type="checkbox" class="task-checkbox" data-level="5" id="t5-3" onchange="updateProgress()">
+                            </div>
+                            <div class="task-body">
+                                <div class="task-title">Task 5.3: Programmatic Guardrail Auditing</div>
+                                <div class="task-desc">Implement a strict programmatic <code>PreToolUse</code> lifecycle hook that checks argument structures and intercepts API payloads to ensure compliance with organization policies.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // System Progress Core Engine
+    const totalTasks = 13;
+    const levelTaskCounts = { 1: 2, 2: 2, 3: 3, 4: 3, 5: 3 };
+
+    window.onload = function() {
+        loadProgress();
+    };
+
+    function toggleLevel(levelNum) {
+        const content = document.getElementById(`level-${levelNum}-content`);
+        content.classList.toggle('open');
+    }
+
+    function switchTab(btn, panelId) {
+        const container = btn.closest('.level-content');
+        
+        // Remove active states from siblings
+        container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        
+        // Active chosen tab
+        btn.classList.add('active');
+        document.getElementById(panelId).classList.add('active');
+    }
+
+    function simulateTask(taskId, mockConsoleOutput) {
+        const feedbackBox = document.getElementById(`feedback-${taskId}`);
+        feedbackBox.className = "task-feedback success";
+        feedbackBox.innerText = mockConsoleOutput;
+        
+        // Check checkbox automatically on successful simulation run
+        const checkbox = document.getElementById(taskId);
+        if (!checkbox.checked) {
+            checkbox.checked = true;
+            updateProgress();
+        }
+    }
+
+    function updateProgress() {
+        let checkedCount = 0;
+        let levelChecks = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        
+        // Evaluate checkbox DOM elements
+        const checkboxes = document.querySelectorAll('.task-checkbox');
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                checkedCount++;
+                levelChecks[cb.dataset.level]++;
+            }
+        });
+
+        // Compute aggregate metrics
+        const percentage = Math.round((checkedCount / totalTasks) * 100);
+        document.getElementById('master-progress-bar').style.width = `${percentage}%`;
+        document.getElementById('master-progress-text').innerText = `${percentage}% Complete`;
+
+        // Update Level Completion Trackers
+        for (let l = 1; l <= 5; l++) {
+            document.getElementById(`level-${l}-progress`).innerText = `${levelChecks[l]}/${levelTaskCounts[l]} Completed`;
+            
+            const badge = document.getElementById(`badge-${l}`);
+            if (levelChecks[l] === levelTaskCounts[l]) {
+                badge.classList.add('active');
+            } else {
+                badge.classList.remove('active');
+            }
+        }
+
+        saveProgress();
+    }
+
+    function saveProgress() {
+        const progressState = {};
+        document.querySelectorAll('.task-checkbox').forEach(cb => {
+            progressState[cb.id] = cb.checked;
+        });
+        localStorage.setItem('claude_matrix_progress', JSON.stringify(progressState));
+    }
+
+    function loadProgress() {
+        const saved = localStorage.getItem('claude_matrix_progress');
+        if (saved) {
+            const progressState = JSON.parse(saved);
+            Object.keys(progressState).forEach(id => {
+                const cb = document.getElementById(id);
+                if (cb) cb.checked = progressState[id];
+            });
+            updateProgress();
+        }
+    }
+
+    function resetProgress() {
+        if (confirm('Are you sure you want to clear your learning checklist milestones?')) {
+            document.querySelectorAll('.task-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.task-feedback').forEach(f => f.style.display = 'none');
+            updateProgress();
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -48,9 +48,8 @@ final class DebtViewModel {
 
     func load(today: Date = Date()) {
         do {
-            let entries = try workoutRepository.entries(on: today)
-            let completedByKey = Dictionary(grouping: entries, by: \.exerciseKey)
-                .mapValues { $0.reduce(0) { $0 + $1.count } }
+            // Reconciled per-exercise reps (Log + Rounds counted once).
+            let completedByKey = try workoutRepository.completedReps(on: today)
             // Show debt remaining after today's payback reps (live), so the number
             // and the plan shrink as the user logs and hit "Paid off" when cleared.
             rows = try exerciseRepository.allOrdered()

@@ -16,13 +16,14 @@ enum WidgetSnapshotPublisher {
         today: Date = Date()
     ) throws -> WidgetSnapshot {
         let dayKey = GMCalendar.dayKey(for: today)
-        let entries = try workoutRepository.entries(on: today)
-        let grouped = Dictionary(grouping: entries, by: \.exerciseKey)
+        // Reconciled per-exercise reps (Log + Rounds counted once) so the widget
+        // matches the Dashboard.
+        let completedByKey = try workoutRepository.completedReps(on: today)
 
         let exercises = try exerciseRepository.allOrdered()
             .filter(\.isEnabled)
             .map { exercise -> WidgetExercise in
-                let completed = (grouped[exercise.key] ?? []).reduce(0) { $0 + $1.count }
+                let completed = completedByKey[exercise.key] ?? 0
                 let target = exerciseRepository.currentTarget(for: exercise, on: today)
                 return WidgetExercise(
                     key: exercise.key,

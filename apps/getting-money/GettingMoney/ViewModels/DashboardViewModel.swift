@@ -95,9 +95,9 @@ final class DashboardViewModel {
         do {
             selectedDate = GMCalendar.dayKey(for: today)
             let settings = try exerciseRepository.appSettings()
-            let dayEntries = try workoutRepository.entries(on: today)
-            let allEntries = try workoutRepository.allEntries()
-            let grouped = Dictionary(grouping: dayEntries, by: \.exerciseKey)
+            // Reconciled per-exercise reps: a workout logged via the Log AND via
+            // Rounds counts once (max), never twice (sum).
+            let completedByKey = try workoutRepository.completedReps(on: today)
             let debtByKey = Dictionary(uniqueKeysWithValues: try exerciseRepository
                 .debtBalances()
                 .compactMap { debt -> (String, Int)? in
@@ -108,7 +108,7 @@ final class DashboardViewModel {
             rows = try exerciseRepository.allOrdered()
                 .filter(\.isEnabled)
                 .map { exercise in
-                    let completed = (grouped[exercise.key] ?? []).reduce(0) { $0 + $1.count }
+                    let completed = completedByKey[exercise.key] ?? 0
                     let target = exerciseRepository.currentTarget(for: exercise, on: today)
                     let debtOwed = debtByKey[exercise.key] ?? 0
                     let debtSummary = debtEngine.settleDay(inputs: [
@@ -143,7 +143,10 @@ final class DashboardViewModel {
                                                           completedReps: row.completed, persistedDebt: row.debtOwed),
                             bonusEarned: row.bonusEarned)
             }
-            let snapshots = allEntries.map { RepEntrySnapshot(date: $0.timestamp, count: $0.count) }
+            // History/balance use reconciled per-day totals so money never
+            // double-counts the manual/round overlap.
+            let reconciledByDay = try workoutRepository.reconciledDailyReps()
+            let snapshots = reconciledByDay.map { RepEntrySnapshot(date: $0.key, count: $0.value) }
             history = historyEngine.dailySeries(
                 from: snapshots,
                 repValue: settings.repValue,
@@ -152,7 +155,7 @@ final class DashboardViewModel {
             )
             totalDebt = rows.reduce(0) { $0 + $1.debtOwed }
             bankBalance = history.last?.cumulativeMoney
-                ?? earningsEngine.totalMoney(for: allEntries, repValue: settings.repValue)
+                ?? earningsEngine.totalMoney(reps: reconciledByDay.values.reduce(0, +), repValue: settings.repValue)
             status = dashboardStatus
             // The empty state claims both "no reps logged" AND "nothing owed", so
             // outstanding debt must also count as activity — otherwise debt is

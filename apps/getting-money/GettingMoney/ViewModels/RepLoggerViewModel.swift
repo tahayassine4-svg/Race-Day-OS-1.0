@@ -26,7 +26,7 @@ final class RepLoggerViewModel {
     private(set) var selectedDate: Date = GMCalendar.dayKey()
     var feedbackTick = 0
     var isToday: Bool { selectedDate == GMCalendar.dayKey() }
-    var hasPendingChanges: Bool { isToday ? draftTotal > 0 : draftTotal != 0 }
+    var hasPendingChanges: Bool { draftTotal != 0 }
     var selectedDateTitle: String {
         if isToday { return "Today" }
         return selectedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())
@@ -72,12 +72,12 @@ final class RepLoggerViewModel {
             selectedDate = nextDate
             let settings = try exerciseRepository.appSettings()
             repValue = settings.repValue
-            let entries = try workoutRepository.entries(on: today)
-            let grouped = Dictionary(grouping: entries, by: \.exerciseKey)
+            // Reconciled total per exercise (Log + Rounds counted once, never twice).
+            let completedByKey = try workoutRepository.completedReps(on: today)
             let exercises = try exerciseRepository.allOrdered().filter(\.isEnabled)
 
             rows = exercises.map { exercise in
-                let logged = (grouped[exercise.key] ?? []).reduce(0) { $0 + $1.count }
+                let logged = completedByKey[exercise.key] ?? 0
                 return Row(
                     id: exercise.key,
                     name: exercise.name,
@@ -104,23 +104,30 @@ final class RepLoggerViewModel {
 
     func adjust(_ key: String, by delta: Int) {
         guard let index = rows.firstIndex(where: { $0.id == key }) else { return }
-        let minimumDraft = isToday ? 0 : -rows[index].logged
+        // The Log edits the day's *total*, so you can adjust up or down — but never
+        // below what's already done. (To drop below reps logged by a completed
+        // round, un-tick that round in the Rounds tab.)
+        let minimumDraft = -rows[index].logged
         rows[index].draft = max(minimumDraft, rows[index].draft + delta)
         recalculateDraftTotals()
         feedbackTick += 1
     }
 
+    /// One save path for today and past days: the Log asserts the whole-day total
+    /// per exercise. We store that as the manual total; the counted total is then
+    /// `max(manual, round)`, so the same workout logged via Rounds is never added a
+    /// second time. Past-day edits also re-settle debt from the change.
     func save() {
         do {
-            if isToday {
-                for row in rows where row.draft > 0 {
-                    _ = try workoutRepository.addRepEntry(exerciseKey: row.id, count: row.draft, sourceRoundNumber: nil, at: selectedDate)
-                }
-            } else {
-                let previousTotals = Dictionary(uniqueKeysWithValues: rows.map { ($0.id, $0.logged) })
-                let correctedTotals = Dictionary(uniqueKeysWithValues: rows.map { ($0.id, $0.displayed) })
-                try workoutRepository.replaceManualRepEntries(on: selectedDate, totalsByExercise: correctedTotals)
-                try reconcileDebtCorrection(from: previousTotals, to: correctedTotals, on: selectedDate)
+            let previousCompleted = Dictionary(uniqueKeysWithValues: rows.map { ($0.id, $0.logged) })
+            let assertedTotals = Dictionary(uniqueKeysWithValues: rows.map { ($0.id, max(0, $0.displayed)) })
+            try workoutRepository.setManualTotals(on: selectedDate, totalsByExercise: assertedTotals)
+
+            if selectedDate < GMCalendar.dayKey() {
+                // Re-settle against the *reconciled* new totals (which may differ
+                // from the asserted manual total when a round covers more).
+                let newCompleted = try workoutRepository.completedReps(on: selectedDate)
+                try reconcileDebtCorrection(from: previousCompleted, to: newCompleted, on: selectedDate)
             }
             load(today: selectedDate, preservingDrafts: false)
             feedbackTick += 1

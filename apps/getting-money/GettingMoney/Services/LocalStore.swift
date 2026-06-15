@@ -57,6 +57,20 @@ final class LocalStore {
             _ = try workoutRepository.addRepEntry(exerciseKey: "pullups", count: 4, sourceRoundNumber: 1, at: seedDate)
             _ = try workoutRepository.addRepEntry(exerciseKey: "squats", count: 50, sourceRoundNumber: 1, at: seedDate)
         }
+        if ProcessInfo.processInfo.arguments.contains("-GMSeedDoubleCountFixture") {
+            // Reproduces the bug report: custom targets 40/25/70, a completed
+            // 1-circle round (40/25/70) AND a manual log (40/10/11). Old sum read
+            // 80/35/81; reconciliation must show the single workout 40/25/70.
+            try exerciseRepository.setTarget(key: "pushups", reps: 40, effectiveDate: seedDate, isManualOverride: true)
+            try exerciseRepository.setTarget(key: "pullups", reps: 25, effectiveDate: seedDate, isManualOverride: true)
+            try exerciseRepository.setTarget(key: "squats", reps: 70, effectiveDate: seedDate, isManualOverride: true)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pushups", count: 40, sourceRoundNumber: nil, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pullups", count: 10, sourceRoundNumber: nil, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "squats", count: 11, sourceRoundNumber: nil, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pushups", count: 40, sourceRoundNumber: 1, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "pullups", count: 25, sourceRoundNumber: 1, at: seedDate)
+            _ = try workoutRepository.addRepEntry(exerciseKey: "squats", count: 70, sourceRoundNumber: 1, at: seedDate)
+        }
         if ProcessInfo.processInfo.arguments.contains("-GMSeedPaybackFixture") {
             // 50 reps of standing pushup debt, with 30 payback reps already logged
             // today (130 = 100 target + 30 payback) → Debt should read 20 live.
@@ -119,7 +133,10 @@ extension LocalStore: LocalDataAdmin {
             exportedAt: Date(),
             appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0",
             repValue: settings.repValue,
-            bankBalance: EarningsEngine().totalMoney(for: entries, repValue: settings.repValue),
+            bankBalance: EarningsEngine().totalMoney(
+                reps: try workoutRepository.reconciledDailyReps().values.reduce(0, +),
+                repValue: settings.repValue
+            ),
             entries: entries
                 .sorted { $0.timestamp < $1.timestamp }
                 .map { .init(date: $0.timestamp, exercise: nameByKey[$0.exerciseKey] ?? $0.exerciseKey, count: $0.count) },

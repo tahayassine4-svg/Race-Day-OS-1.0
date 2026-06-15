@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Money App — Premium iOS UI Mockup</title>
+  <style>
+    :root {
+      --bg: #070a12;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.14);
+      --panel-soft: rgba(255, 255, 255, 0.055);
+      --stroke: rgba(255, 255, 255, 0.13);
+      --text: #f5f8f4;
+      --muted: #99a4a2;
+      --green: #86ff75;
+      --green-2: #43e65f;
+      --gold: #f7cb62;
+      --red: #ff5d73;
+      --orange: #ffb86b;
+      --blue: #82b6ff;
+      --dark-green: #112018;
+      --shadow: rgba(0, 0, 0, 0.42);
+      --ios-radius: 38px;
+      --card-radius: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(134, 255, 117, 0.24), transparent 26%),
+        radial-gradient(circle at 84% 14%, rgba(247, 203, 98, 0.16), transparent 28%),
+        radial-gradient(circle at 55% 92%, rgba(130, 182, 255, 0.13), transparent 25%),
+        linear-gradient(145deg, #05070d 0%, #0b111a 52%, #060910 100%);
+      padding: 42px;
+      overflow-x: auto;
+    }
+
+    .canvas {
+      width: 1720px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      padding: 0 10px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 52px;
+      letter-spacing: -2.5px;
+      line-height: 0.98;
+      max-width: 710px;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+      text-shadow: 0 0 34px rgba(134, 255, 117, 0.32);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.45;
+      max-width: 620px;
+      margin: 0 0 5px 0;
+    }
+
+    .mockups {
+      display: grid;
+      grid-template-columns: repeat(4, 390px);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .phone-wrap {
+      position: relative;
+    }
+
+    .screen-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: rgba(245, 248, 244, 0.72);
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      margin: 0 0 14px 18px;
+    }
+
+    .screen-label .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(134, 255, 117, 0.8);
+    }
+
+    .phone {
+      width: 390px;
+      height: 844px;
+      border-radius: 54px;
+      padding: 14px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.24), rgba(255,255,255,0.04) 35%, rgba(0,0,0,0.58));
+      box-shadow: 0 34px 80px rgba(0, 0, 0, 0.48), inset 0 0 0 1px rgba(255,255,255,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 17px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 124px;
+      height: 34px;
+      background: #05070d;
+      border-radius: 0 0 22px 22px;
+      z-index: 6;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      border-radius: 42px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(134, 255, 117, 0.16), transparent 34%),
+        radial-gradient(circle at 84% 22%, rgba(247, 203, 98, 0.10), transparent 30%),
+        linear-gradient(180deg, #09100f 0%, #071019 43%, #060810 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .app-content {
+      height: 100%;
+      padding: 56px 20px 88px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .statusbar {
+      position: absolute;
+      top: 17px;
+      left: 25px;
+      right: 25px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.92);
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 5;
+    }
+
+    .ios-homebar {
+      position: absolute;
+      width: 132px;
+      height: 5px;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      border-radius: 5px;
+      background: rgba(255,255,255,0.72);
+      z-index: 8;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: 31px;
+      letter-spacing: -1.2px;
+      line-height: 1.05;
+      margin: 5px 0 0;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: -0.35px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.13);
+      font-size: 20px;
+    }
+
+    .bank-card {
+      border-radius: 32px;
+      padding: 20px;
+      background:
+        linear-gradient(145deg, rgba(134,255,117,0.20), rgba(247,203,98,0.11) 48%, rgba(255,255,255,0.08)),
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 22px 56px rgba(0,0,0,0.35);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .bank-card::after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -80px;
+      top: -76px;
+      border-radius: 50%;
+      background: rgba(134,255,117,0.18);
+      filter: blur(8px);
+    }
+
+    .bank-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bank-title {
+      color: rgba(245,248,244,0.76);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .bank-amount {
+      font-size: 50px;
+      letter-spacing: -2.2px;
+      font-weight: 850;
+      margin-top: 6px;
+    }
+
+    .bank-amount small {
+      font-size: 23px;
+      color: rgba(245,248,244,0.64);
+      letter-spacing: -0.4px;
+    }
+
+    .coin-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffe38a, #c9952d);
+      color: #171106;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 19px;
+      box-shadow: 0 0 30px rgba(247,203,98,0.32);
+    }
+
+    .split-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mini-stat, .glass-card {
+      border-radius: var(--card-radius);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.075);
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    .mini-stat {
+      padding: 13px;
+    }
+
+    .mini-stat .label, .subtle-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .mini-stat .value {
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: -0.55px;
+      margin-top: 5px;
+    }
+
+    .value.green { color: var(--green); }
+    .value.red { color: var(--red); }
+    .value.gold { color: var(--gold); }
+    .value.blue { color: var(--blue); }
+
+    .daily-card {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .daily-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 850;
+      background: rgba(134,255,117,0.13);
+      color: var(--green);
+      border: 1px solid rgba(134,255,117,0.20);
+    }
+
+    .pill.red {
+      background: rgba(255,93,115,0.12);
+      color: var(--red);
+      border-color: rgba(255,93,115,0.20);
+    }
+
+    .progress-line {
+      height: 10px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      margin: 10px 0 12px;
+    }
+
+    .progress-line span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      box-shadow: 0 0 18px rgba(134,255,117,0.32);
+    }
+
+    .exercise-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .exercise {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .ex-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      font-size: 17px;
+    }
+
+    .exercise strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .exercise small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .ex-money {
+      font-size: 13px;
+      font-weight: 850;
+      color: var(--green);
+    }
+
+    .tabbar {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      height: 66px;
+      border-radius: 30px;
+      background: rgba(6,9,16,0.82);
+      border: 1px solid rgba(255,255,255,0.13);
+      backdrop-filter: blur(18px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px;
+      z-index: 7;
+    }
+
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: rgba(255,255,255,0.45);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 22px;
+    }
+
+    .tab.active {
+      background: rgba(134,255,117,0.13);
+      color: var(--green);
+      border: 1px solid rgba(134,255,117,0.16);
+    }
+
+    .tab span { font-size: 17px; }
+
+    .round-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .select-card {
+      padding: 13px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.11);
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    select {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 850;
+      margin-top: 3px;
+      outline: none;
+    }
+
+    .start-btn {
+      border: none;
+      border-radius: 22px;
+      padding: 0 18px;
+      background: linear-gradient(145deg, var(--green), #42d35c);
+      color: #031006;
+      font-weight: 900;
+      font-size: 14px;
+      box-shadow: 0 16px 30px rgba(67,230,95,0.22);
+    }
+
+    .round-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .round-card {
+      padding: 13px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.11);
+      background: rgba(255,255,255,0.065);
+    }
+
+    .round-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .round-no {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .round-no span {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(134,255,117,0.14);
+      color: var(--green);
+    }
+
+    .round-bonus {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .rep-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .rep-box {
+      border-radius: 17px;
+      padding: 9px 8px;
+      background: rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+
+    .rep-box b {
+      display: block;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .rep-box small {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 720;
+    }
+
+    .add-strip {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 19px;
+      background: rgba(134,255,117,0.10);
+      border: 1px solid rgba(134,255,117,0.14);
+      font-size: 12px;
+      color: rgba(245,248,244,0.76);
+    }
+
+    .plus-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #031006;
+      font-weight: 900;
+    }
+
+    .debt-card {
+      border-radius: 32px;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,93,115,0.22), transparent 36%),
+        linear-gradient(145deg, rgba(255,93,115,0.12), rgba(255,255,255,0.07));
+      border: 1px solid rgba(255,93,115,0.22);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.30);
+      margin-bottom: 14px;
+    }
+
+    .debt-amount {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -2.2px;
+      margin: 6px 0 0;
+      color: var(--red);
+    }
+
+    .debt-note {
+      color: rgba(245,248,244,0.66);
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 8px;
+    }
+
+    .mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 14px 0;
+      padding: 6px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .mode-toggle div {
+      border-radius: 18px;
+      padding: 10px;
+      text-align: center;
+      font-weight: 850;
+      font-size: 12px;
+      color: rgba(245,248,244,0.55);
+    }
+
+    .mode-toggle .selected {
+      background: rgba(134,255,117,0.14);
+      color: var(--green);
+      border: 1px solid rgba(134,255,117,0.14);
+    }
+
+    .payback-card {
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .payback-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .payback-row:last-child { border-bottom: none; }
+    .payback-row b { font-size: 14px; }
+    .payback-row small { display: block; color: var(--muted); margin-top: 3px; font-size: 11px; }
+    .payback-row .rep-due { color: var(--orange); font-weight: 900; white-space: nowrap; }
+
+    .target-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .target-card {
+      padding: 15px;
+      border-radius: 25px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .target-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .target-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+    }
+
+    .target-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.08);
+      display: grid;
+      place-items: center;
+    }
+
+    .target-value {
+      font-size: 24px;
+      letter-spacing: -0.8px;
+      font-weight: 900;
+    }
+
+    .auto-increase {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(134,255,117,0.10);
+      border: 1px solid rgba(134,255,117,0.16);
+      color: rgba(245,248,244,0.76);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 9px;
+      flex-wrap: wrap;
+    }
+
+    .small-badge {
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(245,248,244,0.68);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .logic-band {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 18px;
+    }
+
+    .logic-card {
+      border-radius: 28px;
+      padding: 18px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+    }
+
+    .logic-card h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    .logic-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .formula {
+      margin-top: 12px;
+      padding: 13px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.22);
+      color: rgba(245,248,244,0.82);
+      font-size: 12px;
+      line-height: 1.45;
+      border: 1px solid rgba(255,255,255,0.06);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 20px; }
+      .canvas { width: 100%; }
+      .hero { display: block; }
+      .hero h1 { font-size: 38px; margin-bottom: 12px; }
+      .mockups { grid-template-columns: 1fr; justify-items: center; }
+      .logic-band { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+    <section class="hero">
+      <h1><span>Getting Money</span><br/>Calisthenics Bank OS</h1>
+      <p>A premium iOS mockup for a simple rep-tracking app where every rep earns money, missed reps become debt, and daily targets split automatically into rounds.</p>
+    </section>
+
+    <section class="mockups" aria-label="iOS app screens">
+      <div class="phone-wrap">
+        <div class="screen-label"><span class="dot"></span>01 Dashboard / Bank</div>
+        <div class="phone">
+          <div class="app">
+            <div class="statusbar"><span>9:41</span><span>5G 🔋</span></div>
+            <div class="app-content">
+              <div class="top-row">
+                <div>
+                  <div class="eyebrow">Today’s Bank</div>
+                  <h2>Make reps.<br/>Stack money.</h2>
+                </div>
+                <div class="avatar">🏦</div>
+              </div>
+
+              <div class="bank-card">
+                <div class="bank-top">
+                  <div>
+                    <div class="bank-title">Total rep money</div>
+                    <div class="bank-amount">$1,284<small>.00</small></div>
+                  </div>
+                  <div class="coin-badge">GM</div>
+                </div>
+                <div class="split-row">
+                  <div class="mini-stat">
+                    <div class="label">Streak</div>
+                    <div class="value green">12 days</div>
+                  </div>
+                  <div class="mini-stat">
+                    <div class="label">Today</div>
+                    <div class="value gold">+$284</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="daily-card glass-card">
+                <div class="daily-head">
+                  <h3>Daily target</h3>
+                  <div class="pill red">36 debt reps</div>
+                </div>
+                <div class="progress-line"><span style="width: 82%"></span></div>
+                <div class="split-row">
+                  <div class="mini-stat">
+                    <div class="label">Done</div>
+                    <div class="value green">284 reps</div>
+                  </div>
+                  <div class="mini-stat">
+                    <div class="label">Target</div>
+                    <div class="value">320 reps</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="exercise-list">
+                <div class="exercise"><div class="ex-icon">🤜</div><div><strong>Push-ups</strong><small>96 / 120 reps</small></div><div class="ex-money">+$96</div></div>
+                <div class="exercise"><div class="ex-icon">🧗</div><div><strong>Pull-ups</strong><small>8 / 10 reps</small></div><div class="ex-money">+$8</div></div>
+                <div class="exercise"><div class="ex-icon">🦵</div><div><strong>Squats</strong><small>180 / 190 reps</small></div><div class="ex-money">+$180</div></div>
+              </div>
+            </div>
+            <div class="tabbar"><div class="tab active"><span>🏦</span>Bank</div><div class="tab"><span>🔁</span>Rounds</div><div class="tab"><span>📉</span>Debt</div><div class="tab"><span>🎯</span>Targets</div></div>
+            <div class="ios-homebar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="screen-label"><span class="dot"></span>02 Rounds / Circles</div>
+        <div class="phone">
+          <div class="app">
+            <div class="statusbar"><span>9:41</span><span>5G 🔋</span></div>
+            <div class="app-content">
+              <div class="top-row">
+                <div>
+                  <div class="eyebrow">Auto Split</div>
+                  <h2>3 rounds<br/>to hit zero.</h2>
+                </div>
+                <div class="avatar">🔁</div>
+              </div>
+
+              <div class="round-controls">
+                <div class="select-card">
+                  <div class="subtle-label">Rounds today</div>
+                  <select aria-label="round count"><option selected>3 circles</option><option>4 circles</option><option>5 circles</option></select>
+                </div>
+                <button class="start-btn">Start</button>
+              </div>
+
+              <div class="daily-card glass-card">
+                <div class="daily-head">
+                  <h3>Round logic</h3>
+                  <div class="pill">Base + debt</div>
+                </div>
+                <div class="debt-note">The app splits your daily target evenly, then adds a dynamic debt payment on top until your debt reaches zero.</div>
+              </div>
+
+              <div class="round-list">
+                <div class="round-card">
+                  <div class="round-header"><div class="round-no"><span>1</span>Circle One</div><div class="round-bonus">+12 payback</div></div>
+                  <div class="rep-grid">
+                    <div class="rep-box"><b>48</b><small>Push</small></div>
+                    <div class="rep-box"><b>4</b><small>Pull</small></div>
+                    <div class="rep-box"><b>74</b><small>Squat</small></div>
+                  </div>
+                  <div class="add-strip"><span>Do extra reps to earn more money</span><div class="plus-btn">+</div></div>
+                </div>
+
+                <div class="round-card">
+                  <div class="round-header"><div class="round-no"><span>2</span>Circle Two</div><div class="round-bonus">+12 payback</div></div>
+                  <div class="rep-grid">
+                    <div class="rep-box"><b>48</b><small>Push</small></div>
+                    <div class="rep-box"><b>3</b><small>Pull</small></div>
+                    <div class="rep-box"><b>73</b><small>Squat</small></div>
+                  </div>
+                  <div class="add-strip"><span>Modify this circle only</span><div class="plus-btn">+</div></div>
+                </div>
+
+                <div class="round-card">
+                  <div class="round-header"><div class="round-no"><span>3</span>Circle Three</div><div class="round-bonus">+12 payback</div></div>
+                  <div class="rep-grid">
+                    <div class="rep-box"><b>48</b><small>Push</small></div>
+                    <div class="rep-box"><b>3</b><small>Pull</small></div>
+                    <div class="rep-box"><b>73</b><small>Squat</small></div>
+                  </div>
+                  <div class="add-strip"><span>Projected finish: debt cleared</span><div class="plus-btn">✓</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="tabbar"><div class="tab"><span>🏦</span>Bank</div><div class="tab active"><span>🔁</span>Rounds</div><div class="tab"><span>📉</span>Debt</div><div class="tab"><span>🎯</span>Targets</div></div>
+            <div class="ios-homebar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="screen-label"><span class="dot"></span>03 Rep Debt / Payback</div>
+        <div class="phone">
+          <div class="app">
+            <div class="statusbar"><span>9:41</span><span>5G 🔋</span></div>
+            <div class="app-content">
+              <div class="top-row">
+                <div>
+                  <div class="eyebrow">Debt Center</div>
+                  <h2>Pay back<br/>what you owe.</h2>
+                </div>
+                <div class="avatar">📉</div>
+              </div>
+
+              <div class="debt-card">
+                <div class="bank-title">Current rep debt</div>
+                <div class="debt-amount">36</div>
+                <div class="debt-note">Your bank money is locked. Only completed reps can reduce debt. Goal: get back to zero.</div>
+              </div>
+
+              <div class="mode-toggle"><div class="selected">Finance Plan</div><div>One Go</div></div>
+
+              <div class="payback-card glass-card">
+                <div class="daily-head"><h3>Dynamic plan</h3><div class="pill">3 days</div></div>
+                <div class="payback-row"><div><b>Today</b><small>Added into 3 circles</small></div><div class="rep-due">+12 reps</div></div>
+                <div class="payback-row"><div><b>Tomorrow</b><small>Added after base target</small></div><div class="rep-due">+12 reps</div></div>
+                <div class="payback-row"><div><b>Day 3</b><small>Final payment to zero</small></div><div class="rep-due">+12 reps</div></div>
+              </div>
+
+              <div class="daily-card glass-card">
+                <div class="daily-head"><h3>Debt breakdown</h3><div class="pill red">Owed</div></div>
+                <div class="exercise-list">
+                  <div class="exercise"><div class="ex-icon">🤜</div><div><strong>Push-ups</strong><small>Need 24 to clear</small></div><div class="value red">24</div></div>
+                  <div class="exercise"><div class="ex-icon">🧗</div><div><strong>Pull-ups</strong><small>Need 2 to clear</small></div><div class="value red">2</div></div>
+                  <div class="exercise"><div class="ex-icon">🦵</div><div><strong>Squats</strong><small>Need 10 to clear</small></div><div class="value red">10</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="tabbar"><div class="tab"><span>🏦</span>Bank</div><div class="tab"><span>🔁</span>Rounds</div><div class="tab active"><span>📉</span>Debt</div><div class="tab"><span>🎯</span>Targets</div></div>
+            <div class="ios-homebar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="screen-label"><span class="dot"></span>04 Individual Targets</div>
+        <div class="phone">
+          <div class="app">
+            <div class="statusbar"><span>9:41</span><span>5G 🔋</span></div>
+            <div class="app-content">
+              <div class="top-row">
+                <div>
+                  <div class="eyebrow">Progression</div>
+                  <h2>Your targets<br/>your rules.</h2>
+                </div>
+                <div class="avatar">🎯</div>
+              </div>
+
+              <div class="daily-card glass-card">
+                <div class="daily-head"><h3>Next increase</h3><div class="pill">in 9 days</div></div>
+                <div class="debt-note">Every two weeks, push-ups and squats can increase by 5–10 reps. Pull-ups stay capped at 10 unless the user changes them manually.</div>
+                <div class="badge-row">
+                  <div class="small-badge">Auto +5 to +10</div><div class="small-badge">Manual override</div><div class="small-badge">Pull-up cap: 10</div>
+                </div>
+              </div>
+
+              <div class="target-list">
+                <div class="target-card">
+                  <div class="target-head"><div class="target-name"><div class="target-icon">🤜</div>Push-ups</div><div class="target-value">120</div></div>
+                  <input type="range" min="20" max="300" value="120" aria-label="push-up target" />
+                </div>
+                <div class="target-card">
+                  <div class="target-head"><div class="target-name"><div class="target-icon">🧗</div>Pull-ups</div><div class="target-value">10</div></div>
+                  <input type="range" min="1" max="10" value="10" aria-label="pull-up target" />
+                </div>
+                <div class="target-card">
+                  <div class="target-head"><div class="target-name"><div class="target-icon">🦵</div>Squats</div><div class="target-value">190</div></div>
+                  <input type="range" min="20" max="350" value="190" aria-label="squat target" />
+                </div>
+                <div class="target-card">
+                  <div class="target-head"><div class="target-name"><div class="target-icon">💪</div>Dips</div><div class="target-value">Optional</div></div>
+                  <div class="auto-increase">Optional exercises still earn money, but they do not create debt unless the user activates a daily target.</div>
+                </div>
+              </div>
+            </div>
+            <div class="tabbar"><div class="tab"><span>🏦</span>Bank</div><div class="tab"><span>🔁</span>Rounds</div><div class="tab"><span>📉</span>Debt</div><div class="tab active"><span>🎯</span>Targets</div></div>
+            <div class="ios-homebar"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="logic-band" aria-label="product logic notes">
+      <div class="logic-card">
+        <h4>Core rule</h4>
+        <p>Every completed rep creates money. Missed target reps become debt. Money is a reward layer, not a payment method, so the user can only clear debt by doing reps.</p>
+        <div class="formula">money = all completed reps × $1<br/>debt = max(target reps - completed reps, 0)<br/>extra money = max(completed reps - target reps, 0)</div>
+      </div>
+      <div class="logic-card">
+        <h4>Round split</h4>
+        <p>Rounds calculate base target reps per exercise, then distribute any debt payback reps across today’s circles.</p>
+        <div class="formula">base per round = ceil(target / rounds)<br/>payback per round = ceil(today debt payment / rounds)</div>
+      </div>
+      <div class="logic-card">
+        <h4>Progression</h4>
+        <p>Every two weeks the app suggests a small increase. Push-ups and squats scale by 5–10 reps. Pull-ups stay capped at 10 unless manually changed.</p>
+        <div class="formula">new target = target + 5…10<br/>pull-up target ≤ 10 by default<br/>manual override always wins</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -12,10 +12,21 @@ struct GettingMoneyApp: App {
             fatalError("Failed to create SwiftData container: \(error)")
         }
         // Close out any completed days into rep-debt before the first screen loads.
-        try? DayCloseService(
+        let dayClose = DayCloseService(
             exerciseRepository: store.exerciseRepository,
             workoutRepository: store.workoutRepository
-        ).run()
+        )
+        // One-time heal: earlier builds could double-count a workout logged via both
+        // the Log and Rounds, so debt may have been settled against inflated totals.
+        // Recompute debt once from the reconciled history (derived data only; reps
+        // are never touched). Thereafter, the normal day-close runs.
+        let healKey = "gm.didReconcileDebtV2"
+        if UserDefaults.standard.bool(forKey: healKey) {
+            try? dayClose.run()
+        } else {
+            try? dayClose.resettle()
+            UserDefaults.standard.set(true, forKey: healKey)
+        }
     }
 
     var body: some Scene {

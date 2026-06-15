@@ -1,0 +1,261 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  ./scripts/create-handoff <apps/app-name|app-name> [--goal "current goal"] [--next "next step"]
+
+Creates or replaces <app>/docs/handoff.md with a current-session handoff
+for Claude Code <-> Codex continuation.
+USAGE
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 1
+fi
+
+app_arg="$1"
+shift
+
+goal=""
+next_override=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --goal)
+      [[ $# -ge 2 ]] || { echo "Missing value for --goal" >&2; exit 1; }
+      goal="$2"
+      shift 2
+      ;;
+    --next)
+      [[ $# -ge 2 ]] || { echo "Missing value for --next" >&2; exit 1; }
+      next_override="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$repo_root"
+
+if [[ "$app_arg" == apps/* ]]; then
+  app_path="${app_arg%/}"
+else
+  app_path="apps/${app_arg%/}"
+fi
+
+if [[ ! -d "$app_path" ]]; then
+  echo "App path not found: $app_path" >&2
+  exit 1
+fi
+
+docs_dir="$app_path/docs"
+tasks_dir="$app_path/tasks"
+reports_dir="$app_path/reports"
+mkdir -p "$docs_dir"
+
+state_file="$docs_dir/state.md"
+handoff_file="$docs_dir/handoff.md"
+
+field() {
+  local key="$1"
+  [[ -f "$state_file" ]] || return 0
+  awk -F': ' -v key="$key" '$1 == key { sub(/^[^:]+: /, ""); print; exit }' "$state_file"
+}
+
+phase="$(field phase)"
+packet="$(field packet)"
+status="$(field status)"
+last_action="$(field last_action)"
+state_next="$(field next_step)"
+branch="$(field branch)"
+commit="$(field commit)"
+
+[[ -n "$phase" ]] || phase="UNKNOWN"
+[[ -n "$packet" ]] || packet="UNKNOWN"
+[[ -n "$status" ]] || status="UNKNOWN"
+[[ -n "$last_action" ]] || last_action="No last_action found in docs/state.md."
+[[ -n "$next_override" ]] && next_step="$next_override" || next_step="$state_next"
+[[ -n "$next_step" ]] || next_step="Review this handoff, then continue from the current packet/state."
+[[ -n "$branch" ]] || branch="$(git branch --show-current 2>/dev/null || true)"
+[[ -n "$branch" ]] || branch="UNKNOWN"
+[[ -n "$commit" ]] || commit="$(git rev-parse --short HEAD 2>/dev/null || true)"
+[[ -n "$commit" ]] || commit="UNKNOWN"
+
+if [[ -z "$goal" ]]; then
+  goal="Continue ${app_path} from ${phase} on ${packet}."
+fi
+
+active_packet_file=""
+packet_number="$(printf '%s\n' "$packet" | sed -nE 's/.*([0-9]{2}).*/\1/p' | head -n 1)"
+if [[ -n "$packet_number" && -f "$tasks_dir/packet-${packet_number}.md" ]]; then
+  active_packet_file="$tasks_dir/packet-${packet_number}.md"
+fi
+
+latest_report=""
+if [[ -d "$reports_dir" ]]; then
+  latest_report="$(find "$reports_dir" -maxdepth 1 -type f -name '*.md' -print0 2>/dev/null \
+    | xargs -0 ls -t 2>/dev/null | head -n 1 || true)"
+fi
+
+latest_report_tests=""
+latest_report_acceptance=""
+if [[ -n "$latest_report" && -f "$latest_report" ]]; then
+  latest_report_tests="$(awk '
+    /^## Test Results/ { in_section=1 }
+    in_section { print }
+    in_section && /^## / && !/^## Test Results/ { exit }
+  ' "$latest_report" | sed '$d' || true)"
+  latest_report_acceptance="$(awk '
+    /^## Acceptance Criteria/ { in_section=1 }
+    in_section { print }
+    in_section && /^## / && !/^## Acceptance Criteria/ { exit }
+  ' "$latest_report" | sed '$d' || true)"
+fi
+
+latest_ipa=""
+latest_archive=""
+if [[ -d "$app_path/build" ]]; then
+  latest_ipa="$(find "$app_path/build" -type f -name '*.ipa' -print0 2>/dev/null \
+    | xargs -0 ls -t 2>/dev/null | head -n 1 || true)"
+  latest_archive="$(find "$app_path/build" -maxdepth 1 -type d -name '*.xcarchive' -print0 2>/dev/null \
+    | xargs -0 ls -td 2>/dev/null | head -n 1 || true)"
+fi
+
+changed_files="$(git status --short -- "$app_path" 2>/dev/null || true)"
+diff_stat="$(git diff --stat -- "$app_path" 2>/dev/null || true)"
+recent_artifacts=""
+if [[ -d "$reports_dir/artifacts" ]]; then
+  recent_artifacts="$(find "$reports_dir/artifacts" -type f -print0 2>/dev/null \
+    | xargs -0 ls -t 2>/dev/null | head -n 10 || true)"
+fi
+
+timestamp="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+
+cat > "$handoff_file" <<EOF
+# Agent Handoff
+
+Generated: ${timestamp}
+
+Use this to continue the current app session between Claude Code and Codex.
+
+## Current Goal
+${goal}
+
+## Active Context
+- App: \`${app_path}\`
+- Phase: \`${phase}\`
+- Packet: \`${packet}\`
+- Status: \`${status}\`
+- Branch: \`${branch}\`
+- Last commit: \`${commit}\`
+
+## Last Completed Action
+${last_action}
+
+## State Snapshot
+EOF
+
+if [[ -f "$state_file" ]]; then
+  {
+    printf '```yaml\n'
+    sed -n '1,180p' "$state_file"
+    printf '\n```\n'
+  } >> "$handoff_file"
+else
+  echo "No docs/state.md found." >> "$handoff_file"
+fi
+
+cat >> "$handoff_file" <<EOF
+
+## Files Changed
+EOF
+
+if [[ -n "$changed_files" ]]; then
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    printf -- "- \`%s\`\n" "$line" >> "$handoff_file"
+  done <<< "$changed_files"
+else
+  echo "- No changed files under ${app_path}." >> "$handoff_file"
+fi
+
+cat >> "$handoff_file" <<EOF
+
+## Diff Summary
+EOF
+
+if [[ -n "$diff_stat" ]]; then
+  printf '```text\n%s\n```\n' "$diff_stat" >> "$handoff_file"
+else
+  echo "No unstaged diff summary under ${app_path}." >> "$handoff_file"
+fi
+
+cat >> "$handoff_file" <<EOF
+
+## Tests And Verification
+- Latest report: \`${latest_report:-not found}\`
+- Active packet file: \`${active_packet_file:-not found}\`
+EOF
+
+if [[ -n "$latest_report_tests" ]]; then
+  printf '\n%s\n' "$latest_report_tests" >> "$handoff_file"
+else
+  echo "- Tests run this session: not found in latest report; check terminal history." >> "$handoff_file"
+fi
+
+if [[ -n "$latest_report_acceptance" ]]; then
+  printf '\n%s\n' "$latest_report_acceptance" >> "$handoff_file"
+fi
+
+cat >> "$handoff_file" <<EOF
+- Tests not run: update this line manually if anything was intentionally skipped.
+
+## Visual Artifacts
+EOF
+
+if [[ -n "$recent_artifacts" ]]; then
+  while IFS= read -r artifact; do
+    [[ -n "$artifact" ]] || continue
+    printf -- "- \`%s\`\n" "$artifact" >> "$handoff_file"
+  done <<< "$recent_artifacts"
+else
+  echo "- No recent artifacts found under ${reports_dir}/artifacts." >> "$handoff_file"
+fi
+
+cat >> "$handoff_file" <<EOF
+
+## Known Risks
+- Review changed files and latest report before continuing.
+- Confirm whether generated archives/IPA include the latest source changes before TestFlight upload.
+
+## Blockers
+- None recorded by this command. Add blockers manually if the session is actually blocked.
+
+## Next Recommended Step
+${next_step}
+
+## Build / Archive Status
+- Latest tested build includes these changes: \`verify from latest report above\`
+- Latest archive includes these changes: \`verify from latest report above and archive timestamp\`
+- Latest archive path: \`${latest_archive:-not found}\`
+- Latest IPA path: \`${latest_ipa:-not found}\`
+
+## Notes For Next Agent
+- Start by reading \`AGENTS.md\`, \`WORKFLOW.md\`, this handoff, \`${state_file}\`, the active packet, and the latest report.
+- Run \`git status --short -- ${app_path}\` before editing.
+- Do not revert unrelated changes.
+EOF
+
+echo "Created ${handoff_file}"

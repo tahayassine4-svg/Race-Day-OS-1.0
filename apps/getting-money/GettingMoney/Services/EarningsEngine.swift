@@ -15,7 +15,7 @@ struct EarningsSummary: Equatable, Sendable {
 
 protocol EarningsEngineProtocol: Sendable {
     func summary(completedReps: Int, targetReps: Int, repValue: Int) -> EarningsSummary
-    func totalMoney(for entries: [RepEntry], repValue: Int) -> Int
+    func totalMoney(reps: Int, repValue: Int) -> Int
 }
 
 struct EarningsEngine: EarningsEngineProtocol {
@@ -36,7 +36,9 @@ struct EarningsEngine: EarningsEngineProtocol {
         )
     }
 
-    func totalMoney(for entries: [RepEntry], repValue: Int = 1) -> Int {
-        entries.reduce(0) { $0 + max(0, $1.count) } * max(0, repValue)
+    /// Bank balance from an already-reconciled rep count (see `RepReconciler`),
+    /// so the manual/round overlap is never double-counted into money.
+    func totalMoney(reps: Int, repValue: Int = 1) -> Int {
+        max(0, reps) * max(0, repValue)
     }
 }

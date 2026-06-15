@@ -51,13 +51,14 @@ struct DayCloseService {
         let cap = max(1, settings.debtCapMultiplier)
         let exercises = try exerciseRepository.allOrdered().filter(\.isEnabled)
 
-        // Group all logged reps by day + exercise up front (avoids touching/creating
-        // empty WorkoutDay rows for days that were never trained).
-        var completedByDay: [Date: [String: Int]] = [:]
-        for entry in try workoutRepository.allEntries() {
-            let key = GMCalendar.dayKey(for: entry.timestamp)
-            completedByDay[key, default: [:]][entry.exerciseKey, default: 0] += entry.count
-        }
+        // Reconciled reps by day + exercise up front (avoids touching/creating
+        // empty WorkoutDay rows for days that were never trained). Each day's
+        // per-exercise total is max(manual, round), so a workout logged both ways
+        // settles debt once, not twice.
+        let completedByDay: [Date: [String: Int]] = Dictionary(
+            grouping: try workoutRepository.allEntries()
+        ) { GMCalendar.dayKey(for: $0.timestamp) }
+            .mapValues { RepReconciler.completedByExercise($0) }
 
         var daysSettled = 0
         while dayKey < todayKey {
@@ -80,5 +81,23 @@ struct DayCloseService {
 
         try exerciseRepository.markDayClosed(through: todayKey)
         return daysSettled
+    }
+
+    /// Recomputes persisted rep-debt from scratch over the reconciled history.
+    /// Run once after the rep-reconciliation fix so debt previously settled against
+    /// double-counted (Log + Rounds) totals is corrected. Only derived debt is
+    /// touched — rep entries are never modified. Safe for fresh installs and for
+    /// days before the user started: `currentTarget` is 0 then, so no phantom debt.
+    @discardableResult
+    func resettle(today: Date = Date()) throws -> Int {
+        for exercise in try exerciseRepository.allOrdered() {
+            try exerciseRepository.setDebt(key: exercise.key, repsOwed: 0, updatedAt: today)
+        }
+        let calendar = GMCalendar.calendar
+        let todayKey = GMCalendar.dayKey(for: today)
+        let earliest = calendar.date(byAdding: .day, value: -Self.maxLookbackDays, to: todayKey) ?? todayKey
+        // Rewind the watermark so `run` replays every completed day from `earliest`.
+        try exerciseRepository.markDayClosed(through: earliest)
+        return try run(today: today)
     }
 }

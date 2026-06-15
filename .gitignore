@@ -1,30 +1,22 @@
-# dependencies
-node_modules/
-.pnp
-.pnp.js
+# macOS
+.DS_Store
 
-# Next.js
-.next/
-out/
-build/
+# Xcode / iOS build artifacts
+apps/*/build/
+apps/*/**/DerivedData/
+apps/*/**/*.xcuserstate
+apps/*/**/xcuserdata/
+*.xcarchive
+*.ipa
+.swiftpm/
 
 # env files
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 
 # misc
-.DS_Store
 *.pem
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# drizzle
-drizzle/
+# Independently-versioned app with its own git repo (live on TestFlight — don't disturb)
+/project-tracker-ios/

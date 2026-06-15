@@ -6,8 +6,10 @@ protocol WorkoutRepositoryProtocol: AnyObject, Sendable {
     func day(for date: Date) throws -> WorkoutDay
     func addRepEntry(exerciseKey: String, count: Int, sourceRoundNumber: Int?, at timestamp: Date) throws -> RepEntry
     func deleteRoundEntries(roundNumber: Int, on date: Date) throws
-    func replaceManualRepEntries(on date: Date, totalsByExercise: [String: Int]) throws
+    func setManualTotals(on date: Date, totalsByExercise: [String: Int]) throws
     func entries(on date: Date) throws -> [RepEntry]
+    func completedReps(on date: Date) throws -> [String: Int]
+    func reconciledDailyReps() throws -> [Date: Int]
     func allEntries() throws -> [RepEntry]
     func saveRoundPlan(roundNumber: Int, exerciseKey: String, plannedReps: Int, completedReps: Int, includesDebtPayoff: Bool, on date: Date) throws -> RoundPlan
     func replaceRoundPlans(_ rounds: [PlannedRound], includesDebtPayoff: Bool, on date: Date) throws
@@ -55,26 +57,25 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
         try context.save()
     }
 
-    /// Replaces hand-entered reps for a day while preserving round-tagged entries.
-    /// The incoming totals are desired whole-day totals; reps already logged by
-    /// completed rounds are subtracted so round completion remains reversible.
-    func replaceManualRepEntries(on date: Date = Date(), totalsByExercise: [String: Int]) throws {
+    /// Sets the *manual* (hand-logged) total per exercise for a day, replacing any
+    /// prior manual entries. Round-tagged entries are left untouched; the counted
+    /// daily total is reconciled separately as `max(manual, round)` (see
+    /// `RepReconciler`). This is the single write path for the Log tab — today and
+    /// past-day corrections alike. The given totals are the user's asserted whole-day
+    /// totals, stored verbatim (NOT minus round reps), so genuine extra reps after a
+    /// round are preserved as a higher manual total.
+    func setManualTotals(on date: Date = Date(), totalsByExercise: [String: Int]) throws {
         let workoutDay = try day(for: date)
-        let entries = workoutDay.repEntries ?? []
-        let roundTotals = Dictionary(grouping: entries.filter { $0.sourceRoundNumber != nil }, by: \.exerciseKey)
-            .mapValues { $0.reduce(0) { $0 + $1.count } }
 
-        for entry in entries where entry.sourceRoundNumber == nil {
+        for entry in (workoutDay.repEntries ?? []) where entry.sourceRoundNumber == nil {
             context.delete(entry)
         }
 
-        for (exerciseKey, desiredTotal) in totalsByExercise {
-            let manualTotal = max(0, desiredTotal - (roundTotals[exerciseKey] ?? 0))
-            guard manualTotal > 0 else { continue }
+        for (exerciseKey, total) in totalsByExercise where total > 0 {
             context.insert(RepEntry(
                 timestamp: GMCalendar.dayKey(for: date),
                 exerciseKey: exerciseKey,
-                count: manualTotal,
+                count: total,
                 sourceRoundNumber: nil,
                 day: workoutDay
             ))
@@ -86,6 +87,20 @@ final class WorkoutRepository: WorkoutRepositoryProtocol {
     func entries(on date: Date = Date()) throws -> [RepEntry] {
         let workoutDay = try day(for: date)
         return (workoutDay.repEntries ?? []).sorted { $0.timestamp < $1.timestamp }
+    }
+
+    /// Reconciled completed reps per exercise for a day — `max(manual, round)` per
+    /// exercise so the same workout logged via the Log and via Rounds is never
+    /// double-counted. Every "reps done today" reader goes through this.
+    func completedReps(on date: Date = Date()) throws -> [String: Int] {
+        RepReconciler.completedByExercise(try entries(on: date))
+    }
+
+    /// Reconciled total reps per day across all days, for history and bank balance
+    /// (so money never double-counts the manual/round overlap).
+    func reconciledDailyReps() throws -> [Date: Int] {
+        Dictionary(grouping: try allEntries()) { GMCalendar.dayKey(for: $0.timestamp) }
+            .mapValues { RepReconciler.dailyTotal($0) }
     }
 
     func allEntries() throws -> [RepEntry] {
