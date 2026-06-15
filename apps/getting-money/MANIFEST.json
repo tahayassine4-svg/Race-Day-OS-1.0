@@ -1,15 +1,16 @@
 {
   "app": "getting-money",
-  "phase": "REPORTER_COMPLETE",
-  "packet": 14,
-  "packet_name": "Home-Screen Widget (Daily Targets)",
-  "packet_branch": "packet-14-widget",
-  "tests": { "status": "PASS", "passed": 98, "failed": 0 },
-  "code_review": { "status": "PASS" },
-  "ui_review": { "status": "PASS" },
-  "git": { "status": "PUSHED", "commit": "c4bd3e1" },
+  "phase": "IMPLEMENTER",
+  "packet": 15,
+  "packet_name": "Rep Reconciliation (not yet planned)",
+  "packet_branch": "packet-15-rep-reconciliation",
+  "tests": { "status": "PENDING", "passed": null, "failed": null },
+  "code_review": { "status": "PENDING" },
+  "ui_review": { "status": "PENDING" },
+  "git": { "status": "PENDING", "commit": null },
   "blockers": [
-    "Manual TestFlight provisioning required: App Group (group.com.yassine.gettingmoney) + widget App ID, then bump build number and archive with automatic signing (see reports/packet-14-report.md)"
+    "Packet 15 has no tasks/packet-15.md yet — RepReconciler.swift/ReconciliationTests.swift exist on this branch but the packet was started without going through PLANNER. Decide: write packet-15.md to retroactively define scope, or fold this work into the next planned packet, before TESTER/GIT can run.",
+    "Carried over from packet 14: manual TestFlight provisioning required (App Group group.com.yassine.gettingmoney + widget App ID, then bump build number and archive with automatic signing — see reports/packet-14-report.md)"
   ],
   "handoff_needed": false,
   "packets": {
@@ -26,7 +27,8 @@
     "11": { "status": "COMPLETE", "branch": "packet-09-debt-day-close", "commit": "c6eec73" },
     "12": { "status": "PUSHED", "branch": "packet-09-debt-day-close", "commit": "8bc2972" },
     "13": { "status": "PUSHED", "branch": "packet-09-debt-day-close", "commit": "8bc2972" },
-    "14": { "status": "PUSHED", "branch": "packet-14-widget", "commit": "c4bd3e1" }
+    "14": { "status": "PUSHED", "branch": "packet-14-widget", "commit": "c4bd3e1" },
+    "15": { "status": "IN_PROGRESS", "branch": "packet-15-rep-reconciliation", "commit": null }
   },
-  "notes": "Packets 12-13 were marked TESTED/Commit:— in packet-index.md but were already committed in 8bc2972 (reconciled here — packet-index.md should be updated to match). Working tree is currently on branch packet-15-rep-reconciliation with new RepReconciler.swift/ReconciliationTests.swift added but no packet-15.md task file yet — packet 15 is started but not yet planned/documented."
+  "notes": "Packets 12-13 were marked TESTED/Commit:— in packet-index.md but were already committed in 8bc2972 (reconciled here — packet-index.md should be updated to match). Working tree is on branch packet-15-rep-reconciliation with RepReconciler.swift/ReconciliationTests.swift added but no packet-15.md task file yet. packet_branch/tests/code_review/git reconciled to packet 15's actual PENDING state during the orchestration redesign (was stuck pointing at packet-14, which left the git-push gate and test-results hooks unable to find this packet's manifest entry)."
 }
