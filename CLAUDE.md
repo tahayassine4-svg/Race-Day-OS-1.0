@@ -4,7 +4,7 @@ This repo is an **iOS App Factory**: a reusable, app-agnostic AI orchestration s
 
 The shared source of truth for both Claude Code and Codex is [`WORKFLOW.md`](./WORKFLOW.md). Read it first and follow it exactly.
 
-Claude Code should then read the active phase's definition per WORKFLOW.md's Agent Roster (a coordinator prompt in `prompts/` or a `.claude/agents/` subagent), the listed `knowledge/` files, and the active app's docs/packet before acting.
+Claude Code should then read the active phase's definition per WORKFLOW.md's Agent Roster (a coordinator skill, e.g. `/architect` at `.claude/skills/architect/SKILL.md`, or a `.claude/agents/` subagent), the listed `.claude/rules/` files, and the active app's docs/packet before acting.
 
 Important:
 

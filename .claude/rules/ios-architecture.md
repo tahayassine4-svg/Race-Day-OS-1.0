@@ -1,3 +1,12 @@
+---
+description: MVVM-C layer cake, @Observable, Repository pattern, DI rules, Swift 6 concurrency — read by IMPLEMENTER and CODE_REVIEWER for every packet that touches Swift code.
+globs:
+  - "apps/**/*.swift"
+  - "project-tracker-ios/**/*.swift"
+  - "GettinMoney/**/*.swift"
+alwaysApply: false
+---
+
 # iOS Architecture — MVVM-C, Layers, Concurrency
 
 > Distilled engineering reference. The **Implementer** and **Code-Reviewer** read this. It defines *how the code is shaped*, not what the app does.
@@ -59,4 +68,4 @@ The "-C" (Coordinator) is optional: introduce a coordinator/router only when nav
 
 ## Right-sizing (do not over-engineer)
 
-Validate the core loop before adopting heavy patterns. Don't debate TCA vs MVVM-C before the product works. Start with the layer cake above; reach for more structure only when a real pain appears. See `knowledge/ios-launch.md` for MVP scoping.
+Validate the core loop before adopting heavy patterns. Don't debate TCA vs MVVM-C before the product works. Start with the layer cake above; reach for more structure only when a real pain appears. See `.claude/rules/ios-launch.md` for MVP scoping.

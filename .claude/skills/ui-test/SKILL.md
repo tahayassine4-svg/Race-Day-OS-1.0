@@ -14,7 +14,7 @@ Start your response with `**Phase: TESTER**`.
 
 ## 0. Orient
 - Resolve which app (see `apps/<name>/`; legacy apps at repo root). Read `.claude/agents/tester.md`
-  and `knowledge/ios-testing.md` (they govern this phase).
+  and `.claude/rules/ios-testing.md` (they govern this phase).
 - Find the Simulator + tooling: `xcrun simctl list devices available | grep -i iphone`
   (use a booted one or boot one), `which xcodegen`, `xcodebuild -version`.
 

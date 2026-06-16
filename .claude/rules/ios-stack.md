@@ -1,3 +1,12 @@
+---
+description: Default stacks (SwiftData+CloudKit vs Supabase), native vs cross-platform decision rules, and monetization toolchain — read by ARCHITECT when scoping any new app.
+globs:
+  - "apps/**/docs/stack.md"
+  - "apps/**/docs/vision.md"
+  - "apps/**/docs/decisions.md"
+alwaysApply: false
+---
+
 # iOS Tech Stack — Defaults & Decision Rules
 
 > The **Architect** reads this to recommend a stack. Default to the simplest stack that reliably ships. Don't introduce technology for its own sake.
@@ -7,7 +16,7 @@
 - **Swift 6** — strict compile-time data-race safety on.
 - **SwiftUI** — declarative UI. ~20–30% smaller memory footprint than UIKit; stack-allocated views.
 - **Xcode** — build, profile (Instruments), test.
-- **SwiftData** — local persistence (iOS 17+). See migration rules in `knowledge/ios-testing.md`.
+- **SwiftData** — local persistence (iOS 17+). See migration rules in `.claude/rules/ios-testing.md`.
 - **TestFlight + App Store Connect** — beta distribution, crash telemetry, IAP config, submission.
 
 ## Default stack — Stack 1: Rapid Solo Indie (RECOMMENDED for most apps)
@@ -30,7 +39,7 @@ Native SwiftUI  →  Supabase (PostgreSQL + Row-Level Security + Deno Edge Funct
 ```
 
 - **Best for:** multi-platform, real-time collaboration, complex relational data, growing user cohorts.
-- **Auth:** Supabase native auth with RLS. If you offer ANY third-party social login you MUST also offer Sign in with Apple (Guideline 4.8) — see the first-sign-in trap in `knowledge/ios-launch.md`.
+- **Auth:** Supabase native auth with RLS. If you offer ANY third-party social login you MUST also offer Sign in with Apple (Guideline 4.8) — see the first-sign-in trap in `.claude/rules/ios-launch.md`.
 - **Pros:** relational, predictable instance-based cost, self-hostable (no lock-in).
 - **Cons:** you own migrations and RLS policies.
 

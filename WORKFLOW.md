@@ -34,29 +34,20 @@ Web or cross-platform work is not the default. Choose it only with explicit just
 
 ## Standing Rules
 
-- First line of every response must be `**Phase: [NAME]**`.
-- Valid phases: `SESSION_INIT`, `ARCHITECT`, `PLANNER`, `DESIGNER`, `IMPLEMENTER`, `TESTER`, `UI_REVIEWER`, `CODE_REVIEWER`, `GIT`, `REPORTER`, `DEPLOYER`, `ICP`.
-- Full-app design comes before code. No UI implementation until the Designer has produced the full app screen set as reviewable HTML and rendered PNG files, and Yassine has approved the complete design direction.
-- If later work changes scope or introduces a new screen/state not covered by the approved design, produce a design addendum and get approval before implementing that delta.
+- First line of every response must be `**Phase: [NAME]**`. Valid phases: `SESSION_INIT`, `ARCHITECT`, `PLANNER`, `DESIGNER`, `IMPLEMENTER`, `TESTER`, `UI_REVIEWER`, `CODE_REVIEWER`, `GIT`, `REPORTER`, `DEPLOYER`, `ICP`.
 - Never skip a gate. Each gate needs Yassine's explicit "approved" or "go."
-- One agent runs at a time within a packet.
-- Read before acting. Always read the active app's `MANIFEST.json` (structured state — phase, packet, tests, review, git status, blockers), `docs/vision.md`, `docs/stack.md`, `docs/ui-system.md`, active `tasks/packet-NN.md`, and the relevant `knowledge/` file.
-- If `MANIFEST.json.handoff_needed` is true, read `docs/handoff.md` before doing anything else — this applies to SESSION_INIT and to any mid-session phase transition after a restart (e.g. IMPLEMENTER → TESTER).
-- Implement only what the current packet defines.
-- Baseline first. Confirm a green build and passing tests before editing unless the task is explicitly triage-only or the baseline cannot run.
-- Verify visually. UI is confirmed by a real Simulator screenshot against the approved mockup, never only by reading source.
+- Read the active app's `MANIFEST.json` first (structured state: phase, packet, tests, review, git status, blockers). If `handoff_needed` is true, read `docs/handoff.md` before doing anything else.
+- Design before code. No UI implementation until mockups are approved. New screens/states not covered by the approved design need a design addendum before implementation.
+- Implement only what the current packet defines. Confirm a green build and passing tests before editing. Verify UI with a real Simulator screenshot against the approved mockup — never by reading source alone.
 - Protect user data. If an app is shipped with real data, every persistence/schema/migration change must be proven safe by a migration test that loads an old-schema store with data.
-- Use the advisor before committing to a non-trivial approach and before declaring substantial work done.
-- Surface blockers. When blocked or uncertain, stop and ask Yassine. Do not improvise silently.
-- Every agent writes the active app's `docs/state.md` and `MANIFEST.json` before handing off.
-- REPORTER updates the app's `tasks/packet-index.md`.
+- Surface blockers. When blocked or uncertain, stop and ask Yassine. Use the advisor before committing to a non-trivial approach and before declaring substantial work done.
+- Every agent writes the active app's `docs/state.md` and `MANIFEST.json` before handing off. REPORTER also updates `tasks/packet-index.md`.
 - GIT pushes the packet branch and opens a PR but leaves it **unmerged** — "pushed" never means "merged to main." Merging happens after Yassine reviews the REPORTER output at Gate 3.
-- A `PreToolUse` hook (`.claude/hooks/check-git-push-gate.sh`, registered in `.claude/settings.json`) enforces CODE_REVIEWER → GIT ordering: `git push`/`gh pr create` on a packet branch is blocked unless that packet's `MANIFEST.json` shows `tests.status == "PASS"` and `code_review.status == "PASS"`. If the branch is named `packet-*` and no `apps/*/MANIFEST.json` has a matching `packet_branch`, the hook **fails closed** (blocks) rather than silently allowing the push — see the next bullet for why this matters. **This only loads if the Claude Code session's project root is this repo** (i.e. launched with cwd inside `claude-app-system`) — verify with a quick `ls` + check that `.claude/settings.json` here is the active project settings before relying on it.
-- **The coordinator sets `MANIFEST.json.packet_branch` to the new packet's branch (and resets `tests.status`/`code_review.status` to `"PENDING"`) at the start of each packet**, before handing off to IMPLEMENTER. The git-push gate and the test-results hook both key off `packet_branch` to find the right manifest — if it still points at the previous packet's branch, both hooks miss their target for the whole packet.
+- A `PreToolUse` hook (`.claude/hooks/check-git-push-gate.sh`, registered in `.claude/settings.json`) enforces CODE_REVIEWER → GIT ordering: `git push`/`gh pr create` on a packet branch is blocked unless that packet's `MANIFEST.json` shows `tests.status == "PASS"` and `code_review.status == "PASS"`. If the branch is named `packet-*` and no `apps/*/MANIFEST.json` has a matching `packet_branch`, the hook **fails closed** (blocks). **This only loads if the Claude Code session's project root is this repo.**
+- **The coordinator sets `MANIFEST.json.packet_branch` to the new packet's branch (and resets `tests.status`/`code_review.status` to `"PENDING"`) at the start of each packet**, before handing off to IMPLEMENTER. The git-push gate and the test-results hook both key off `packet_branch` — if it still points at the previous packet's branch, both hooks miss their target for the whole packet.
 - A `PostToolUse` hook (`.claude/hooks/swift-format-on-edit.sh`) runs `swift format --in-place` on any `.swift` file after Edit/Write — formatting is enforced automatically, not reviewed.
-- A `PostToolUse` hook (`.claude/hooks/write-test-results.sh`) parses the output of any `xcodebuild test`/`swift test` run on a packet branch and writes the PASS/FAIL verdict (+ counts, best-effort) into that packet's `MANIFEST.json.tests` automatically — TESTER doesn't have to remember to update it.
-- When the DEPLOYER subagent reports back ("Deploy complete — ..." or "Deploy blocked — ..."), the coordinator sends Yassine a push notification with that result — subagents cannot call notification tools themselves, only the coordinator session can.
-- System files in the repo root stay app-agnostic.
+- A `PostToolUse` hook (`.claude/hooks/write-test-results.sh`) parses the output of any `xcodebuild test`/`swift test` run on a packet branch and writes the PASS/FAIL verdict (+ counts) into that packet's `MANIFEST.json.tests` automatically — TESTER doesn't have to remember to update it.
+- When the DEPLOYER subagent reports back, the coordinator sends Yassine a push notification — subagents cannot call notification tools themselves, only the coordinator session can.
 
 ---
 
@@ -68,14 +59,14 @@ claude-app-system/
 ├── CLAUDE.md                    ← Claude Code entrypoint, points here
 ├── AGENTS.md                    ← Codex entrypoint, points here
 ├── README.md
+├── .claude/
+│   ├── agents/                  ← subagent prompts (designer, implementer, tester, …)
+│   ├── hooks/                   ← PreToolUse/PostToolUse shell hooks
+│   ├── rules/                   ← glob-conditional knowledge (ios-architecture, ios-design, …)
+│   ├── skills/                  ← invocable skills (/architect, /planner, /reporter, /icp, /worktree, …)
+│   └── settings.json
 ├── knowledge/
-│   ├── ios-architecture.md
-│   ├── ios-stack.md
-│   ├── ios-design.md
-│   ├── ios-testing.md
-│   ├── ios-launch.md
 │   └── game-design.md           ← opt-in for gamified apps only
-├── prompts/                     ← agent role prompts
 ├── reviews/                     ← review checklists
 ├── templates/                   ← app scaffolds and handoff templates
 ├── apps/
@@ -136,63 +127,26 @@ Automatic handoffs without a user gate:
 
 | # | Phase | Prompt | Key knowledge | Produces | Gate after |
 |---|---|---|---|---|---|
-| 0 | SESSION_INIT | none | this file | resume report | confirm direction |
-| 1 | ARCHITECT | `prompts/architect.md` | `ios-stack`, `ios-launch`, `ios-design` | vision.md, stack.md, decisions.md | Gate 1 |
-| 2 | PLANNER | `prompts/planner.md` | `ios-architecture` | packet-index + packet files | Gate 2 |
-| 3 | DESIGNER | `.claude/agents/designer.md` (subagent), `.claude/skills/render-mockups`, `reviews/design.md` | `ios-design` | ui-system + full app screen set | Full-App Design Gate |
-| 4 | IMPLEMENTER | `.claude/agents/implementer.md` (subagent) | `ios-architecture`, `ios-launch`, `.claude/rules/swift6.md` | SwiftUI code | TESTER |
-| 5 | TESTER | `.claude/agents/tester.md` (subagent), `.claude/skills/swiftdata-migration-test` | `ios-testing` | tests + screenshots + verdict | reviewer |
-| 6 | UI_REVIEWER | `.claude/agents/ui-reviewer.md` (subagent, fresh context from IMPLEMENTER), `reviews/design.md` | `ios-design` | UI verdict | CODE_REVIEWER |
-| 7 | CODE_REVIEWER | `.claude/agents/code-reviewer.md` (subagent, isolated from IMPLEMENTER), review checklist | `ios-architecture` | review verdict | GIT or IMPLEMENTER |
+| 0 | SESSION_INIT | skill: `/resume-app` | this file | resume report | confirm direction |
+| 1 | ARCHITECT | skill: `/architect` | `.claude/rules/ios-stack`, `ios-launch`, `ios-design` | vision.md, stack.md, decisions.md | Gate 1 |
+| 2 | PLANNER | skill: `/planner` | `.claude/rules/ios-architecture` | packet-index + packet files | Gate 2 |
+| 3 | DESIGNER | `.claude/agents/designer.md` (subagent), `.claude/skills/render-mockups`, `reviews/design.md` | `.claude/rules/ios-design` | ui-system + full app screen set | Full-App Design Gate |
+| 4 | IMPLEMENTER | `.claude/agents/implementer.md` (subagent) | `.claude/rules/ios-architecture`, `ios-launch`, `swift6.md` | SwiftUI code | TESTER |
+| 5 | TESTER | `.claude/agents/tester.md` (subagent), `.claude/skills/swiftdata-migration-test` | `.claude/rules/ios-testing` | tests + screenshots + verdict | reviewer |
+| 6 | UI_REVIEWER | `.claude/agents/ui-reviewer.md` (subagent, fresh context from IMPLEMENTER), `reviews/design.md` | `.claude/rules/ios-design` | UI verdict | CODE_REVIEWER |
+| 7 | CODE_REVIEWER | `.claude/agents/code-reviewer.md` (subagent, isolated from IMPLEMENTER), review checklist | `.claude/rules/ios-architecture` | review verdict | GIT or IMPLEMENTER |
 | 8 | GIT | `.claude/agents/git-manager.md` (subagent, git/gh only) | none | branch + commit + push | REPORTER |
-| 9 | REPORTER | `prompts/reporter.md` | none | packet report | Gate 3 |
-| 10 | DEPLOYER | `.claude/agents/deployer.md` (subagent) | `ios-launch` | TestFlight/App Store build | confirm production |
-| — | ICP | `prompts/icp.md`, app `docs/icp.md` | `ios-design` | icp-session report | on demand |
+| 9 | REPORTER | skill: `/reporter` | none | packet report | Gate 3 |
+| 10 | DEPLOYER | `.claude/agents/deployer.md` (subagent) | `.claude/rules/ios-launch` | TestFlight/App Store build | confirm production |
+| — | ICP | skill: `/icp`, app `docs/icp.md` | `.claude/rules/ios-design` | icp-session report | on demand |
 
 When activating an agent, read its prompt file and the listed knowledge file(s), then follow them exactly.
 
 ---
 
-## Knowledge Base
-
-- `knowledge/ios-architecture.md` — MVVM-C layer cake, `@Observable`, Repository pattern, DI, no DB in views, Swift 6 concurrency.
-- `knowledge/ios-stack.md` — Swift 6, SwiftUI, SwiftData, CloudKit, RevenueCat; native vs cross-platform choices.
-- `knowledge/ios-design.md` — HIG, Liquid Glass, functional motion, thumb-zone ergonomics, accessibility, anti-slop rules.
-- `knowledge/ios-testing.md` — Swift Testing, migration tests, Simulator visual verification.
-- `knowledge/ios-launch.md` — MVP/MoSCoW, StoreKit 2, Sign in with Apple, privacy manifest, ASO, account deletion, post-launch.
-- `knowledge/game-design.md` — opt-in only when the Architect marks an app as gamified.
-
----
-
 ## Starting Or Resuming A Session
 
-Start in `SESSION_INIT`.
-
-1. Read the active tool entrypoint:
-   - Claude Code: `CLAUDE.md`, then this file.
-   - Codex: `AGENTS.md`, then this file.
-2. List `apps/` to see available apps.
-3. If Yassine names an app, read that app's:
-   - `docs/state.md`
-   - latest relevant `reports/`
-   - active `tasks/packet-NN.md`
-   - any `docs/handoff.md` if present
-4. Cross-check state against the actual filesystem and git status.
-5. Report:
-
-```text
-Resuming app: <name>
-Last phase: <phase>
-Active packet: <NN — name>
-Last action: <...>
-Next step: <...>
-
-Continue, or change direction?
-```
-
-If `apps/` is empty or Yassine gives a new app idea, activate ARCHITECT.
-
-Never advance past a gate without Yassine's explicit approval.
+Run `/resume-app` to orient. Full SESSION_INIT in `.claude/skills/resume-app/SKILL.md`.
 
 ---
 

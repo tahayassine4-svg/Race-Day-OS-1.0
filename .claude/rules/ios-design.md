@@ -1,3 +1,13 @@
+---
+description: HIG principles, Liquid Glass (iOS 26), functional motion, thumb-zone ergonomics, accessibility, anti-slop rules — read by DESIGNER and UI_REVIEWER for any packet that creates or changes UI.
+globs:
+  - "apps/*/design/**"
+  - "apps/**/Views/**/*.swift"
+  - "apps/**/*View.swift"
+  - "apps/**/*Screen.swift"
+alwaysApply: false
+---
+
 # iOS Design — Delight, HIG, and Anti-Slop
 
 > The **Designer** and **UI-Reviewer** read this. Goal: apps that feel native, premium, and intentional — like Apple Design Award winners, not AI-generated templates. The mockup is approved against these principles at the Design Gate.

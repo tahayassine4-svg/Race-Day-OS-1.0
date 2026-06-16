@@ -1,3 +1,12 @@
+---
+description: Swift Testing framework (@Suite/@Test/#expect), mandatory data-safety migration test recipe, and visual Simulator verification — read by TESTER for every packet.
+globs:
+  - "**/*Tests*/**/*.swift"
+  - "**/*Test*.swift"
+  - "**/*Spec*.swift"
+alwaysApply: false
+---
+
 # iOS Testing & Data Safety
 
 > The **Tester** reads this. Two jobs: prove the acceptance criteria with Swift Testing, and prove that persistence changes never wipe real user data.
@@ -27,7 +36,7 @@ struct UsernameTests {
 }
 ```
 
-**Every acceptance criterion maps to at least one test. An untested criterion is FAILED.** Test pure logic (validators, calculations, ViewModel state transitions) and service boundaries. Inject mock repositories via the DI protocols (see `knowledge/ios-architecture.md`).
+**Every acceptance criterion maps to at least one test. An untested criterion is FAILED.** Test pure logic (validators, calculations, ViewModel state transitions) and service boundaries. Inject mock repositories via the DI protocols (see `.claude/rules/ios-architecture.md`).
 
 ## Data-safety / migration test (MANDATORY when persistence/schema/migrations change on a shipped app)
 

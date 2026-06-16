@@ -2,6 +2,8 @@
 description: Swift 6 / SwiftUI architecture conventions — enforced on every Swift edit
 globs:
   - "apps/**/*.swift"
+  - "project-tracker-ios/**/*.swift"
+  - "GettinMoney/**/*.swift"
 alwaysApply: false
 ---
 
@@ -9,7 +11,7 @@ alwaysApply: false
 
 These are the conventions IMPLEMENTER must follow and CODE_REVIEWER must
 block on. For the rationale and reference architecture (layer cake, DI
-example), see `knowledge/ios-architecture.md` — read that once per packet;
+example), see `.claude/rules/ios-architecture.md` — read that once per packet;
 this file is the per-edit checklist.
 
 - **No database queries in Views.** No `@Query`/`ModelContext` in a View past

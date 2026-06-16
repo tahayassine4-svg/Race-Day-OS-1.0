@@ -1,3 +1,13 @@
+---
+description: MVP/MoSCoW scoping, StoreKit 2 implementation spine, Sign-in-with-Apple first-sign-in trap, privacy manifest requirements, and App Store launch checklist — read by ARCHITECT, IMPLEMENTER (launch-touching packets), and DEPLOYER.
+globs:
+  - "apps/**/docs/**"
+  - "apps/**/*StoreKit*.swift"
+  - "apps/**/*Auth*.swift"
+  - "apps/**/*Privacy*.swift"
+alwaysApply: false
+---
+
 # iOS MVP, Monetization & Launch
 
 > The **Architect** (scoping, monetization), **Implementer** (StoreKit, auth, privacy), and **Reporter/Deployer** (launch readiness) draw on this.
