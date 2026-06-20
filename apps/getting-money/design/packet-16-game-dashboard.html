@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Getting Money — Game Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #0A0D0B;
+      --surface:   #131714;
+      --elevated:  #1B201C;
+      --hairline:  #2A302C;
+      --ink:       #F3F7F1;
+      --muted:     #8A938C;
+      --accent:    #AEE63D;
+      --success:   #5FD08A;
+      --warning:   #F2C14E;
+      --debt:      #FF6A5A;
+      --coin:      #FFD700;
+    }
+
+    html, body {
+      width: 393px;
+      height: 852px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .screen {
+      display: flex;
+      flex-direction: column;
+      width: 393px;
+      height: 852px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* ─── STATUS BAR ─────────────────────────── */
+    .status-bar {
+      flex-shrink: 0;
+      height: 44px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 20px 8px;
+    }
+    .status-bar .time {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0;
+      color: var(--ink);
+      font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    }
+    .status-bar .icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-bar .icons svg {
+      display: block;
+    }
+
+    /* ─── HUD BAR ────────────────────────────── */
+    .hud {
+      flex-shrink: 0;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: var(--surface);
+      border-bottom: 1.5px solid var(--hairline);
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hud-streak {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hud-streak .streak-num {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hud-balance {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .hud-balance .bal-num {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--coin);
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .debt-badge {
+      background: var(--debt);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── EXERCISE SELECTOR ──────────────────── */
+    .exercise-selector {
+      flex-shrink: 0;
+      padding: 10px 20px 8px;
+      display: flex;
+      gap: 0;
+      background: var(--bg);
+    }
+    .seg {
+      flex: 1;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1.5px solid var(--hairline);
+      color: var(--muted);
+      background: var(--surface);
+    }
+    .seg:first-child {
+      border-radius: 2px 0 0 2px;
+    }
+    .seg:last-child {
+      border-radius: 0 2px 2px 0;
+    }
+    .seg.active {
+      background: var(--accent);
+      color: #0A0D0B;
+      border-color: var(--accent);
+      z-index: 1;
+    }
+
+    /* ─── PROGRESS BAR ───────────────────────── */
+    .progress-row {
+      flex-shrink: 0;
+      padding: 0 20px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pixel-bar {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+    }
+    .pixel-seg {
+      width: 10px;
+      height: 16px;
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+    .pixel-seg.filled {
+      background: var(--accent);
+    }
+    .pixel-seg.empty {
+      background: var(--elevated);
+      border: 1px solid var(--hairline);
+    }
+    .prog-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .prog-label span {
+      color: var(--ink);
+    }
+
+    /* ─── ARENA ──────────────────────────────── */
+    .arena {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #0A0D0B;
+    }
+
+    /* Pixel star dots in sky */
+    .arena-sky {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      bottom: 25%;
+    }
+
+    .star {
+      position: absolute;
+      background: #1E2820;
+      border-radius: 0;
+    }
+
+    /* Stage line (depth) */
+    .arena-stage-line {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 25%;
+      height: 2px;
+      background: var(--hairline);
+    }
+
+    /* Ground strip */
+    .arena-ground {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: calc(25% - 10px);
+      height: 10px;
+      background: #1A2020;
+    }
+
+    /* Arena floor (below ground) */
+    .arena-floor {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      height: calc(25% - 10px);
+      background: #0D1010;
+    }
+
+    /* Character container */
+    .character-wrap {
+      position: absolute;
+      bottom: calc(25% - 4px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 276px;
+      height: 276px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .character-wrap img {
+      width: 276px;
+      height: 276px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+    }
+
+    /* ─── TAP TO REP ─────────────────────────── */
+    .tap-hint {
+      flex-shrink: 0;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tap-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--muted);
+      border-radius: 0;
+      opacity: 0.6;
+    }
+    .tap-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ─── SESSION STRIP ──────────────────────── */
+    .session-strip {
+      flex-shrink: 0;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .session-text {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    .session-earned {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .session-divider {
+      color: var(--hairline);
+      font-size: 11px;
+    }
+
+    /* ─── BOTTOM NAV STRIP ───────────────────── */
+    .bottom-nav {
+      flex-shrink: 0;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-top: 1px solid var(--hairline);
+    }
+    .bottom-link {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .bottom-link.debt-link {
+      color: var(--debt);
+    }
+
+    /* ─── TAB BAR ────────────────────────────── */
+    .tab-bar {
+      flex-shrink: 0;
+      height: 83px;
+      background: var(--surface);
+      border-top: 1px solid var(--hairline);
+      display: flex;
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+    .tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .tab-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .tab.active .tab-label {
+      color: var(--accent);
+    }
+    .home-indicator {
+      height: 34px;
+      background: var(--surface);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8px;
+    }
+    .home-pill {
+      width: 134px;
+      height: 5px;
+      background: var(--ink);
+      border-radius: 3px;
+      opacity: 0.18;
+    }
+  </style>
+</head>
+<body>
+<div class="screen">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="time">9:41</div>
+    <div class="icons">
+      <!-- Signal bars -->
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+        <rect x="0" y="6" width="3" height="6" rx="0.5" fill="#F3F7F1"/>
+        <rect x="4.5" y="4" width="3" height="8" rx="0.5" fill="#F3F7F1"/>
+        <rect x="9" y="2" width="3" height="10" rx="0.5" fill="#F3F7F1"/>
+        <rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="#F3F7F1"/>
+      </svg>
+      <!-- WiFi -->
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <path d="M8 9.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z" fill="#F3F7F1"/>
+        <path d="M3.3 6.7a6.5 6.5 0 0 1 9.4 0" stroke="#F3F7F1" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <path d="M0.5 4a10.5 10.5 0 0 1 15 0" stroke="#F3F7F1" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      </svg>
+      <!-- Battery -->
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="#F3F7F1" stroke-width="1"/>
+        <rect x="2" y="2" width="16" height="8" rx="1.5" fill="#F3F7F1"/>
+        <path d="M23 4v4a2 2 0 0 0 0-4z" fill="#F3F7F1" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- HUD BAR -->
+  <div class="hud">
+    <div class="hud-left">
+      <div class="hud-streak">
+        <!-- Pixel flame SVG (no emoji) -->
+        <svg width="14" height="18" viewBox="0 0 7 9" style="image-rendering:pixelated;shape-rendering:crispEdges;display:block;">
+          <rect x="3" y="0" width="1" height="2" fill="#FFD700"/>
+          <rect x="2" y="1" width="3" height="2" fill="#FFD700"/>
+          <rect x="1" y="2" width="5" height="2" fill="#FF8A1F"/>
+          <rect x="2" y="2" width="3" height="1" fill="#FFD700"/>
+          <rect x="1" y="4" width="5" height="2" fill="#FF6A2F"/>
+          <rect x="0" y="5" width="7" height="3" fill="#FF5214"/>
+          <rect x="2" y="3" width="3" height="3" fill="#FF8A1F"/>
+          <rect x="3" y="2" width="1" height="4" fill="#FFD700"/>
+        </svg>
+        <span class="streak-num">12</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-balance">
+        <!-- Pixel coin SVG -->
+        <svg width="18" height="18" viewBox="0 0 9 9" style="image-rendering:pixelated;shape-rendering:crispEdges;display:block;">
+          <!-- dark border ring -->
+          <rect x="2" y="0" width="5" height="1" fill="#1A1A1A"/>
+          <rect x="1" y="1" width="7" height="1" fill="#1A1A1A"/>
+          <rect x="0" y="2" width="9" height="5" fill="#1A1A1A"/>
+          <rect x="1" y="7" width="7" height="1" fill="#1A1A1A"/>
+          <rect x="2" y="8" width="5" height="1" fill="#1A1A1A"/>
+          <!-- yellow fill -->
+          <rect x="2" y="1" width="5" height="1" fill="#FFD700"/>
+          <rect x="1" y="2" width="7" height="5" fill="#FFD700"/>
+          <rect x="2" y="7" width="5" height="1" fill="#FFD700"/>
+          <!-- white pixel highlight (top-left) -->
+          <rect x="2" y="2" width="2" height="2" fill="rgba(255,255,255,0.85)"/>
+        </svg>
+        <span class="bal-num">1,284</span>
+      </div>
+      <div class="debt-badge">-50</div>
+    </div>
+  </div>
+
+  <!-- EXERCISE SELECTOR -->
+  <div class="exercise-selector">
+    <div class="seg active">PUSHUP</div>
+    <div class="seg">SQUAT</div>
+    <div class="seg">PULLUP</div>
+  </div>
+
+  <!-- PIXEL PROGRESS BAR -->
+  <div class="progress-row">
+    <div class="pixel-bar" id="bar"></div>
+    <div class="prog-label"><span>75</span> / 100</div>
+  </div>
+
+  <!-- ARENA -->
+  <div class="arena" id="arena">
+
+    <!-- Sky pixel dots -->
+    <div class="arena-sky">
+      <!-- Stars placed absolutely within sky -->
+      <div class="star" style="width:2px;height:2px;top:8%;left:12%;"></div>
+      <div class="star" style="width:2px;height:2px;top:15%;left:28%;"></div>
+      <div class="star" style="width:4px;height:2px;top:6%;left:50%;background:#222C24;"></div>
+      <div class="star" style="width:2px;height:2px;top:22%;left:72%;"></div>
+      <div class="star" style="width:2px;height:2px;top:10%;left:85%;"></div>
+      <div class="star" style="width:2px;height:4px;top:30%;left:8%;background:#1E2820;"></div>
+      <div class="star" style="width:2px;height:2px;top:38%;left:42%;"></div>
+      <div class="star" style="width:4px;height:2px;top:18%;left:60%;background:#1E2820;"></div>
+      <div class="star" style="width:2px;height:2px;top:45%;left:90%;"></div>
+      <div class="star" style="width:2px;height:2px;top:50%;left:22%;"></div>
+      <div class="star" style="width:2px;height:2px;top:55%;left:78%;"></div>
+      <div class="star" style="width:4px;height:2px;top:60%;left:35%;background:#182018;"></div>
+      <div class="star" style="width:2px;height:2px;top:25%;left:95%;"></div>
+      <div class="star" style="width:2px;height:2px;top:42%;left:55%;"></div>
+    </div>
+
+    <!-- Actual pixel character PNG (idle frame 0, scaled 3×) -->
+    <div class="character-wrap">
+      <img src="data:image/png;base64,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" alt="character" />
+    </div>
+
+        <!-- Stage line -->
+    <div class="arena-stage-line"></div>
+
+    <!-- Ground strip -->
+    <div class="arena-ground"></div>
+
+    <!-- Floor below ground -->
+    <div class="arena-floor"></div>
+
+  </div>
+
+  <!-- TAP TO REP -->
+  <div class="tap-hint">
+    <div class="tap-dot"></div>
+    <div class="tap-text">TAP TO REP</div>
+    <div class="tap-dot"></div>
+  </div>
+
+  <!-- SESSION STRIP -->
+  <div class="session-strip">
+    <span class="session-text">+12 REPS THIS SESSION</span>
+    <span class="session-divider">·</span>
+    <div class="session-earned">
+      <!-- Small coin -->
+      <svg width="11" height="11" viewBox="0 0 9 9" style="image-rendering:pixelated;shape-rendering:crispEdges;display:block;">
+        <rect x="2" y="0" width="5" height="1" fill="#1A1A1A"/>
+        <rect x="1" y="1" width="7" height="1" fill="#1A1A1A"/>
+        <rect x="0" y="2" width="9" height="5" fill="#1A1A1A"/>
+        <rect x="1" y="7" width="7" height="1" fill="#1A1A1A"/>
+        <rect x="2" y="8" width="5" height="1" fill="#1A1A1A"/>
+        <rect x="2" y="1" width="5" height="1" fill="#FFD700"/>
+        <rect x="1" y="2" width="7" height="5" fill="#FFD700"/>
+        <rect x="2" y="7" width="5" height="1" fill="#FFD700"/>
+        <rect x="2" y="2" width="2" height="2" fill="rgba(255,255,255,0.8)"/>
+      </svg>
+      +12
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV STRIP -->
+  <div class="bottom-nav">
+    <div class="bottom-link">ROUNDS &rarr;</div>
+    <div class="bottom-link debt-link">DEBT &nearr;</div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <!-- Dashboard -->
+    <div class="tab active">
+      <div class="tab-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="2" width="8" height="8" rx="1.5" fill="#AEE63D"/>
+          <rect x="12" y="2" width="8" height="8" rx="1.5" fill="#8A938C" opacity="0.5"/>
+          <rect x="2" y="12" width="8" height="8" rx="1.5" fill="#8A938C" opacity="0.5"/>
+          <rect x="12" y="12" width="8" height="8" rx="1.5" fill="#8A938C" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="tab-label" style="color:#AEE63D;">HOME</div>
+    </div>
+    <!-- Log -->
+    <div class="tab">
+      <div class="tab-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="4" y="3" width="14" height="16" rx="2" stroke="#8A938C" stroke-width="1.5" fill="none"/>
+          <rect x="7" y="7" width="8" height="1.5" rx="0.5" fill="#8A938C"/>
+          <rect x="7" y="10.5" width="8" height="1.5" rx="0.5" fill="#8A938C"/>
+          <rect x="7" y="14" width="5" height="1.5" rx="0.5" fill="#8A938C"/>
+        </svg>
+      </div>
+      <div class="tab-label">LOG</div>
+    </div>
+    <!-- Rounds -->
+    <div class="tab">
+      <div class="tab-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="8" stroke="#8A938C" stroke-width="1.5" fill="none"/>
+          <circle cx="11" cy="11" r="3.5" stroke="#8A938C" stroke-width="1.5" fill="none"/>
+          <line x1="11" y1="3" x2="11" y2="7" stroke="#8A938C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="11" y1="15" x2="11" y2="19" stroke="#8A938C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="3" y1="11" x2="7" y2="11" stroke="#8A938C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="15" y1="11" x2="19" y2="11" stroke="#8A938C" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tab-label">ROUNDS</div>
+    </div>
+    <!-- Debt -->
+    <div class="tab">
+      <div class="tab-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="8" stroke="#8A938C" stroke-width="1.5" fill="none"/>
+          <text x="11" y="15.5" text-anchor="middle" font-size="10" font-weight="700" fill="#8A938C" font-family="Courier New">!</text>
+        </svg>
+      </div>
+      <div class="tab-label">DEBT</div>
+    </div>
+    <!-- Settings -->
+    <div class="tab">
+      <div class="tab-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="3" stroke="#8A938C" stroke-width="1.5" fill="none"/>
+          <path d="M11 2v3M11 17v3M2 11h3M17 11h3M4.22 4.22l2.12 2.12M15.66 15.66l2.12 2.12M4.22 17.78l2.12-2.12M15.66 6.34l2.12-2.12" stroke="#8A938C" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tab-label">SETTINGS</div>
+    </div>
+  </div>
+
+  <!-- HOME INDICATOR -->
+  <div class="home-indicator">
+    <div class="home-pill"></div>
+  </div>
+
+</div>
+
+<script>
+  // Build pixel progress bar (20 segments, 75% = 15 filled)
+  const bar = document.getElementById('bar');
+  const total = 20;
+  const filled = 15;
+  for (let i = 0; i < total; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'pixel-seg ' + (i < filled ? 'filled' : 'empty');
+    bar.appendChild(seg);
+  }
+</script>
+</body>
+</html>
