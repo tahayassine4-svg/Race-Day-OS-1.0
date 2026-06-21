@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "xp_meter_340_600.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

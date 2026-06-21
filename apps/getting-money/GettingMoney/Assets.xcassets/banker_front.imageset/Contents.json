@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "banker_front_at_desk.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

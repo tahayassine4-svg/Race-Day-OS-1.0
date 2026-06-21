@@ -63,3 +63,45 @@ Lime is the only accent — no second accent. Coral is reserved for debt/loss. N
 
 ## Design gates
 Every UI packet renders `design/packet-NN.html` → `design/packet-NN.png`; Yassine approves the PNG before SwiftUI; UI-Reviewer compares a Simulator screenshot to it before pass.
+
+---
+
+## Packet 16 — Pixel Game Dashboard extension
+
+This packet deliberately shifts the Dashboard tab into a **pixel arcade arena** aesthetic. This is not a contradiction of the "serious bank" tone — it is the motivational skin layered on top of it. The banking data model stays; the visual language upgrades to pixel game HUD. All other tabs (Rounds, Debt, Settings, Log) retain the original banking system design.
+
+### Pixel-specific design tokens
+
+**Typography — pixel/game mode**
+- All numerics in the HUD and progress areas: `SF Mono` or `Courier New`, heavy weight, uppercase. No dollar signs anywhere.
+- Labels: system monospaced or `Courier New`, all-caps, tight letter-spacing (0.08em).
+- Character-domain copy ("TAP TO REP", exercise segment labels): monospaced, UPPERCASE.
+
+**Corner radius — pixel mode**
+- Maximum 2px radius on all progress bars, segment controls, and HUD chips. Sharp is the intent.
+- Character arena container: 0px radius (full bleed stage).
+
+**Progress bar — pixel segmented**
+- 20 discrete blocks (not a smooth fill). Each block: 10px wide, 16px tall, 2px gap between.
+- Filled blocks: `#AEE63D` (lime accent). Unfilled blocks: `#1B201C` with `#2A302C` border.
+- Label to right of blocks: monospaced, muted color, tabular figures.
+
+**Coin icon — PixelCoinView spec**
+- Small (~14–16px): SVG circle with `#FFD700` fill, 1–2px `#1A1A1A` dark border, 2×2px white highlight at top-left.
+- Used everywhere balance amounts appear. Never use the 🪙 emoji in rendered UI.
+
+**Flame icon — PixelFlameView spec**
+- ~14px: SVG flame drawn with stacked rects (no emoji — headless Chromium has no color-emoji font).
+- Colors: base orange `#FF6A2F`, mid `#FF8A1F`, tip `#FFD700`.
+
+**Character sprite — PixelCharacter spec**
+- 276×276pt container, centered in the arena.
+- Drawn as SVG `<rect>` elements with `shape-rendering="crispEdges"`, 6px per art pixel.
+- Colors: hair `#1A1A1A`, skin `#C8845A`, tank top `#1A1A1A`, shorts `#1A1A1A`, shoes `#2A2A3A`.
+- `image-rendering: pixelated` on the SVG container.
+
+**Arena depth layers**
+1. Sky: `#0A0D0B` with subtle pixel dot stars (`#1B201C`).
+2. Stage line: 2px `#2A302C` horizontal rule at ~75% from arena top.
+3. Ground strip: 8px `#1A2020` immediately below stage line.
+4. Floor: `#0D1010` below ground strip.

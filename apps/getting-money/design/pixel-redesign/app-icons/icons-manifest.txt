@@ -1,0 +1,36 @@
+App Icons Manifest
+Source: /Users/sinou/claude-app-system/apps/getting-money/design/pixel-redesign/generated-pixel-asset-kit.png
+Sizes: 24, 32, 48, 64
+Total icons: 31
+
+- alert: source/alert-source.png, 24/alert-24.png, 32/alert-32.png, 48/alert-48.png, 64/alert-64.png | Cropped from misc elements: exclamation badge.
+- arrow-right: source/arrow-right-source.png, 24/arrow-right-24.png, 32/arrow-right-32.png, 48/arrow-right-48.png, 64/arrow-right-64.png | [GENERATED] Distinct right-arrow icon missing as standalone asset; created from approved palette.
+- banker-npc-front: source/banker-npc-front-source.png, 24/banker-npc-front-24.png, 32/banker-npc-front-32.png, 48/banker-npc-front-48.png, 64/banker-npc-front-64.png | Cropped from banker NPC front sprite; included because Debt Office UI needs this created asset.
+- calendar: source/calendar-source.png, 24/calendar-24.png, 32/calendar-32.png, 48/calendar-48.png, 64/calendar-64.png | Cropped from economy/status icons.
+- chart: source/chart-source.png, 24/chart-24.png, 32/chart-32.png, 48/chart-48.png, 64/chart-64.png | [GENERATED] Distinct chart icon missing in reference sheet; created from approved palette.
+- check: source/check-source.png, 24/check-24.png, 32/check-32.png, 48/check-48.png, 64/check-64.png | Cropped from UI controls.
+- clipboard: source/clipboard-source.png, 24/clipboard-24.png, 32/clipboard-32.png, 48/clipboard-48.png, 64/clipboard-64.png | Cropped from economy/status icons.
+- close: source/close-source.png, 24/close-24.png, 32/close-32.png, 48/close-48.png, 64/close-64.png | Cropped from misc elements: close badge.
+- coin: source/coin-source.png, 24/coin-24.png, 32/coin-32.png, 48/coin-48.png, 64/coin-64.png | Cropped from economy/status icons.
+- dashboard: source/dashboard-source.png, 24/dashboard-24.png, 32/dashboard-32.png, 48/dashboard-48.png, 64/dashboard-64.png | Cropped from navigation tabs: dashboard gamepad.
+- debt: source/debt-source.png, 24/debt-24.png, 32/debt-32.png, 48/debt-48.png, 64/debt-64.png | Cropped from navigation tabs: coin/debt.
+- dips: source/dips-source.png, 24/dips-24.png, 32/dips-32.png, 48/dips-48.png, 64/dips-64.png | Cropped from exercise icons.
+- dumbbell: source/dumbbell-source.png, 24/dumbbell-24.png, 32/dumbbell-32.png, 48/dumbbell-48.png, 64/dumbbell-64.png | Cropped from economy/status icons.
+- flame: source/flame-source.png, 24/flame-24.png, 32/flame-32.png, 48/flame-48.png, 64/flame-64.png | Cropped from economy/status icons.
+- info: source/info-source.png, 24/info-24.png, 32/info-32.png, 48/info-48.png, 64/info-64.png | [GENERATED] Distinct info icon missing in reference sheet; created from approved palette.
+- lock: source/lock-source.png, 24/lock-24.png, 32/lock-32.png, 48/lock-48.png, 64/lock-64.png | [GENERATED] Distinct lock icon missing in reference sheet; created from approved palette.
+- log: source/log-source.png, 24/log-24.png, 32/log-32.png, 48/log-48.png, 64/log-64.png | Cropped from navigation tabs: log clipboard.
+- minus: source/minus-source.png, 24/minus-24.png, 32/minus-32.png, 48/minus-48.png, 64/minus-64.png | Cropped from UI controls.
+- plus: source/plus-source.png, 24/plus-24.png, 32/plus-32.png, 48/plus-48.png, 64/plus-64.png | Cropped from UI controls.
+- pull-ups: source/pull-ups-source.png, 24/pull-ups-24.png, 32/pull-ups-32.png, 48/pull-ups-48.png, 64/pull-ups-64.png | Cropped from exercise icons.
+- push-ups: source/push-ups-source.png, 24/push-ups-24.png, 32/push-ups-32.png, 48/push-ups-48.png, 64/push-ups-64.png | Cropped from exercise icons.
+- rounds: source/rounds-source.png, 24/rounds-24.png, 32/rounds-32.png, 48/rounds-48.png, 64/rounds-64.png | Cropped from navigation tabs: crossed swords.
+- settings: source/settings-source.png, 24/settings-24.png, 32/settings-32.png, 48/settings-48.png, 64/settings-64.png | Cropped from navigation tabs: gear.
+- shield: source/shield-source.png, 24/shield-24.png, 32/shield-32.png, 48/shield-48.png, 64/shield-64.png | Cropped from economy/status icons.
+- squats: source/squats-source.png, 24/squats-24.png, 32/squats-32.png, 48/squats-48.png, 64/squats-64.png | Cropped from exercise icons.
+- swords: source/swords-source.png, 24/swords-24.png, 32/swords-32.png, 48/swords-48.png, 64/swords-64.png | Cropped from economy/status icons.
+- target: source/target-source.png, 24/target-24.png, 32/target-32.png, 48/target-48.png, 64/target-64.png | [GENERATED] Distinct target icon missing in reference sheet; created from approved palette.
+- toggle-off: source/toggle-off-source.png, 24/toggle-off-24.png, 32/toggle-off-32.png, 48/toggle-off-48.png, 64/toggle-off-64.png | Cropped from UI controls.
+- toggle-on: source/toggle-on-source.png, 24/toggle-on-24.png, 32/toggle-on-32.png, 48/toggle-on-48.png, 64/toggle-on-64.png | Cropped from UI controls.
+- trash: source/trash-source.png, 24/trash-24.png, 32/trash-32.png, 48/trash-48.png, 64/trash-64.png | [GENERATED] Distinct trash icon missing in reference sheet; created from approved palette.
+- upload: source/upload-source.png, 24/upload-24.png, 32/upload-32.png, 48/upload-48.png, 64/upload-64.png | [GENERATED] Distinct upload/share icon missing in reference sheet; created from approved palette.

@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting Money - Pixel Redesign Board</title>
+  <style>
+    :root {
+      --bg: #050806;
+      --stage: #0A0D0B;
+      --panel: #10140F;
+      --raised: #171D13;
+      --line: #343829;
+      --line-hot: #6C742D;
+      --ink: #F3F7F1;
+      --muted: #9A9485;
+      --lime: #AEE63D;
+      --lime-dark: #556B22;
+      --gold: #FFD34D;
+      --coral: #E85D4F;
+      --paper: #E8D8B8;
+      --paper-line: #B08A54;
+      --shadow: #020302;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(174, 230, 61, .10), transparent 24%),
+        linear-gradient(180deg, #030504 0%, var(--bg) 100%);
+      color: var(--ink);
+      font-family: "Courier New", ui-monospace, Menlo, monospace;
+      letter-spacing: 0;
+    }
+
+    .board {
+      width: 1920px;
+      min-height: 1280px;
+      padding: 28px 28px 30px;
+      margin: 0 auto;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .title h1 {
+      margin: 0;
+      font-size: 54px;
+      line-height: 1;
+      color: var(--lime);
+      text-shadow: 0 4px 0 #25300F, 0 0 16px rgba(174, 230, 61, .18);
+      letter-spacing: 4px;
+    }
+    .title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .phones {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .caption {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 42px;
+      color: var(--lime);
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .phone {
+      width: 348px;
+      height: 760px;
+      margin: 0 auto;
+      padding: 14px 10px 12px;
+      border: 4px solid #2A2D28;
+      border-radius: 34px;
+      background: #030504;
+      box-shadow: inset 0 0 0 2px #070A08, 0 26px 48px rgba(0,0,0,.55);
+      position: relative;
+      overflow: hidden;
+    }
+    .screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      overflow: hidden;
+      background: var(--stage);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid #151A13;
+    }
+    .status {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      font: 700 12px system-ui, sans-serif;
+      color: var(--ink);
+      background: rgba(0,0,0,.14);
+    }
+    .island {
+      width: 92px;
+      height: 24px;
+      background: #000;
+      border-radius: 14px;
+      position: absolute;
+      left: 50%;
+      top: 13px;
+      transform: translateX(-50%);
+    }
+    .content {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      padding: 14px 16px 78px;
+      position: relative;
+    }
+    .content.scroll { overflow: hidden; }
+
+    .tabs {
+      height: 64px;
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      padding: 5px;
+      background: rgba(16, 20, 15, .96);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 -12px 30px rgba(0,0,0,.45);
+    }
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--ink);
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 22px;
+    }
+    .tab.active {
+      background: rgba(174, 230, 61, .18);
+      color: var(--lime);
+    }
+
+    .pix {
+      image-rendering: pixelated;
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      border: 2px solid currentColor;
+      color: inherit;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.45);
+      font-size: 10px;
+      line-height: 1;
+    }
+    .pix.round { border-radius: 50%; }
+    .pix.small { width: 18px; height: 18px; font-size: 8px; border-width: 1px; }
+    .pix.gold { color: var(--gold); }
+    .pix.coral { color: var(--coral); }
+
+    .hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 26px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      background: rgba(16,20,15,.9);
+      color: var(--ink);
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.04), inset -2px -2px 0 rgba(0,0,0,.3);
+    }
+    .chip.debt { color: var(--coral); border-color: #76352E; background: #22110F; }
+    .chip.lime { color: var(--lime); border-color: var(--line-hot); }
+
+    .screen-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .eyebrow {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+    }
+    h2 {
+      margin: 3px 0 0;
+      color: var(--ink);
+      font-size: 23px;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .status-pill {
+      border: 1px solid #7E392E;
+      background: #26100E;
+      color: var(--coral);
+      padding: 6px 8px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .card {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.03), transparent 32%),
+        var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.035), inset -2px -2px 0 rgba(0,0,0,.36);
+      padding: 14px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .card.hot { border-color: var(--lime); box-shadow: inset 0 0 0 1px rgba(174,230,61,.3); }
+    .paper {
+      background:
+        linear-gradient(90deg, rgba(176,138,84,.10), transparent 12%, transparent 88%, rgba(176,138,84,.12)),
+        var(--paper);
+      border: 2px solid var(--paper-line);
+      color: #1C1710;
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.32), inset -2px -2px 0 rgba(0,0,0,.12);
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+    .section {
+      color: var(--lime);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      margin: 16px 0 8px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    .stack { display: flex; flex-direction: column; gap: 3px; }
+    .label { font-size: 13px; font-weight: 900; color: inherit; }
+    .sub { font-size: 10px; color: var(--muted); line-height: 1.3; font-weight: 700; }
+    .paper .sub { color: #4E3D2A; }
+    .num { font-weight: 900; font-size: 28px; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .num.lime { color: var(--lime); }
+    .num.gold { color: var(--gold); }
+    .num.coral { color: var(--coral); }
+    .tiny { font-size: 10px; color: var(--muted); font-weight: 700; }
+
+    .blocks {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      gap: 2px;
+      width: 100%;
+      height: 14px;
+    }
+    .block { background: #20251D; border: 1px solid #33392D; }
+    .block.on { background: var(--lime); border-color: #D8FF70; }
+    .block.coral { background: var(--coral); border-color: #FF998A; }
+
+    .seg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      margin-bottom: 8px;
+    }
+    .seg span {
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .seg span:last-child { border-right: 0; }
+    .seg .active { background: var(--lime); color: #071006; }
+
+    .arena {
+      height: 352px;
+      margin: 8px -16px 10px;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,211,77,.04), transparent 42%),
+        linear-gradient(90deg, rgba(176,138,84,.08), transparent 16%, transparent 82%, rgba(176,138,84,.08)),
+        var(--stage);
+    }
+    .arena:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 56px;
+      height: 6px;
+      background: #2A2218;
+      box-shadow: 0 6px 0 #15120F;
+    }
+    .prop {
+      position: absolute;
+      bottom: 74px;
+      width: 44px;
+      height: 116px;
+      border: 4px solid #241D14;
+      background: #10100C;
+      opacity: .75;
+    }
+    .prop.left { left: 28px; }
+    .prop.right { right: 28px; border-radius: 24px 24px 0 0; }
+    .hero {
+      position: absolute;
+      left: 50%;
+      bottom: 70px;
+      transform: translateX(-50%);
+      width: 116px;
+      height: 192px;
+    }
+    .hero div { position: absolute; image-rendering: pixelated; }
+    .hair { left: 31px; top: 0; width: 54px; height: 38px; background: #121614; box-shadow: 0 8px 0 #1D2721; }
+    .head { left: 38px; top: 28px; width: 40px; height: 42px; background: #C8845A; box-shadow: inset 0 -8px 0 #9B6044; }
+    .body { left: 31px; top: 72px; width: 54px; height: 64px; background: #1C2320; border: 5px solid #111; }
+    .arm.l { left: 15px; top: 78px; width: 18px; height: 68px; background: #C8845A; }
+    .arm.r { right: 15px; top: 78px; width: 18px; height: 68px; background: #C8845A; }
+    .leg.l { left: 32px; top: 135px; width: 18px; height: 44px; background: #C8845A; }
+    .leg.r { right: 32px; top: 135px; width: 18px; height: 44px; background: #C8845A; }
+    .shoe.l { left: 23px; top: 178px; width: 32px; height: 12px; background: #E8F0F1; }
+    .shoe.r { right: 23px; top: 178px; width: 32px; height: 12px; background: #E8F0F1; }
+
+    .cta {
+      height: 52px;
+      display: grid;
+      place-items: center;
+      background: var(--lime);
+      color: #071006;
+      border: 2px solid #34440E;
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.3), inset -3px -3px 0 rgba(0,0,0,.25);
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+    .cta.coral { background: var(--coral); color: #160B09; border-color: #712E27; }
+    .sticky {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 76px;
+      z-index: 3;
+    }
+
+    .quick {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 9px;
+    }
+    .quick span {
+      height: 28px;
+      display: grid;
+      place-items: center;
+      background: #31451B;
+      border: 1px solid #718C37;
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .stepper {
+      display: grid;
+      grid-template-columns: 42px 1fr 42px;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .stepper button {
+      height: 38px;
+      background: #211D17;
+      border: 2px solid #806643;
+      color: inherit;
+      font: 900 24px "Courier New", monospace;
+    }
+    .stepper strong { text-align: center; font-size: 28px; }
+
+    .mission-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--line);
+      background: #10140F;
+      color: var(--lime);
+      font-size: 27px;
+      font-weight: 900;
+    }
+    .round-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) 40px;
+      gap: 6px;
+      align-items: end;
+      margin-top: 10px;
+    }
+    .round-grid .metric {
+      background: #0B0E0A;
+      border: 1px solid #2E3329;
+      padding: 7px 5px;
+      text-align: center;
+    }
+    .metric b { display: block; font-size: 22px; color: var(--ink); }
+    .metric span { font-size: 8px; color: var(--muted); text-transform: uppercase; }
+
+    .npc {
+      height: 154px;
+      margin: -4px -2px 12px;
+      border: 1px solid #49351F;
+      background:
+        linear-gradient(90deg, rgba(255,211,77,.08), transparent 20%, transparent 80%, rgba(255,211,77,.08)),
+        #11100C;
+      position: relative;
+      overflow: hidden;
+    }
+    .npc:before {
+      content: "Here's your payoff plan. Sign and commit.";
+      position: absolute;
+      top: 16px;
+      left: 45px;
+      right: 45px;
+      background: #E8D8B8;
+      color: #1A1610;
+      border: 2px solid #B08A54;
+      padding: 8px;
+      font-size: 9px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .banker {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      width: 82px;
+      height: 72px;
+      background:
+        linear-gradient(90deg, transparent 0 20px, #EAD7BD 20px 62px, transparent 62px),
+        linear-gradient(#C8845A 0 34px, #20201C 34px 72px);
+      border: 4px solid #080806;
+    }
+    .contract {
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+    .plan-row {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid var(--line);
+      background: #0D100C;
+      margin-bottom: 7px;
+    }
+    .plan-row.active { border-color: var(--lime); box-shadow: inset 0 0 0 1px rgba(174,230,61,.35); }
+
+    .settings-row {
+      display: grid;
+      grid-template-columns: 34px 1fr auto auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(52,56,41,.7);
+    }
+    .settings-row:last-child { border-bottom: 0; }
+    .square-btn {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: #151914;
+      color: var(--ink);
+      font-weight: 900;
+    }
+    .toggle {
+      width: 52px;
+      height: 28px;
+      border: 2px solid #3A402F;
+      background: #22251D;
+      padding: 3px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .toggle.on { background: var(--lime); }
+    .toggle:after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      background: var(--ink);
+      border: 1px solid rgba(0,0,0,.35);
+    }
+
+    .style-kit {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr .9fr 1.1fr 1.1fr 1.2fr 1.2fr;
+      gap: 18px;
+      padding: 18px;
+      background: rgba(16,20,15,.9);
+      border: 2px solid var(--line);
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.04), inset -2px -2px 0 rgba(0,0,0,.4);
+    }
+    .kit h3 {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+    .swatches { display: grid; grid-template-columns: repeat(5, 48px); gap: 10px; }
+    .swatch { height: 48px; border: 2px solid var(--line); box-shadow: inset 3px 3px 0 rgba(255,255,255,.08); }
+    .asset-img {
+      width: 100%;
+      max-height: 170px;
+      object-fit: cover;
+      image-rendering: pixelated;
+      border: 2px solid var(--line);
+    }
+    .notes {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="title">
+      <h1>REPS &amp; DEBT: LEVEL UP</h1>
+      <p>Track reps. Manage debt. Become legend.</p>
+    </header>
+
+    <section class="phones">
+      <div>
+        <div class="caption"><span class="pix small">A</span> 1. Dashboard</div>
+        <div class="phone"><div class="screen">
+          <div class="island"></div><div class="status"><span>00:08</span><span>...</span></div>
+          <div class="content">
+            <div class="hud">
+              <span class="chip"><span class="pix small coral">F</span> 3</span>
+              <span class="chip lime"><span class="pix small gold">L</span> LEVEL 6</span>
+              <span class="chip debt">-510</span>
+            </div>
+            <div class="seg"><span class="active">Push-ups</span><span>Pull-ups</span><span>Squats</span></div>
+            <div class="row tiny"><span></span><span>67 / 100</span></div>
+            <div class="blocks">
+              <i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i>
+            </div>
+            <div class="arena"><div class="prop left"></div><div class="prop right"></div><div class="hero"><div class="hair"></div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div><div class="shoe l"></div><div class="shoe r"></div></div></div>
+            <div class="card hot" style="text-align:center"><div class="label" style="color:var(--lime)">TAP TO REP</div><div class="sub">+1 REP  +1 XP</div></div>
+            <div class="card">
+              <div class="row tiny"><b>DAILY PROGRESS</b><span>67 / 260</span></div>
+              <div class="blocks" style="margin:7px 0"><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i></div>
+              <div class="row"><span><b>STREAK</b><br><span class="num gold" style="font-size:18px">3</span></span><span><b>LEVEL</b><br><span class="num" style="font-size:18px">6</span></span><span><b>XP</b><br><span class="num" style="font-size:18px">340/600</span></span></div>
+            </div>
+          </div>
+          <nav class="tabs"><div class="tab active"><span class="pix">D</span>Dashboard</div><div class="tab"><span class="pix">L</span>Log</div><div class="tab"><span class="pix round">R</span>Rounds</div><div class="tab"><span class="pix">C</span>Debt</div><div class="tab"><span class="pix">G</span>Settings</div></nav>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="caption"><span class="pix small">L</span> 2. Log</div>
+        <div class="phone"><div class="screen">
+          <div class="island"></div><div class="status"><span>00:08</span><span>...</span></div>
+          <div class="content">
+            <div class="screen-title"><div><div class="eyebrow">Session Log</div><h2>Track every rep.</h2></div><div class="tiny" style="text-align:right">0 / 260<br>logged</div></div>
+            <div class="paper">
+              <div class="row"><span class="label">PUSH-UPS</span><span class="chip lime">DONE</span></div>
+              <div class="sub">TODAY: 67 / 100</div>
+              <div class="stepper"><button>-</button><strong>67</strong><button>+</button></div>
+              <div class="quick"><span>+5</span><span>+10</span><span>+20</span></div>
+            </div>
+            <div class="paper">
+              <div class="row"><span class="label">PULL-UPS</span><span class="chip">OPEN</span></div>
+              <div class="sub">TODAY: 4 / 10</div>
+              <div class="stepper"><button>-</button><strong>4</strong><button>+</button></div>
+              <div class="quick"><span>+1</span><span>+2</span><span>+5</span></div>
+            </div>
+            <div class="paper">
+              <div class="row"><span class="label">SQUATS</span><span class="chip">OPEN</span></div>
+              <div class="sub">TODAY: 0 / 150</div>
+              <div class="stepper"><button>-</button><strong>0</strong><button>+</button></div>
+              <div class="quick"><span>+5</span><span>+10</span><span>+20</span></div>
+            </div>
+            <div class="paper row"><span class="pix">H</span><span class="sub">Every rep counts. Log it. Own it.</span></div>
+          </div>
+          <div class="sticky"><div class="cta">Save reps</div></div>
+          <nav class="tabs"><div class="tab"><span class="pix">D</span>Dashboard</div><div class="tab active"><span class="pix">L</span>Log</div><div class="tab"><span class="pix round">R</span>Rounds</div><div class="tab"><span class="pix">C</span>Debt</div><div class="tab"><span class="pix">G</span>Settings</div></nav>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="caption"><span class="pix small">R</span> 3. Rounds</div>
+        <div class="phone"><div class="screen">
+          <div class="island"></div><div class="status"><span>00:08</span><span>...</span></div>
+          <div class="content">
+            <div class="screen-title"><div class="row" style="gap:12px"><div class="mission-icon">X</div><div><div class="eyebrow">Mission Today</div><h2>3 rounds<br>to hit zero</h2></div></div><div class="tiny" style="text-align:right">0 / 3<br>done</div></div>
+            <div class="card row"><div><div class="section" style="margin:0 0 4px">Total Target</div><div class="num lime">260 REPS</div><div class="sub">Split across your rounds.</div></div><span class="pix round">T</span></div>
+            <div class="card hot"><div class="row"><span class="chip lime">1</span><b>ROUND 1</b><span class="tiny">0 / 88 done</span></div><div class="round-grid"><div class="metric"><b>34</b><span>push-ups</span></div><div class="metric"><b>4</b><span>pull-ups</span></div><div class="metric"><b>50</b><span>squats</span></div><span class="tiny">0%</span></div><div class="blocks" style="margin-top:8px"><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i></div></div>
+            <div class="card"><div class="row"><span class="chip">2</span><b>ROUND 2</b><span class="tiny">0 / 86 done</span></div><div class="round-grid"><div class="metric"><b>33</b><span>push-ups</span></div><div class="metric"><b>3</b><span>pull-ups</span></div><div class="metric"><b>50</b><span>squats</span></div><span class="tiny">0%</span></div></div>
+            <div class="card"><div class="row"><span class="chip">3</span><b>ROUND 3</b><span class="tiny">0 / 86 done</span></div><div class="round-grid"><div class="metric"><b>33</b><span>push-ups</span></div><div class="metric"><b>3</b><span>pull-ups</span></div><div class="metric"><b>50</b><span>squats</span></div><span class="tiny">0%</span></div></div>
+          </div>
+          <div class="sticky"><div class="cta">Start round 1</div></div>
+          <nav class="tabs"><div class="tab"><span class="pix">D</span>Dashboard</div><div class="tab"><span class="pix">L</span>Log</div><div class="tab active"><span class="pix round">R</span>Rounds</div><div class="tab"><span class="pix">C</span>Debt</div><div class="tab"><span class="pix">G</span>Settings</div></nav>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="caption"><span class="pix small gold">C</span> 4. Debt</div>
+        <div class="phone"><div class="screen">
+          <div class="island"></div><div class="status"><span>00:08</span><span>...</span></div>
+          <div class="content">
+            <div class="screen-title"><div><div class="eyebrow">Debt Office</div><h2>Rep now,<br>repay later.</h2></div><div class="status-pill">Active<br>Debt</div></div>
+            <div class="npc"><div class="banker"></div></div>
+            <div class="card" style="text-align:center"><div class="section" style="margin-top:0">Current Rep Debt</div><div class="num coral"><span style="color:var(--gold)">C</span> 510</div><div class="sub">510 reps owed - paid back in reps, not money</div></div>
+            <div class="section">Choose Payoff Plan</div>
+            <div class="plan-row"><span class="pix gold">1</span><div><b>ONE TIME</b><div class="sub">Pay in one go</div></div><b>510 reps</b></div>
+            <div class="plan-row active"><span class="pix">B</span><div><b>BALANCED</b><div class="sub">Split over 3 days</div></div><b>171 / day</b></div>
+            <div class="plan-row"><span class="pix">E</span><div><b>EXTENDED</b><div class="sub">Split over 5 days</div></div><b>102 / day</b></div>
+            <div class="paper contract"><b>REPAYMENT CONTRACT</b><br>I agree to repay 510 reps according to the selected plan.<br><br>You ____ &nbsp;&nbsp; Bank ____</div>
+          </div>
+          <div class="sticky"><div class="cta coral">Sign &amp; confirm plan</div></div>
+          <nav class="tabs"><div class="tab"><span class="pix">D</span>Dashboard</div><div class="tab"><span class="pix">L</span>Log</div><div class="tab"><span class="pix round">R</span>Rounds</div><div class="tab active"><span class="pix">C</span>Debt</div><div class="tab"><span class="pix">G</span>Settings</div></nav>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="caption"><span class="pix small">G</span> 5. Settings</div>
+        <div class="phone"><div class="screen">
+          <div class="island"></div><div class="status"><span>00:09</span><span>...</span></div>
+          <div class="content">
+            <div class="screen-title"><div><div class="eyebrow">Training HQ</div><h2>Set targets.<br>Level up.</h2></div><span class="pix gold">S</span></div>
+            <div class="section">Daily Targets</div>
+            <div class="card">
+              <div class="settings-row"><span class="pix">P</span><div><b>PUSH-UPS</b><div class="sub">reps / day</div></div><span class="square-btn">-</span><b>100</b><span class="square-btn">+</span></div>
+              <div class="settings-row"><span class="pix">U</span><div><b>PULL-UPS</b><div class="sub">reps / day</div></div><span class="square-btn">-</span><b>10</b><span class="square-btn">+</span></div>
+              <div class="settings-row"><span class="pix">Q</span><div><b>SQUATS</b><div class="sub">reps / day</div></div><span class="square-btn">-</span><b>150</b><span class="square-btn">+</span></div>
+              <div class="settings-row"><span class="pix">D</span><div><b>DIPS</b><div class="sub">optional</div></div><span></span><span></span><span class="toggle"></span></div>
+            </div>
+            <div class="section">Progression</div>
+            <div class="card">
+              <div class="row" style="margin-bottom:12px"><div><b>AUTO-INCREASE</b><div class="sub">Every 14 days - +5 reps</div></div><span class="toggle on"></span></div>
+              <div class="settings-row"><span class="pix">+</span><div><b>INCREASE</b><div class="sub">reps</div></div><span class="square-btn">-</span><b>5</b><span class="square-btn">+</span></div>
+              <div class="settings-row"><span class="pix">C</span><div><b>FREQUENCY</b><div class="sub">days</div></div><span class="square-btn">-</span><b>14</b><span class="square-btn">+</span></div>
+            </div>
+            <div class="section">Preferences</div>
+            <div class="card"><div class="row"><b>SOUND EFFECTS</b><span class="toggle on"></span></div><div class="row" style="margin-top:10px"><b>HAPTIC FEEDBACK</b><span class="toggle on"></span></div></div>
+          </div>
+          <nav class="tabs"><div class="tab"><span class="pix">D</span>Dashboard</div><div class="tab"><span class="pix">L</span>Log</div><div class="tab"><span class="pix round">R</span>Rounds</div><div class="tab"><span class="pix">C</span>Debt</div><div class="tab active"><span class="pix">G</span>Settings</div></nav>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="style-kit">
+      <div class="kit"><h3>Palette</h3><div class="swatches"><i class="swatch" style="background:#AEE63D"></i><i class="swatch" style="background:#556B22"></i><i class="swatch" style="background:#343829"></i><i class="swatch" style="background:#10140F"></i><i class="swatch" style="background:#050806"></i><i class="swatch" style="background:#E8D8B8"></i><i class="swatch" style="background:#B08A54"></i><i class="swatch" style="background:#E85D4F"></i><i class="swatch" style="background:#FFD34D"></i><i class="swatch" style="background:#9A9485"></i></div></div>
+      <div class="kit"><h3>Typography</h3><p class="notes" style="padding-left:0">Pixel direction, implemented with system monospaced fonts until a licensed pixel font is added.<br><br><b style="color:var(--lime);font-size:20px">BOLD HEADINGS</b><br>Aa Bb Cc 123</p></div>
+      <div class="kit"><h3>Components</h3><div class="cta">Primary CTA</div><div class="card" style="margin-top:10px;text-align:center">Secondary Panel</div><div class="blocks"><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block on"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i><i class="block"></i></div></div>
+      <div class="kit"><h3>Generated Asset Kit</h3><img class="asset-img" src="generated-pixel-asset-kit.png" alt="Generated pixel asset kit reference"></div>
+      <div class="kit"><h3>Icon Grid</h3><p class="notes" style="padding-left:0">16x16 and 24x24 source grids. One-pixel dark outline. Render at integer multiples. Decorative art hidden from VoiceOver; controls expose labels.</p></div>
+      <div class="kit"><h3>Notes</h3><ul class="notes"><li>Dark theme</li><li>Pixel art only</li><li>Practical first</li><li>Consistent tab coverage</li><li>Debt repaid only in reps</li></ul></div>
+    </section>
+  </main>
+</body>
+</html>
+

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0293DF4146C0889746001A1D /* RoundsCompletionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE509EBCE9B7E1C993E24FE8 /* RoundsCompletionTests.swift */; };
-		04818C09701EF641C2CC9550 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */; };
 		0A2CEC2992FFF8017F427052 /* RepLoggerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D0A3C70EA6126F275B5A9C /* RepLoggerViewModel.swift */; };
 		0B14CAC1D36530553E182ECB /* ProgressionSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FE1724D5E8193130091E7A /* ProgressionSettingsCard.swift */; };
 		14E7118863DF8A9C4A50310B /* HistoryEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ACEEA529E329AF48AECAAC /* HistoryEngine.swift */; };
@@ -38,10 +37,8 @@
 		96EE0AFA1BC52F48152F83BB /* DebtEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034B7AB96E44564C5D6F4AAE /* DebtEngine.swift */; };
 		9DD41FC407D01D01FED53B39 /* GMCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FBB4151760EE43AC4E120D /* GMCalendar.swift */; };
 		A109272FD0674C5069EE04D6 /* DayCloseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68282965962F604192226990 /* DayCloseTests.swift */; };
-		A44F611AEFAA94AAB7DA974E /* TrendChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47CCB213426788D0D92951E /* TrendChart.swift */; };
 		A45AECD7D2B0D9E5A7798473 /* ScreenBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32885A46E154336003BB447 /* ScreenBackground.swift */; };
 		A6884D8C2328BE10C4133AE3 /* GettingMoneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7ACD89CDAA151BEB0D1367 /* GettingMoneyApp.swift */; };
-		A8461C55A7ED1F9E04588A7B /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E5BB960609CA977EF2684 /* DashboardView.swift */; };
 		A86CF9945B677A1DBEB2EB71 /* DebtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C967238A1AD2433266936E /* DebtView.swift */; };
 		AED114DF92E67FB346882F41 /* DayCloseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5639ED5219BC79174C0D14 /* DayCloseService.swift */; };
 		AF1EFD48754010C5DA27ADF8 /* TargetSettingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3CC94F0763115D6AD00EF6 /* TargetSettingsList.swift */; };
@@ -56,6 +53,7 @@
 		BC1D304B455551BC0BC9A2AD /* SchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC07701DD15914B6C922C28B /* SchemaV1.swift */; };
 		BC6EA290E4981F3D0BA5D453 /* TargetProgressionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3ACC20524957A53CEE663 /* TargetProgressionEngineTests.swift */; };
 		BD5D8FC8D92AD4D9EAF127D2 /* RoundsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FCD2377AAE7D8A9D989400 /* RoundsViewModel.swift */; };
+		04818C09701EF641C2CC9550 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */; };
 		BF46AB2B3409E29DBBCEF677 /* GMProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FAFC88DF0AAB23A591A12 /* GMProgressBar.swift */; };
 		C04EC4ADDBDA921F128A0EEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 707635667C43152DC33C00B3 /* Assets.xcassets */; };
 		C38EF7533E26F0D6B1D3B08F /* RoundPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B394E7708598C4702EB80A4 /* RoundPlannerTests.swift */; };
@@ -82,6 +80,7 @@
 		FECD55934803319DE2AE5944 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546769BDD783D6760C742F1A /* LogView.swift */; };
 		CA8B94C047B0B03C0D9FEC5A /* GameSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2907A373781FB55BD5C145D7 /* GameSessionViewModel.swift */; };
 		12D492792E3C11A954040F87 /* PixelCoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FCD51BB221F8044FA62F6D /* PixelCoinView.swift */; };
+		903208280440485EBAA56EFC /* PixelImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65CD207C5054E329823AB53 /* PixelImage.swift */; };
 		519D49E6FD9555C223D2D48A /* PixelCharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA929F52D1827554E41FF54 /* PixelCharacterView.swift */; };
 		3CDD7CBC28FAF047E387A1D5 /* GameDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AAC5FC78D22789B689FDF7 /* GameDashboardView.swift */; };
 		7AF76FB349FFFE377E71B62D /* RepReconciler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9C1EAEFE0A3C7E24B6E3F4 /* RepReconciler.swift */; };
@@ -165,15 +164,14 @@
 		90D500CBE47FE8FFC8B07B14 /* AccessibilityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabels.swift; sourceTree = "<group>"; };
 		94FC11FCC0D4179E18434918 /* EarningsEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsEngineTests.swift; sourceTree = "<group>"; };
 		981087FD266EA11EA454391F /* ExerciseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepository.swift; sourceTree = "<group>"; };
-		9A3E5BB960609CA977EF2684 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		AA81224326422C4381ED8F83 /* WidgetSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotPublisher.swift; sourceTree = "<group>"; };
 		AA99F30166FE52C971485F8E /* GMCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMCard.swift; sourceTree = "<group>"; };
 		ABE38D80640AC1C499C93F79 /* RepLoggingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepLoggingTests.swift; sourceTree = "<group>"; };
 		AC5639ED5219BC79174C0D14 /* DayCloseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCloseService.swift; sourceTree = "<group>"; };
 		B0D0A3C70EA6126F275B5A9C /* RepLoggerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepLoggerViewModel.swift; sourceTree = "<group>"; };
-		B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		B56BC87B28FA8E7BAFB8AF58 /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
 		B7FCD2377AAE7D8A9D989400 /* RoundsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsViewModel.swift; sourceTree = "<group>"; };
+		B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		C118D7D3B2A81835600A0564 /* GMStatusPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMStatusPill.swift; sourceTree = "<group>"; };
 		C1D11FEC4F12F618D99B2E72 /* GettingMoneyWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingMoneyWidgetBundle.swift; sourceTree = "<group>"; };
 		C32885A46E154336003BB447 /* ScreenBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenBackground.swift; sourceTree = "<group>"; };
@@ -192,12 +190,12 @@
 		ED535DADE76F61B744ED412B /* DashboardSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSample.swift; sourceTree = "<group>"; };
 		F0D3ACC20524957A53CEE663 /* TargetProgressionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetProgressionEngineTests.swift; sourceTree = "<group>"; };
 		F16243050D293105803D5165 /* NumberFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatting.swift; sourceTree = "<group>"; };
-		F47CCB213426788D0D92951E /* TrendChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendChart.swift; sourceTree = "<group>"; };
 		F4A838EC51F58E98B29D0639 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		FCC44BFCEB0CFD526B9C7C86 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FF43324DE6B016E1DD37E32E /* RoundPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundPlanner.swift; sourceTree = "<group>"; };
 		2907A373781FB55BD5C145D7 /* GameSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionViewModel.swift; sourceTree = "<group>"; };
 		40FCD51BB221F8044FA62F6D /* PixelCoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelCoinView.swift; sourceTree = "<group>"; };
+		E65CD207C5054E329823AB53 /* PixelImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelImage.swift; sourceTree = "<group>"; };
 		2FA929F52D1827554E41FF54 /* PixelCharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelCharacterView.swift; sourceTree = "<group>"; };
 		62AAC5FC78D22789B689FDF7 /* GameDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDashboardView.swift; sourceTree = "<group>"; };
 		DC9C1EAEFE0A3C7E24B6E3F4 /* RepReconciler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepReconciler.swift; sourceTree = "<group>"; };
@@ -252,8 +250,6 @@
 		08C80EBD6B8460FAAE0D2D74 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				9A3E5BB960609CA977EF2684 /* DashboardView.swift */,
-				F47CCB213426788D0D92951E /* TrendChart.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -318,10 +314,10 @@
 		4DE3F8D7EAB6FAE770C8E120 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */,
 				4EC2FC6D891D1E31A840544B /* DebtViewModel.swift */,
 				B0D0A3C70EA6126F275B5A9C /* RepLoggerViewModel.swift */,
 				B7FCD2377AAE7D8A9D989400 /* RoundsViewModel.swift */,
+				B3BEDF173F42C0F490349D78 /* DashboardViewModel.swift */,
 				6F142AD5517A671BCC2FDBF6 /* SettingsViewModel.swift */,
 				2907A373781FB55BD5C145D7 /* GameSessionViewModel.swift */,
 			);
@@ -382,6 +378,7 @@
 				856B42AF899F1BF3F23C07FB /* GMTypography.swift */,
 				F16243050D293105803D5165 /* NumberFormatting.swift */,
 				40FCD51BB221F8044FA62F6D /* PixelCoinView.swift */,
+				E65CD207C5054E329823AB53 /* PixelImage.swift */,
 				D0801DACC7E0A1856A69B971 /* Components */,
 			);
 			path = DesignSystem;
@@ -568,8 +565,6 @@
 				20DE38C2E1C2D119DC0D96F9 /* ComingSoonScreen.swift in Sources */,
 				F8345671336539454398233B /* DailyTarget.swift in Sources */,
 				3AE46537B22A74E6CFC81A3E /* DashboardSample.swift in Sources */,
-				A8461C55A7ED1F9E04588A7B /* DashboardView.swift in Sources */,
-				04818C09701EF641C2CC9550 /* DashboardViewModel.swift in Sources */,
 				AED114DF92E67FB346882F41 /* DayCloseService.swift in Sources */,
 				5308D690D008AC3955D2DAB7 /* DebtBalance.swift in Sources */,
 				96EE0AFA1BC52F48152F83BB /* DebtEngine.swift in Sources */,
@@ -603,18 +598,19 @@
 				B5CB82C181E4E044B5305FDE /* RoundPlanner.swift in Sources */,
 				D516449D5BFE36A479CF3E2E /* RoundsView.swift in Sources */,
 				BD5D8FC8D92AD4D9EAF127D2 /* RoundsViewModel.swift in Sources */,
+				04818C09701EF641C2CC9550 /* DashboardViewModel.swift in Sources */,
 				BC1D304B455551BC0BC9A2AD /* SchemaV1.swift in Sources */,
 				A45AECD7D2B0D9E5A7798473 /* ScreenBackground.swift in Sources */,
 				4903179D9FA698BB17C23523 /* SettingsView.swift in Sources */,
 				BB34749FA8081905C503FAF1 /* SettingsViewModel.swift in Sources */,
 				CA8B94C047B0B03C0D9FEC5A /* GameSessionViewModel.swift in Sources */,
 				12D492792E3C11A954040F87 /* PixelCoinView.swift in Sources */,
+				903208280440485EBAA56EFC /* PixelImage.swift in Sources */,
 				519D49E6FD9555C223D2D48A /* PixelCharacterView.swift in Sources */,
 				3CDD7CBC28FAF047E387A1D5 /* GameDashboardView.swift in Sources */,
 				7AF76FB349FFFE377E71B62D /* RepReconciler.swift in Sources */,
 				37CAFECCD0B5DBB422163E16 /* TargetProgressionEngine.swift in Sources */,
 				AF1EFD48754010C5DA27ADF8 /* TargetSettingsList.swift in Sources */,
-				A44F611AEFAA94AAB7DA974E /* TrendChart.swift in Sources */,
 				5FCF967E89EB08FFFA58FD10 /* WidgetShared.swift in Sources */,
 				EC0A9594E7A49DA4BD9A96DE /* WidgetSnapshotPublisher.swift in Sources */,
 				7DD6A8BCA51EF008138927AA /* WorkoutDay.swift in Sources */,

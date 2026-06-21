@@ -105,6 +105,9 @@ final class GameSessionViewModel {
     let allCompleted = (try? workoutRepo.completedReps(on: today)) ?? [:]
     completedToday = allCompleted
 
+    let dailyTotals = (try? workoutRepo.reconciledDailyReps()) ?? [:]
+    streakDays = computeStreak(dailyTotals: dailyTotals, today: today)
+
     var targets: [String: Int] = [:]
     var totalDebt = 0
     for ex in exercises {
@@ -123,5 +126,22 @@ final class GameSessionViewModel {
     targetsToday = targets
     debtCoins = totalDebt
     earnedCoins = allCompleted.values.reduce(0, +)
+  }
+
+  private func computeStreak(dailyTotals: [Date: Int], today: Date) -> Int {
+    var streak = 0
+    var check = today
+    for _ in 0..<366 {
+      let key = GMCalendar.dayKey(for: check)
+      if (dailyTotals[key] ?? 0) > 0 {
+        streak += 1
+      } else if streak == 0 && Calendar.current.isDateInToday(check) {
+        // Today not yet complete — check yesterday before breaking
+      } else {
+        break
+      }
+      check = Calendar.current.date(byAdding: .day, value: -1, to: check) ?? check
+    }
+    return streak
   }
 }

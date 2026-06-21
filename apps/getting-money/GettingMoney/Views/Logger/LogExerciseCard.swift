@@ -1,84 +1,83 @@
 import SwiftUI
 
 struct LogExerciseCard: View {
-    let row: RepLoggerViewModel.Row
-    let viewModel: RepLoggerViewModel
-    let reduceMotion: Bool
+  let row: RepLoggerViewModel.Row
+  let viewModel: RepLoggerViewModel
+  let reduceMotion: Bool
 
-    var body: some View {
-        GMCard {
-            VStack(alignment: .leading, spacing: GMSpacing.md) {
-                HStack(spacing: GMSpacing.md) {
-                    Image(systemName: row.glyph)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(GMColor.ink)
-                        .frame(width: 38, height: 38)
-                        .background(RoundedRectangle(cornerRadius: 11, style: .continuous).fill(GMColor.elevated))
-                        .overlay(RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
-
-                    Text(row.name)
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(GMColor.ink)
-                    Spacer()
-                    (Text(row.displayed.gmGrouped).foregroundStyle(GMColor.ink)
-                     + Text(" / \(row.target.gmGrouped)").foregroundStyle(GMColor.muted))
-                        .font(.system(size: 14, weight: .semibold))
-                        .monospacedDigit()
-                }
-
-                GMProgressBar(fraction: row.fraction, height: 7)
-
-                HStack(spacing: GMSpacing.md) {
-                    stepButton("minus", label: "Decrease \(row.name)") { adjust(-1) }
-                    Text(row.displayed.gmGrouped)
-                        .font(.system(size: 26, weight: .bold))
-                        .monospacedDigit()
-                        .foregroundStyle(GMColor.ink)
-                        .frame(minWidth: 54)
-                    stepButton("plus", label: "Increase \(row.name)") { adjust(1) }
-                    Spacer(minLength: 0)
-                }
-
-                HStack(spacing: GMSpacing.sm) {
-                    ForEach(row.quickAdds, id: \.self) { amount in
-                        quickAddButton(amount)
-                    }
-                }
-            }
+  var body: some View {
+    GMParchmentCard {
+      VStack(alignment: .leading, spacing: GMSpacing.md) {
+        HStack(spacing: GMSpacing.md) {
+          exerciseIcon
+          Text(row.name)
+            .font(.system(size: 17, weight: .heavy, design: .monospaced))
+            .foregroundStyle(GMColor.parchmentInk)
+          Spacer()
+          (Text(row.displayed.gmGrouped).foregroundStyle(GMColor.parchmentInk)
+            + Text(" / \(row.target.gmGrouped)").foregroundStyle(GMColor.parchmentInk.opacity(0.6)))
+            .font(.system(size: 14, weight: .heavy, design: .monospaced))
+            .monospacedDigit()
         }
-    }
 
-    private func quickAddButton(_ amount: Int) -> some View {
-        Button("+\(amount)") { adjust(amount) }
-            .font(.system(size: 14, weight: .bold))
-            .lineLimit(1)
-            .minimumScaleFactor(0.82)
-            .foregroundStyle(GMColor.accent)
-            .frame(maxWidth: .infinity, minHeight: 42)
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(GMColor.accent.opacity(0.10)))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(GMColor.accent.opacity(0.34), lineWidth: 1))
-    }
+        GMProgressBar(fraction: row.fraction, height: 7)
 
-    private func stepButton(_ systemName: String, label: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(GMColor.ink)
-                .frame(width: 46, height: 46)
-                .background(RoundedRectangle(cornerRadius: 13, style: .continuous).fill(GMColor.elevated))
-                .overlay(RoundedRectangle(cornerRadius: 13, style: .continuous).stroke(GMColor.hairline, lineWidth: 1))
+        HStack(spacing: GMSpacing.md) {
+          PixelStepButton(kind: .minus, label: "Decrease \(row.name)") { adjust(-1) }
+          Text(row.displayed.gmGrouped)
+            .font(.system(size: 28, weight: .heavy, design: .monospaced))
+            .monospacedDigit()
+            .foregroundStyle(GMColor.parchmentInk)
+            .frame(minWidth: 54)
+          PixelStepButton(kind: .plus, label: "Increase \(row.name)") { adjust(1) }
+          Spacer(minLength: 0)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label)
-    }
 
-    private func adjust(_ amount: Int) {
-        if reduceMotion {
-            viewModel.adjust(row.id, by: amount)
-        } else {
-            withAnimation(.snappy(duration: 0.18)) {
-                viewModel.adjust(row.id, by: amount)
-            }
+        HStack(spacing: GMSpacing.sm) {
+          ForEach(row.quickAdds, id: \.self) { amount in
+            quickAddButton(amount)
+          }
         }
+      }
     }
+  }
+
+  private var exerciseImageName: String {
+    switch row.id {
+    case "pushups": return "pixel_exercise_pushups"
+    case "pullups": return "pixel_exercise_pullups"
+    case "squats": return "pixel_exercise_squats"
+    case "dips": return "pixel_exercise_dips"
+    default:
+      assertionFailure("Unknown exercise key: \(row.id)")
+      return "pixel_exercise_pushups"
+    }
+  }
+
+  private var exerciseIcon: some View {
+    Image(exerciseImageName)
+      .pixelArt()
+      .frame(width: 38, height: 44)
+  }
+
+  private func quickAddButton(_ amount: Int) -> some View {
+    Button("+\(amount)") { adjust(amount) }
+      .font(.system(size: 14, weight: .heavy, design: .monospaced))
+      .lineLimit(1)
+      .minimumScaleFactor(0.82)
+      .foregroundStyle(GMColor.accent)
+      .frame(maxWidth: .infinity, minHeight: 42)
+      .background(Rectangle().fill(Color(hex: "#31451B")))
+      .overlay(Rectangle().stroke(Color(hex: "#718C37"), lineWidth: 1.5))
+  }
+
+  private func adjust(_ amount: Int) {
+    if reduceMotion {
+      viewModel.adjust(row.id, by: amount)
+    } else {
+      withAnimation(.snappy(duration: 0.18)) {
+        viewModel.adjust(row.id, by: amount)
+      }
+    }
+  }
 }

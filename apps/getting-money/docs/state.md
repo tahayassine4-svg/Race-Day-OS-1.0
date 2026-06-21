@@ -1,17 +1,29 @@
-phase: REPORTER_COMPLETE
+phase: CODE_REVIEWER
 app: getting-money
-packet: 14 — Home-Screen Widget (Daily Targets)
-status: TESTED — read-only daily-targets widget built; app publishes today's snapshot to App Group group.com.yassine.gettingmoney; 98/98 tests; widget UI + App Group write verified on simulator; freshness hardened (publish on background + new-day reset). Provisioning steps required before TestFlight (see packet-14-report).
-last_action: Built WidgetKit extension + App Group snapshot publisher, future-proofed for optional Dips, ran 96/96 tests, screenshot-verified the widget content + on-disk App Group write.
-branch: packet-14-widget
-commit: —
-next_step: Yassine completes App Group + widget App ID provisioning (packet-14-report → Provisioning), bumps build number, archives with automatic signing, uploads to TestFlight.
-timestamp: 2026-06-14T16:55:00Z
+packet: 19 — PNG Asset Integration & Full Redesign
+status: TESTER_PASS — All PNG assets imported, full redesign live, advisor blockers resolved, 98/98 tests pass. UNCOMMITTED.
+last_action: Resolved advisor blockers: (1) daily console badges replaced with dynamic consoleMetric() calls, (2) debt panel active/paidoff PNGs removed from debtHero to eliminate static "510" number, (3) exercise icon imagesets replaced with no-label PNG variants, (4) debt header changed to "DEBT OFFICE". Build green, 98/98 tests pass.
+branch: packet-16-pixel-game-core
+commit: — (packet 19 work uncommitted)
+next_step: CODE_REVIEWER → GIT (commit packet 19) → REPORTER.
+timestamp: 2026-06-21T01:00:00Z
 notes: |
-  Widget is READ-ONLY (tap-to-open), not interactive +1 — chosen per the user's stated fallback to avoid moving the live SwiftData store into the App Group (TestFlight data-safety). Live store untouched; no schema/migration change.
-  Optional Dips appears in the widget automatically when enabled (buildSnapshot filters .isEnabled) — verified with -GMEnableDips.
-  App Group: group.com.yassine.gettingmoney (identical in both entitlements + WidgetShared). Widget bundle id: com.yassine.gettingmoney.widget.
-  New files: Shared/WidgetShared.swift, GettingMoney/Services/WidgetSnapshotPublisher.swift, GettingMoneyWidget/*, both *.entitlements, GettingMoneyTests/WidgetSnapshotTests.swift.
-  DEBUG screenshot harness: -GMWidgetPreview renders DailyTargetsContent in-app (simctl can't capture live widgets).
-  Prior context (P09–P13): debt day-close + cap, live payback, actionable rounds, dashboard day selector, past-day corrections. Last app commit 8bc2972.
-  System skills (repo .claude/skills): resume-app, ui-test.
+  Packet 19 implementation summary:
+  - 86 imagesets created/updated in Assets.xcassets (char animations + 40 new pixel asset imagesets)
+  - New character: curly black hair, 4 animation sets (idle 9f, pushup 9f, squat 9f, pullup 17f)
+  - New shared DesignSystem/PixelImage.swift: Image.pixelArt() + PixelToggle + PixelStepButton
+  - AppRootView: PNG tab icons via Label+Image renderingMode(.template).interpolation(.none)
+  - GameDashboardView: pixel HUD icons, pixel_level_badge arena overlay, dynamic console metrics
+  - LogView + LogExerciseCard: clipboard header icon, pixel exercise icons (no-label), PixelStepButton
+  - RoundsView: pixel swords icon header, PixelStepButton round stepper
+  - DebtView: banker_front + banker_lamp NPC sprites, pixel_debt_coin hero, "DEBT OFFICE" header
+  - SettingsView + TargetSettingsList + ProgressionSettingsCard: pixel exercise icons (no-label), PixelToggle, PixelStepButton
+  - All pixel images use .interpolation(.none).antialiased(false) via .pixelArt() modifier
+  - Advisor blockers fixed: static badges → dynamic text; debt panel removed from hero; exercise icons label-free
+
+  Screenshots: reports/artifacts/qa/p19-dashboard-v2.png (primary, post-advisor-fixes)
+  Prior screenshots: p19-dashboard.png, p19-log-v2.png, p19-rounds.png, p19-debt-v2.png, p19-settings.png
+
+  KNOWN GAPS (carried from prior packets):
+  - Game HUD streak shows session timer not streak days — GameSessionViewModel.streakDays gap
+  - TestFlight provisioning (App Group + widget App ID) — see packet-14-report.md

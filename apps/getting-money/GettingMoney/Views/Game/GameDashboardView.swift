@@ -2,8 +2,6 @@ import SwiftUI
 
 struct GameDashboardView: View {
   var vm: GameSessionViewModel
-  var onGoToRounds: () -> Void
-  var onGoToDebt: () -> Void
 
   @State private var animController = CharacterAnimationController()
 
@@ -15,7 +13,7 @@ struct GameDashboardView: View {
       arenaSection
       tapHint
       sessionStrip
-      bottomNav
+      dailyConsole
     }
     .background(GMColor.background)
     .onAppear { vm.load() }
@@ -27,16 +25,18 @@ struct GameDashboardView: View {
   private var hudBar: some View {
     HStack {
       HStack(spacing: 5) {
-        Image(systemName: "flame.fill")
-          .foregroundStyle(Color.orange)
-          .font(.system(size: 14))
+        Image("pixel_icon_flame")
+          .pixelArt()
+          .frame(width: 18, height: 26)
         Text("\(vm.streakDays)")
           .font(.system(size: 16, weight: .heavy, design: .monospaced))
           .foregroundStyle(GMColor.ink)
       }
       Spacer()
       HStack(spacing: 4) {
-        PixelCoinView(size: 16)
+        Image("pixel_icon_coin")
+          .pixelArt()
+          .frame(width: 16, height: 18)
         Text(vm.earnedCoins.gmCoins)
           .font(.system(size: 16, weight: .heavy, design: .monospaced))
           .foregroundStyle(Color(hex: "#FFD700"))
@@ -128,6 +128,19 @@ struct GameDashboardView: View {
         }
       }
       .padding(.bottom, 14)
+
+      // Level badge — bottom leading corner
+      VStack {
+        Spacer()
+        HStack {
+          Image("pixel_level_badge")
+            .pixelArt()
+            .frame(height: 28)
+            .padding(.leading, 16)
+            .padding(.bottom, 20)
+          Spacer()
+        }
+      }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(GMColor.background)
@@ -175,26 +188,44 @@ struct GameDashboardView: View {
     .frame(height: 28)
   }
 
-  // MARK: - Bottom Nav
-
-  private var bottomNav: some View {
-    HStack {
-      Button("ROUNDS →", action: onGoToRounds)
-        .font(.system(size: 11, weight: .heavy, design: .monospaced))
-        .foregroundStyle(GMColor.muted)
-      Spacer()
-      if vm.debtCoins > 0 {
-        Button("DEBT ↗", action: onGoToDebt)
-          .font(.system(size: 11, weight: .heavy, design: .monospaced))
-          .foregroundStyle(GMColor.debt)
+  private var dailyConsole: some View {
+    let completed = completedToday.values.reduce(0, +)
+    let target = targetsToday.values.reduce(0, +)
+    return VStack(alignment: .leading, spacing: 7) {
+      HStack {
+        Text("DAILY PROGRESS")
+          .font(.system(size: 10, weight: .heavy, design: .monospaced))
+          .foregroundStyle(GMColor.muted)
+        Spacer()
+        Text("\(completed.gmGrouped) / \(target.gmGrouped)")
+          .font(.system(size: 10, weight: .heavy, design: .monospaced))
+          .foregroundStyle(GMColor.muted)
+      }
+      GMProgressBar(fraction: target > 0 ? Double(completed) / Double(target) : 0, height: 11)
+      HStack {
+        consoleMetric(title: "STREAK", value: "\(vm.streakDays)d")
+        Spacer()
+        consoleMetric(title: "COINS", value: vm.earnedCoins.gmCoins)
+        Spacer()
+        consoleMetric(title: "DEBT", value: vm.debtCoins > 0 ? vm.debtCoins.gmCoins : "CLEAR")
       }
     }
     .padding(.horizontal, 20)
-    .frame(height: 40)
+    .padding(.vertical, 10)
+    .background(GMColor.surface)
     .overlay(alignment: .top) {
-      Rectangle()
-        .fill(GMColor.hairline)
-        .frame(height: 1)
+      Rectangle().fill(GMColor.hairline).frame(height: 1)
+    }
+  }
+
+  private func consoleMetric(title: String, value: String) -> some View {
+    VStack(spacing: 2) {
+      Text(title)
+        .font(.system(size: 9, weight: .heavy, design: .monospaced))
+        .foregroundStyle(GMColor.muted)
+      Text(value)
+        .font(.system(size: 12, weight: .heavy, design: .monospaced))
+        .foregroundStyle(GMColor.ink)
     }
   }
 
@@ -207,6 +238,9 @@ struct GameDashboardView: View {
     guard t > 0 else { return 0 }
     return min(1.0, Double(c) / Double(t))
   }
+
+  private var completedToday: [String: Int] { vm.completedToday }
+  private var targetsToday: [String: Int] { vm.targetsToday }
 
   private var selectedCompleted: Int {
     guard let ex = vm.selectedExercise else { return 0 }

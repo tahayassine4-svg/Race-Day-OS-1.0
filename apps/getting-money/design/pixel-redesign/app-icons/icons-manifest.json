@@ -1,0 +1,605 @@
+{
+  "icons" : [
+    {
+      "files" : [
+        "source\/alert-source.png",
+        "24\/alert-24.png",
+        "32\/alert-32.png",
+        "48\/alert-48.png",
+        "64\/alert-64.png"
+      ],
+      "name" : "alert",
+      "notes" : "Cropped from misc elements: exclamation badge.",
+      "sizes" : [
+        "50x50",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1248, y:798, w:50, h:50"
+    },
+    {
+      "files" : [
+        "source\/arrow-right-source.png",
+        "24\/arrow-right-24.png",
+        "32\/arrow-right-32.png",
+        "48\/arrow-right-48.png",
+        "64\/arrow-right-64.png"
+      ],
+      "name" : "arrow-right",
+      "notes" : "[GENERATED] Distinct right-arrow icon missing as standalone asset; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/banker-npc-front-source.png",
+        "24\/banker-npc-front-24.png",
+        "32\/banker-npc-front-32.png",
+        "48\/banker-npc-front-48.png",
+        "64\/banker-npc-front-64.png"
+      ],
+      "name" : "banker-npc-front",
+      "notes" : "Cropped from banker NPC front sprite; included because Debt Office UI needs this created asset.",
+      "sizes" : [
+        "226x178",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:565, y:84, w:226, h:178"
+    },
+    {
+      "files" : [
+        "source\/calendar-source.png",
+        "24\/calendar-24.png",
+        "32\/calendar-32.png",
+        "48\/calendar-48.png",
+        "64\/calendar-64.png"
+      ],
+      "name" : "calendar",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "76x66",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1410, y:612, w:76, h:66"
+    },
+    {
+      "files" : [
+        "source\/chart-source.png",
+        "24\/chart-24.png",
+        "32\/chart-32.png",
+        "48\/chart-48.png",
+        "64\/chart-64.png"
+      ],
+      "name" : "chart",
+      "notes" : "[GENERATED] Distinct chart icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/check-source.png",
+        "24\/check-24.png",
+        "32\/check-32.png",
+        "48\/check-48.png",
+        "64\/check-64.png"
+      ],
+      "name" : "check",
+      "notes" : "Cropped from UI controls.",
+      "sizes" : [
+        "78x74",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1225, y:82, w:78, h:74"
+    },
+    {
+      "files" : [
+        "source\/clipboard-source.png",
+        "24\/clipboard-24.png",
+        "32\/clipboard-32.png",
+        "48\/clipboard-48.png",
+        "64\/clipboard-64.png"
+      ],
+      "name" : "clipboard",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "68x72",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1228, y:608, w:68, h:72"
+    },
+    {
+      "files" : [
+        "source\/close-source.png",
+        "24\/close-24.png",
+        "32\/close-32.png",
+        "48\/close-48.png",
+        "64\/close-64.png"
+      ],
+      "name" : "close",
+      "notes" : "Cropped from misc elements: close badge.",
+      "sizes" : [
+        "54x50",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1304, y:798, w:54, h:50"
+    },
+    {
+      "files" : [
+        "source\/coin-source.png",
+        "24\/coin-24.png",
+        "32\/coin-32.png",
+        "48\/coin-48.png",
+        "64\/coin-64.png"
+      ],
+      "name" : "coin",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "58x58",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:902, y:620, w:58, h:58"
+    },
+    {
+      "files" : [
+        "source\/dashboard-source.png",
+        "24\/dashboard-24.png",
+        "32\/dashboard-32.png",
+        "48\/dashboard-48.png",
+        "64\/dashboard-64.png"
+      ],
+      "name" : "dashboard",
+      "notes" : "Cropped from navigation tabs: dashboard gamepad.",
+      "sizes" : [
+        "56x48",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:34, y:612, w:56, h:48"
+    },
+    {
+      "files" : [
+        "source\/debt-source.png",
+        "24\/debt-24.png",
+        "32\/debt-32.png",
+        "48\/debt-48.png",
+        "64\/debt-64.png"
+      ],
+      "name" : "debt",
+      "notes" : "Cropped from navigation tabs: coin\/debt.",
+      "sizes" : [
+        "54x54",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:302, y:611, w:54, h:54"
+    },
+    {
+      "files" : [
+        "source\/dips-source.png",
+        "24\/dips-24.png",
+        "32\/dips-32.png",
+        "48\/dips-48.png",
+        "64\/dips-64.png"
+      ],
+      "name" : "dips",
+      "notes" : "Cropped from exercise icons.",
+      "sizes" : [
+        "78x72",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:798, y:607, w:78, h:72"
+    },
+    {
+      "files" : [
+        "source\/dumbbell-source.png",
+        "24\/dumbbell-24.png",
+        "32\/dumbbell-32.png",
+        "48\/dumbbell-48.png",
+        "64\/dumbbell-64.png"
+      ],
+      "name" : "dumbbell",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "86x52",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1299, y:622, w:86, h:52"
+    },
+    {
+      "files" : [
+        "source\/flame-source.png",
+        "24\/flame-24.png",
+        "32\/flame-32.png",
+        "48\/flame-48.png",
+        "64\/flame-64.png"
+      ],
+      "name" : "flame",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "60x68",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:976, y:615, w:60, h:68"
+    },
+    {
+      "files" : [
+        "source\/info-source.png",
+        "24\/info-24.png",
+        "32\/info-32.png",
+        "48\/info-48.png",
+        "64\/info-64.png"
+      ],
+      "name" : "info",
+      "notes" : "[GENERATED] Distinct info icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/lock-source.png",
+        "24\/lock-24.png",
+        "32\/lock-32.png",
+        "48\/lock-48.png",
+        "64\/lock-64.png"
+      ],
+      "name" : "lock",
+      "notes" : "[GENERATED] Distinct lock icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/log-source.png",
+        "24\/log-24.png",
+        "32\/log-32.png",
+        "48\/log-48.png",
+        "64\/log-64.png"
+      ],
+      "name" : "log",
+      "notes" : "Cropped from navigation tabs: log clipboard.",
+      "sizes" : [
+        "60x62",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:121, y:611, w:60, h:62"
+    },
+    {
+      "files" : [
+        "source\/minus-source.png",
+        "24\/minus-24.png",
+        "32\/minus-32.png",
+        "48\/minus-48.png",
+        "64\/minus-64.png"
+      ],
+      "name" : "minus",
+      "notes" : "Cropped from UI controls.",
+      "sizes" : [
+        "74x74",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1069, y:82, w:74, h:74"
+    },
+    {
+      "files" : [
+        "source\/plus-source.png",
+        "24\/plus-24.png",
+        "32\/plus-32.png",
+        "48\/plus-48.png",
+        "64\/plus-64.png"
+      ],
+      "name" : "plus",
+      "notes" : "Cropped from UI controls.",
+      "sizes" : [
+        "74x74",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1146, y:82, w:74, h:74"
+    },
+    {
+      "files" : [
+        "source\/pull-ups-source.png",
+        "24\/pull-ups-24.png",
+        "32\/pull-ups-32.png",
+        "48\/pull-ups-48.png",
+        "64\/pull-ups-64.png"
+      ],
+      "name" : "pull-ups",
+      "notes" : "Cropped from exercise icons.",
+      "sizes" : [
+        "94x66",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:600, y:608, w:94, h:66"
+    },
+    {
+      "files" : [
+        "source\/push-ups-source.png",
+        "24\/push-ups-24.png",
+        "32\/push-ups-32.png",
+        "48\/push-ups-48.png",
+        "64\/push-ups-64.png"
+      ],
+      "name" : "push-ups",
+      "notes" : "Cropped from exercise icons.",
+      "sizes" : [
+        "92x54",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:493, y:625, w:92, h:54"
+    },
+    {
+      "files" : [
+        "source\/rounds-source.png",
+        "24\/rounds-24.png",
+        "32\/rounds-32.png",
+        "48\/rounds-48.png",
+        "64\/rounds-64.png"
+      ],
+      "name" : "rounds",
+      "notes" : "Cropped from navigation tabs: crossed swords.",
+      "sizes" : [
+        "66x66",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:203, y:607, w:66, h:66"
+    },
+    {
+      "files" : [
+        "source\/settings-source.png",
+        "24\/settings-24.png",
+        "32\/settings-32.png",
+        "48\/settings-48.png",
+        "64\/settings-64.png"
+      ],
+      "name" : "settings",
+      "notes" : "Cropped from navigation tabs: gear.",
+      "sizes" : [
+        "60x54",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:393, y:610, w:60, h:54"
+    },
+    {
+      "files" : [
+        "source\/shield-source.png",
+        "24\/shield-24.png",
+        "32\/shield-32.png",
+        "48\/shield-48.png",
+        "64\/shield-64.png"
+      ],
+      "name" : "shield",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "60x58",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1062, y:620, w:60, h:58"
+    },
+    {
+      "files" : [
+        "source\/squats-source.png",
+        "24\/squats-24.png",
+        "32\/squats-32.png",
+        "48\/squats-48.png",
+        "64\/squats-64.png"
+      ],
+      "name" : "squats",
+      "notes" : "Cropped from exercise icons.",
+      "sizes" : [
+        "82x72",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:711, y:607, w:82, h:72"
+    },
+    {
+      "files" : [
+        "source\/swords-source.png",
+        "24\/swords-24.png",
+        "32\/swords-32.png",
+        "48\/swords-48.png",
+        "64\/swords-64.png"
+      ],
+      "name" : "swords",
+      "notes" : "Cropped from economy\/status icons.",
+      "sizes" : [
+        "70x70",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1138, y:608, w:70, h:70"
+    },
+    {
+      "files" : [
+        "source\/target-source.png",
+        "24\/target-24.png",
+        "32\/target-32.png",
+        "48\/target-48.png",
+        "64\/target-64.png"
+      ],
+      "name" : "target",
+      "notes" : "[GENERATED] Distinct target icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/toggle-off-source.png",
+        "24\/toggle-off-24.png",
+        "32\/toggle-off-32.png",
+        "48\/toggle-off-48.png",
+        "64\/toggle-off-64.png"
+      ],
+      "name" : "toggle-off",
+      "notes" : "Cropped from UI controls.",
+      "sizes" : [
+        "94x58",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1322, y:82, w:94, h:58"
+    },
+    {
+      "files" : [
+        "source\/toggle-on-source.png",
+        "24\/toggle-on-24.png",
+        "32\/toggle-on-32.png",
+        "48\/toggle-on-48.png",
+        "64\/toggle-on-64.png"
+      ],
+      "name" : "toggle-on",
+      "notes" : "Cropped from UI controls.",
+      "sizes" : [
+        "96x58",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ],
+      "sourceCrop" : "x:1418, y:82, w:96, h:58"
+    },
+    {
+      "files" : [
+        "source\/trash-source.png",
+        "24\/trash-24.png",
+        "32\/trash-32.png",
+        "48\/trash-48.png",
+        "64\/trash-64.png"
+      ],
+      "name" : "trash",
+      "notes" : "[GENERATED] Distinct trash icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    },
+    {
+      "files" : [
+        "source\/upload-source.png",
+        "24\/upload-24.png",
+        "32\/upload-32.png",
+        "48\/upload-48.png",
+        "64\/upload-64.png"
+      ],
+      "name" : "upload",
+      "notes" : "[GENERATED] Distinct upload\/share icon missing in reference sheet; created from approved palette.",
+      "sizes" : [
+        "16x16",
+        "24x24",
+        "32x32",
+        "48x48",
+        "64x64"
+      ]
+    }
+  ],
+  "missing" : [
+
+  ],
+  "namingConvention" : "{icon-name}-{size}.png, organized in \/24, \/32, \/48, \/64 plus \/source transparent masters",
+  "notes" : [
+    "Reference prompt did not specify exact target sizes, total count, or delivery layout; exported production defaults: 24, 32, 48, 64 px plus transparent source masters.",
+    "All cropped icons are derived from the approved generated pixel design sheet.",
+    "Generated additions use the same approved palette and pixel grid because those utility icons were not present as standalone artwork in the source sheet.",
+    "Nearest-neighbor scaling only; no smoothing or non-pixel vector fallback."
+  ],
+  "outputFormat" : "PNG with alpha channel",
+  "source" : "\/Users\/sinou\/claude-app-system\/apps\/getting-money\/design\/pixel-redesign\/generated-pixel-asset-kit.png",
+  "targetSizes" : [
+    24,
+    32,
+    48,
+    64
+  ],
+  "totalIcons" : 31
+}

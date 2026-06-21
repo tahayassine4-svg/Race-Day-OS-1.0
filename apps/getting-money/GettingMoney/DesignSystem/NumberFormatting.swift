@@ -9,10 +9,8 @@ extension Int {
     Self.grouping.string(from: NSNumber(value: self)) ?? "\(self)"
   }
 
-  /// Money, e.g. 1284 -> "$1,284" (in-app metaphor currency, always "$").
-  var gmMoney: String { "$" + gmGrouped }
-
   /// Coin count with no currency symbol — pair inline with PixelCoinView.
+  /// The app's currency metaphor is the pixel coin, never a dollar sign.
   var gmCoins: String { gmGrouped }
 
   private static let grouping: NumberFormatter = {

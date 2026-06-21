@@ -5,7 +5,6 @@ struct AppRootView: View {
   enum Tab: Hashable { case dashboard, log, rounds, debt, settings }
   @State private var selection: Tab
   @State private var settingsViewModel: SettingsViewModel
-  @State private var dashboardViewModel: DashboardViewModel
   @State private var repLoggerViewModel: RepLoggerViewModel
   @State private var debtViewModel: DebtViewModel
   @State private var roundsViewModel: RoundsViewModel
@@ -18,11 +17,6 @@ struct AppRootView: View {
     _selection = State(initialValue: Self.initialTab())
     _settingsViewModel = State(
       initialValue: SettingsViewModel(repository: store.exerciseRepository, dataAdmin: store))
-    _dashboardViewModel = State(
-      initialValue: DashboardViewModel(
-        exerciseRepository: store.exerciseRepository,
-        workoutRepository: store.workoutRepository
-      ))
     _repLoggerViewModel = State(
       initialValue: RepLoggerViewModel(
         exerciseRepository: store.exerciseRepository,
@@ -52,28 +46,24 @@ struct AppRootView: View {
 
   var body: some View {
     TabView(selection: $selection) {
-      GameDashboardView(
-        vm: gameViewModel,
-        onGoToRounds: { selection = .rounds },
-        onGoToDebt: { selection = .debt }
-      )
-      .tabItem { Label("Game", systemImage: "gamecontroller.fill") }
-      .tag(Tab.dashboard)
+      GameDashboardView(vm: gameViewModel)
+        .tabItem { pixelTab("pixel_nav_dashboard", "Dashboard") }
+        .tag(Tab.dashboard)
 
       LogView(viewModel: repLoggerViewModel)
-        .tabItem { Label("Log", systemImage: "plus.circle.fill") }
+        .tabItem { pixelTab("pixel_nav_log", "Log") }
         .tag(Tab.log)
 
       RoundsView(viewModel: roundsViewModel)
-        .tabItem { Label("Rounds", systemImage: "circle.dotted") }
+        .tabItem { pixelTab("pixel_nav_rounds", "Rounds") }
         .tag(Tab.rounds)
 
       DebtView(viewModel: debtViewModel, onAddPayoff: addPayoffToRounds)
-        .tabItem { Label("Debt", systemImage: "arrow.triangle.2.circlepath") }
+        .tabItem { pixelTab("pixel_nav_debt", "Debt") }
         .tag(Tab.debt)
 
       SettingsView(viewModel: settingsViewModel)
-        .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+        .tabItem { pixelTab("pixel_nav_settings", "Settings") }
         .tag(Tab.settings)
     }
     .tint(GMColor.accent)
@@ -153,9 +143,14 @@ struct AppRootView: View {
     selection = .rounds
   }
 
-  private func openLog(on date: Date) {
-    repLoggerViewModel.load(today: date, preservingDrafts: false)
-    selection = .log
+  private func pixelTab(_ imageName: String, _ title: String) -> some View {
+    Label {
+      Text(title)
+    } icon: {
+      Image(imageName)
+        .renderingMode(.template)
+        .interpolation(.none)
+    }
   }
 }
 

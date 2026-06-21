@@ -1,34 +1,133 @@
 {
   "app": "getting-money",
-  "phase": "IMPLEMENTER",
-  "packet": 15,
-  "packet_name": "Rep Reconciliation (not yet planned)",
-  "packet_branch": "packet-15-rep-reconciliation",
-  "tests": { "status": "PENDING", "passed": null, "failed": null },
-  "code_review": { "status": "PENDING" },
-  "ui_review": { "status": "PENDING" },
-  "git": { "status": "PENDING", "commit": null },
+  "phase": "CODE_REVIEWER",
+  "packet": 19,
+  "packet_name": "PNG Asset Integration & Full Redesign",
+  "packet_branch": "packet-16-pixel-game-core",
+  "tests": {
+    "status": "PASS",
+    "passed": 98,
+    "failed": null
+  },
+  "code_review": {
+    "status": "PENDING"
+  },
+  "ui_review": {
+    "status": "PENDING"
+  },
+  "design_review": {
+    "status": "PENDING_APPROVAL",
+    "board": "design/pixel-redesign/pixel-redesign-board.png",
+    "plan": "design/pixel-redesign/pixel-redesign-plan.md",
+    "asset_kit": "design/pixel-redesign/generated-pixel-asset-kit.png",
+    "report": "reports/pixel-redesign-design-report.md"
+  },
+  "git": {
+    "status": "UNCOMMITTED",
+    "commit": null
+  },
   "blockers": [
-    "Packet 15 has no tasks/packet-15.md yet — RepReconciler.swift/ReconciliationTests.swift exist on this branch but the packet was started without going through PLANNER. Decide: write packet-15.md to retroactively define scope, or fold this work into the next planned packet, before TESTER/GIT can run.",
+    "Game HUD streak always reads 0 — GameSessionViewModel.refreshStats() never computes streakDays (packet-16 gap, surfaced during packet-17 testing). Out of packet-17 scope; needs a streak source (HistoryEngine) wired into the game VM.",
     "Carried over from packet 14: manual TestFlight provisioning required (App Group group.com.yassine.gettingmoney + widget App ID, then bump build number and archive with automatic signing — see reports/packet-14-report.md)"
   ],
   "handoff_needed": false,
   "packets": {
-    "01": { "status": "COMPLETE", "branch": "packet-01-02-foundation-persistence", "commit": "9b8d597" },
-    "02": { "status": "COMPLETE", "branch": "packet-01-02-foundation-persistence", "commit": "9b8d597" },
-    "03": { "status": "COMPLETE", "branch": "packet-03-targets-progression", "commit": "415ae17" },
-    "04": { "status": "COMPLETE", "branch": "packet-04-rep-logging", "commit": "f741440" },
-    "05": { "status": "COMPLETE", "branch": "packet-05-debt-engine", "commit": "03b4122" },
-    "06": { "status": "COMPLETE", "branch": "packet-06-rounds-planner", "commit": "6cc00bb" },
-    "07": { "status": "COMPLETE", "branch": "packet-07-payback-planner", "commit": "12a56f0" },
-    "08": { "status": "COMPLETE", "branch": "packet-08-history-polish", "commit": "e33a58f" },
-    "09": { "status": "COMPLETE", "branch": "packet-09-debt-day-close", "commit": "aa1d94d" },
-    "10": { "status": "COMPLETE", "branch": "packet-09-debt-day-close", "commit": "d06d732" },
-    "11": { "status": "COMPLETE", "branch": "packet-09-debt-day-close", "commit": "c6eec73" },
-    "12": { "status": "PUSHED", "branch": "packet-09-debt-day-close", "commit": "8bc2972" },
-    "13": { "status": "PUSHED", "branch": "packet-09-debt-day-close", "commit": "8bc2972" },
-    "14": { "status": "PUSHED", "branch": "packet-14-widget", "commit": "c4bd3e1" },
-    "15": { "status": "IN_PROGRESS", "branch": "packet-15-rep-reconciliation", "commit": null }
+    "01": {
+      "status": "COMPLETE",
+      "branch": "packet-01-02-foundation-persistence",
+      "commit": "9b8d597"
+    },
+    "02": {
+      "status": "COMPLETE",
+      "branch": "packet-01-02-foundation-persistence",
+      "commit": "9b8d597"
+    },
+    "03": {
+      "status": "COMPLETE",
+      "branch": "packet-03-targets-progression",
+      "commit": "415ae17"
+    },
+    "04": {
+      "status": "COMPLETE",
+      "branch": "packet-04-rep-logging",
+      "commit": "f741440"
+    },
+    "05": {
+      "status": "COMPLETE",
+      "branch": "packet-05-debt-engine",
+      "commit": "03b4122"
+    },
+    "06": {
+      "status": "COMPLETE",
+      "branch": "packet-06-rounds-planner",
+      "commit": "6cc00bb"
+    },
+    "07": {
+      "status": "COMPLETE",
+      "branch": "packet-07-payback-planner",
+      "commit": "12a56f0"
+    },
+    "08": {
+      "status": "COMPLETE",
+      "branch": "packet-08-history-polish",
+      "commit": "e33a58f"
+    },
+    "09": {
+      "status": "COMPLETE",
+      "branch": "packet-09-debt-day-close",
+      "commit": "aa1d94d"
+    },
+    "10": {
+      "status": "COMPLETE",
+      "branch": "packet-09-debt-day-close",
+      "commit": "d06d732"
+    },
+    "11": {
+      "status": "COMPLETE",
+      "branch": "packet-09-debt-day-close",
+      "commit": "c6eec73"
+    },
+    "12": {
+      "status": "PUSHED",
+      "branch": "packet-09-debt-day-close",
+      "commit": "8bc2972"
+    },
+    "13": {
+      "status": "PUSHED",
+      "branch": "packet-09-debt-day-close",
+      "commit": "8bc2972"
+    },
+    "14": {
+      "status": "PUSHED",
+      "branch": "packet-14-widget",
+      "commit": "c4bd3e1"
+    },
+    "15": {
+      "status": "MERGED_INTO_16",
+      "branch": "packet-16-pixel-game-core",
+      "commit": "a2ebe33"
+    },
+    "16": {
+      "status": "COMMITTED",
+      "branch": "packet-16-pixel-game-core",
+      "commit": "a2ebe33"
+    },
+    "17": {
+      "status": "COMMITTED",
+      "branch": "packet-16-pixel-game-core",
+      "commit": "a2ebe33"
+    },
+    "18": {
+      "status": "SUPERSEDED_BY_19",
+      "branch": "packet-16-pixel-game-core",
+      "commit": null,
+      "note": "Code-native pixel components replaced by actual PNG asset imports in packet 19"
+    },
+    "19": {
+      "status": "TESTED",
+      "branch": "packet-16-pixel-game-core",
+      "commit": null
+    }
   },
-  "notes": "Packets 12-13 were marked TESTED/Commit:— in packet-index.md but were already committed in 8bc2972 (reconciled here — packet-index.md should be updated to match). Working tree is on branch packet-15-rep-reconciliation with RepReconciler.swift/ReconciliationTests.swift added but no packet-15.md task file yet. packet_branch/tests/code_review/git reconciled to packet 15's actual PENDING state during the orchestration redesign (was stuck pointing at packet-14, which left the git-push gate and test-results hooks unable to find this packet's manifest entry)."
+  "notes": "Packet 19 imports the full provided PNG asset kit (86 imagesets: 44 char animation frames + 40 UI assets) and redesigns all 5 tabs to use actual pixel art PNGs. Replaces all code-native pixel drawing (GMPixelIcon, PixelNoise, PixelBankerNPC, GMPixelToggleButton, etc.) with imported sprites. New curly-black-hair character across all 4 animation states. Dynamic data verified in console. Advisor-identified blockers resolved: static badges replaced with dynamic metrics, debt panel active/paidoff PNGs removed from hero, exercise icons use no-label variants, debt header is now DEBT OFFICE. Build green, 98/98 tests pass. Screenshots: reports/artifacts/qa/p19-dashboard-v2.png (post-fix), plus prior p19-*.png set. Uncommitted."
 }
