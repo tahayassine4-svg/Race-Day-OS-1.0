@@ -1,6 +1,6 @@
 {
   "app": "getting-money",
-  "phase": "GIT",
+  "phase": "REPORTER",
   "packet": 21,
   "packet_name": "Main Menu Fix, Alive Animations, Splash, Reset",
   "packet_branch": "packet-21-menu-polish",
@@ -29,8 +29,10 @@
     ]
   },
   "git": {
-    "status": "COMMITTED",
-    "commit": null
+    "status": "PUSHED",
+    "commit": "c2a6fa8",
+    "branch": "packet-21-menu-polish",
+    "pr": "PENDING \u2014 gh unavailable; open manually from the pushed branch"
   },
   "blockers": [],
   "handoff_needed": false,

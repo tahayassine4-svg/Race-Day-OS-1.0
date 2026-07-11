@@ -1,10 +1,10 @@
-phase: GIT → REPORTER
+phase: REPORTER → GATE 3 (halted)
 app: getting-money
-packet: 21 — Main Menu Fix, Alive Animations, Splash, Reset — COMPLETE (commit pending push)
+packet: 21 — Main Menu Fix, Alive Animations, Splash, Reset — COMPLETE — pushed as c2a6fa8
 status: BUILD GREEN · 114 tests (112 pass, 2 PRE-EXISTING ReconciliationTests failures, baseline-identical) · code review PASS after 2-blocker remediation · screenshots match approved mockups.
 last_action: Implemented packet 21 on branch packet-21-menu-polish: dashboard ghosting fix (greeting out of ScrollView + collapse-gated backdrop), TimelineView sheen/coins, staggered entrance, tab cross-fades, SplashView+SplashPolicy, Targets Danger Zone reset with honest failure alert.
 branch: packet-21-menu-polish
-commit: (this packet's commit)
+commit: c2a6fa8
 next_step: REPORTER done → Gate 3. Recommended next: Packet 22 (dynamic rounds + guided sessions; designs already approved).
 timestamp: 2026-07-11T18:35:00Z
 notes: |
