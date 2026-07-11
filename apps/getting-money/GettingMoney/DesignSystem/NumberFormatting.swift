@@ -13,6 +13,10 @@ extension Int {
   /// The app's currency metaphor is the pixel coin, never a dollar sign.
   var gmCoins: String { gmGrouped }
 
+  /// Money with the Training Bank "$" prefix, e.g. 4870 -> "$4,870".
+  /// Negative values format as "-$120".
+  var gmDollars: String { self < 0 ? "-$\(abs(self).gmGrouped)" : "$\(gmGrouped)" }
+
   private static let grouping: NumberFormatter = {
     let f = NumberFormatter()
     f.numberStyle = .decimal

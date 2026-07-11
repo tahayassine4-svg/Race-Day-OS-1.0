@@ -11,14 +11,17 @@ enum GMSpacing {
   static let xxxl: CGFloat = 32
 
   /// Standard screen horizontal padding.
-  static let screen: CGFloat = 20
+  static let screen: CGFloat = 22
 }
 
-/// Corner-radius scale — pixel-game sharp: controls 3 · rows 3 · modules 4.
-/// Kept as named roles so every surface stays consistent; the small values
-/// read as crisp pixel corners against the monospaced type and segmented bars.
+/// Corner-radius scale — Training Bank soft spec: pills fully rounded, controls
+/// 12–14, cards 18–28. Named roles keep every surface consistent.
 enum GMRadius {
-  static let control: CGFloat = 3
-  static let row: CGFloat = 3
-  static let module: CGFloat = 4
+  static let control: CGFloat = 13  // chips / small buttons
+  static let button: CGFloat = 18  // primary CTA
+  static let row: CGFloat = 18  // list rows / small panels
+  static let module: CGFloat = 22  // panels / charts
+  static let card: CGFloat = 24  // wallet + hero cards
+  static let cardLarge: CGFloat = 28  // exercise goal cards
+  static let pill: CGFloat = 99  // status pills / progress tracks
 }

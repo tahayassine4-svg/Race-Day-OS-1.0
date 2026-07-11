@@ -1,89 +1,99 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct GettingMoneyApp: App {
-    let store: LocalStore
+  let store: LocalStore
 
-    init() {
-        do {
-            store = try LocalStore()
-        } catch {
-            fatalError("Failed to create SwiftData container: \(error)")
-        }
-        // Close out any completed days into rep-debt before the first screen loads.
-        let dayClose = DayCloseService(
-            exerciseRepository: store.exerciseRepository,
-            workoutRepository: store.workoutRepository
-        )
-        // One-time heal: earlier builds could double-count a workout logged via both
-        // the Log and Rounds, so debt may have been settled against inflated totals.
-        // Recompute debt once from the reconciled history (derived data only; reps
-        // are never touched). Thereafter, the normal day-close runs.
-        let healKey = "gm.didReconcileDebtV2"
-        if UserDefaults.standard.bool(forKey: healKey) {
-            try? dayClose.run()
+  init() {
+    GMFontRegistration.registerIfNeeded()
+    do {
+      store = try LocalStore()
+    } catch {
+      fatalError("Failed to create SwiftData container: \(error)")
+    }
+    #if DEBUG
+      // Screenshot helper: jump straight past onboarding into the app.
+      if ProcessInfo.processInfo.arguments.contains("-GMSkipOnboarding") {
+        UserDefaults.standard.set(true, forKey: "gm.onboardingComplete")
+      }
+      if ProcessInfo.processInfo.arguments.contains("-GMResetOnboarding") {
+        UserDefaults.standard.set(false, forKey: "gm.onboardingComplete")
+      }
+    #endif
+    // Close out any completed days into rep-debt before the first screen loads.
+    let dayClose = DayCloseService(
+      exerciseRepository: store.exerciseRepository,
+      workoutRepository: store.workoutRepository
+    )
+    // One-time heal: earlier builds could double-count a workout logged via both
+    // the Log and Rounds, so debt may have been settled against inflated totals.
+    // Recompute debt once from the reconciled history (derived data only; reps
+    // are never touched). Thereafter, the normal day-close runs.
+    let healKey = "gm.didReconcileDebtV2"
+    if UserDefaults.standard.bool(forKey: healKey) {
+      try? dayClose.run()
+    } else {
+      try? dayClose.resettle()
+      UserDefaults.standard.set(true, forKey: healKey)
+    }
+  }
+
+  var body: some Scene {
+    WindowGroup {
+      #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-GMWidgetPreview") {
+          WidgetPreviewHarness(store: store)
+            .preferredColorScheme(.dark)
         } else {
-            try? dayClose.resettle()
-            UserDefaults.standard.set(true, forKey: healKey)
+          AppRootView(store: store)
+            .preferredColorScheme(.dark)
         }
+      #else
+        AppRootView(store: store)
+          // v1 is dark-first per docs/ui-system.md. Light mirror is deferred to a polish packet.
+          .preferredColorScheme(.dark)
+      #endif
     }
-
-    var body: some Scene {
-        WindowGroup {
-#if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-GMWidgetPreview") {
-                WidgetPreviewHarness(store: store)
-                    .preferredColorScheme(.dark)
-            } else {
-                AppRootView(store: store)
-                    .preferredColorScheme(.dark)
-            }
-#else
-            AppRootView(store: store)
-                // v1 is dark-first per docs/ui-system.md. Light mirror is deferred to a polish packet.
-                .preferredColorScheme(.dark)
-#endif
-        }
-        .modelContainer(store.container)
-    }
+    .modelContainer(store.container)
+  }
 }
 
 #if DEBUG
-/// Renders the widget's content view at system medium/large sizes so the widget
-/// UI can be screenshot-verified inside the app (WidgetKit timelines can't be
-/// captured with `simctl`). Reachable only via `-GMWidgetPreview`.
-private struct WidgetPreviewHarness: View {
+  /// Renders the widget's content view at system medium/large sizes so the widget
+  /// UI can be screenshot-verified inside the app (WidgetKit timelines can't be
+  /// captured with `simctl`). Reachable only via `-GMWidgetPreview`.
+  private struct WidgetPreviewHarness: View {
     let store: LocalStore
 
     private var snapshot: WidgetSnapshot {
-        (try? WidgetSnapshotPublisher.buildSnapshot(
-            exerciseRepository: store.exerciseRepository,
-            workoutRepository: store.workoutRepository
-        )) ?? .placeholder
+      (try? WidgetSnapshotPublisher.buildSnapshot(
+        exerciseRepository: store.exerciseRepository,
+        workoutRepository: store.workoutRepository
+      )) ?? .placeholder
     }
 
     var body: some View {
-        ZStack {
-            GMWidgetColor.background.ignoresSafeArea()
-            VStack(spacing: 24) {
-                Text("Widget preview").font(.caption).foregroundStyle(GMWidgetColor.muted)
-                widgetCard(width: 360, height: 170)   // systemMedium-ish
-                widgetCard(width: 360, height: 360)   // systemLarge-ish
-            }
-            .padding()
+      ZStack {
+        GMWidgetColor.background.ignoresSafeArea()
+        VStack(spacing: 24) {
+          Text("Widget preview").font(.caption).foregroundStyle(GMWidgetColor.muted)
+          widgetCard(width: 360, height: 170)  // systemMedium-ish
+          widgetCard(width: 360, height: 360)  // systemLarge-ish
         }
+        .padding()
+      }
     }
 
     private func widgetCard(width: CGFloat, height: CGFloat) -> some View {
-        DailyTargetsContent(snapshot: snapshot)
-            .frame(width: width, height: height)
-            .background(GMWidgetColor.background)
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(GMWidgetColor.track, lineWidth: 1)
-            )
+      DailyTargetsContent(snapshot: snapshot)
+        .frame(width: width, height: height)
+        .background(GMWidgetColor.background)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+          RoundedRectangle(cornerRadius: 22, style: .continuous)
+            .stroke(GMWidgetColor.track, lineWidth: 1)
+        )
     }
-}
+  }
 #endif

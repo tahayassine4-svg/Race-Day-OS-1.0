@@ -1,15 +1,17 @@
 import SwiftUI
 
-/// Type roles — pixel-game register. Headlines, labels and numbers all use the
-/// monospaced system face (SF Mono) for the blocky, arcade-HUD feel; body and
-/// meta stay proportional for readability.
+/// Type roles — Space Grotesk for display + numbers, Manrope for body/meta
+/// (Training Bank spec). The `gm*` names are kept stable across the redesign so
+/// existing call sites keep working; the faces underneath are now the bundled
+/// brand fonts.
 extension Font {
-  static let gmHero = Font.system(size: 44, weight: .heavy, design: .monospaced)  // balance / debt hero
-  static let gmTitle = Font.system(size: 25, weight: .heavy, design: .monospaced)  // screen title
-  static let gmSection = Font.system(size: 12, weight: .heavy, design: .monospaced)  // section label
-  static let gmBody = Font.system(size: 16, weight: .regular)
-  static let gmValue = Font.system(size: 16, weight: .heavy, design: .monospaced)  // inline numbers
-  static let gmMeta = Font.system(size: 12, weight: .medium, design: .monospaced)
+  static let gmHero = GMFont.display(44, .bold)  // balance / debt hero
+  static let gmTitle = GMFont.display(24, .bold)  // screen title
+  static let gmSection = GMFont.display(18, .bold)  // section label
+  static let gmEyebrow = GMFont.body(13, .semibold)  // small caps-ish label
+  static let gmBody = GMFont.body(16, .regular)
+  static let gmValue = GMFont.display(16, .semibold)  // inline numbers
+  static let gmMeta = GMFont.body(13, .medium)
 }
 
 extension View {

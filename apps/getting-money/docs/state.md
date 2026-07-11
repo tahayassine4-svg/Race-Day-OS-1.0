@@ -1,29 +1,27 @@
-phase: CODE_REVIEWER
+phase: TESTER → GIT
 app: getting-money
-packet: 19 — PNG Asset Integration & Full Redesign
-status: TESTER_PASS — All PNG assets imported, full redesign live, advisor blockers resolved, 98/98 tests pass. UNCOMMITTED.
-last_action: Resolved advisor blockers: (1) daily console badges replaced with dynamic consoleMetric() calls, (2) debt panel active/paidoff PNGs removed from debtHero to eliminate static "510" number, (3) exercise icon imagesets replaced with no-label PNG variants, (4) debt header changed to "DEBT OFFICE". Build green, 98/98 tests pass.
-branch: packet-16-pixel-game-core
-commit: — (packet 19 work uncommitted)
-next_step: CODE_REVIEWER → GIT (commit packet 19) → REPORTER.
-timestamp: 2026-06-21T01:00:00Z
+packet: 20 — Training Bank redesign (from Claude Design file)
+status: BUILD GREEN · all 6 screens screenshot-verified vs design · 108 tests (104 pass, 2 PRE-EXISTING failures unrelated to this packet). COMMITTED on branch.
+last_action: Full presentation redesign to the "Training Bank" Claude Design file. Reused the entire data/service/ViewModel layer (no engine/model changes); rewrote tokens + all screens + shell.
+branch: packet-20-training-bank-redesign
+commit: (this packet's commit)
+next_step: Release .xcarchive → REPORTER. Awaiting Yassine on gate items below.
+timestamp: 2026-07-11T15:12:00Z
 notes: |
-  Packet 19 implementation summary:
-  - 86 imagesets created/updated in Assets.xcassets (char animations + 40 new pixel asset imagesets)
-  - New character: curly black hair, 4 animation sets (idle 9f, pushup 9f, squat 9f, pullup 17f)
-  - New shared DesignSystem/PixelImage.swift: Image.pixelArt() + PixelToggle + PixelStepButton
-  - AppRootView: PNG tab icons via Label+Image renderingMode(.template).interpolation(.none)
-  - GameDashboardView: pixel HUD icons, pixel_level_badge arena overlay, dynamic console metrics
-  - LogView + LogExerciseCard: clipboard header icon, pixel exercise icons (no-label), PixelStepButton
-  - RoundsView: pixel swords icon header, PixelStepButton round stepper
-  - DebtView: banker_front + banker_lamp NPC sprites, pixel_debt_coin hero, "DEBT OFFICE" header
-  - SettingsView + TargetSettingsList + ProgressionSettingsCard: pixel exercise icons (no-label), PixelToggle, PixelStepButton
-  - All pixel images use .interpolation(.none).antialiased(false) via .pixelArt() modifier
-  - Advisor blockers fixed: static badges → dynamic text; debt panel removed from hero; exercise icons label-free
+  WHAT CHANGED (Packet 20):
+  - New brand fonts bundled + runtime-registered: Space Grotesk (display/numbers), Manrope (body). OFL, from google/fonts.
+  - Design tokens rewritten (GMTheme/GMTypography/GMSpacing): lime #C6F833 accent, coral #FF5B5B debt, dark radial backdrop. Legacy pixel tokens retained temporarily so the outgoing views still compile.
+  - New component kit (DesignSystem/Bank/): AmbientBackground, WalletCard (scroll-collapse), StatusPill, ExerciseGoalCard, CoinFlipView, GMToast/ToastCenter, FloatingTabBar, ScrollOffset.
+  - Screens rewritten/new: DashboardScreen, RoundsScreen, BankScreen (NET-NEW), DebtScreen, TargetsScreen, OnboardingView (NET-NEW, @AppStorage gated).
+  - New shell AppRootView: custom floating tab bar (Dashboard/Rounds/Bank/Debt) + gear→Targets + toast host + onboarding gate. Same scenePhase day-close + widget publish preserved.
+  - New VMs/logic: BankViewModel; DashboardViewModel.logReps (toast breakdown); RoundsViewModel.exercises/debtByKey/logExtra; DebtViewModel finance options 1..7. Engines untouched.
+  - Tests added: TrainingBankRedesignTests (4, all green) covering logReps breakdown + Bank economy.
 
-  Screenshots: reports/artifacts/qa/p19-dashboard-v2.png (primary, post-advisor-fixes)
-  Prior screenshots: p19-dashboard.png, p19-log-v2.png, p19-rounds.png, p19-debt-v2.png, p19-settings.png
+  SCREENSHOTS: scratchpad/shots/p20-{dashboard,onboarding,rounds,bank,debt-clean,targets-clean}.png — all match the design file.
 
-  KNOWN GAPS (carried from prior packets):
-  - Game HUD streak shows session timer not streak days — GameSessionViewModel.streakDays gap
-  - TestFlight provisioning (App Group + widget App ID) — see packet-14-report.md
+  ⚠️ GATE ITEMS FOR YASSINE (see report):
+  1. Two tests RED (ReconciliationTests: day-close debt == 40). PROVEN pre-existing on baseline 43d7d5a — NOT a regression of this packet. In the economic core; worth a dedicated fix packet.
+  2. The approved nav change dropped the old Settings tab, which also hosted the BETA data export/reset + progression amount/interval tuning. New Targets screen exposes only the auto-progression toggle. Those utilities are currently unreachable — decide if they need a home.
+  3. Dead pixel views + legacy tokens remain in-tree (harmless, compiling). Cleanup deferred.
+
+  KNOWN COSMETIC (follow-ups): dashboard/targets "100" left-glyph tightness; Bank "Missed reps +$0" sign.
