@@ -9,38 +9,51 @@ struct DashboardScreen: View {
   let onOpenRounds: () -> Void
   let onOpenTargets: () -> Void
 
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @State private var collapse: CGFloat = 0
+  @State private var entered = false
   private let space = "dash"
 
   var body: some View {
-    ScrollView(showsIndicators: false) {
-      ScrollOffsetReader(space: space)
-      LazyVStack(alignment: .leading, spacing: 18, pinnedViews: [.sectionHeaders]) {
-        greeting
-          .padding(.top, 4)
+    // The greeting lives OUTSIDE the scroll view: it can never be overpainted
+    // by the pinned wallet header's backdrop (the "ghosted bank name" bug).
+    VStack(spacing: 0) {
+      greeting
+        .padding(.horizontal, GMSpacing.screen)
+        .padding(.top, 4)
+        .padding(.bottom, 6)
 
-        Section {
-          statusPill
-            .padding(.top, 14)
-          goalsHeader
-          cardsScroller
-          openRoundsButton
-        } header: {
-          WalletCard(
-            bankName: bankName, balance: vm.bankBalance,
-            earned: earnedTotal, debt: vm.totalDebt, collapse: collapse
-          )
-          .padding(.vertical, 8)
-          .background(pinnedBackdrop)
+      ScrollView(showsIndicators: false) {
+        ScrollOffsetReader(space: space)
+        LazyVStack(alignment: .leading, spacing: 18, pinnedViews: [.sectionHeaders]) {
+          Section {
+            statusPill
+              .padding(.top, 14)
+              .entrance(entered, delay: 0.06, reduceMotion: reduceMotion)
+            goalsHeader
+              .entrance(entered, delay: 0.12, reduceMotion: reduceMotion)
+            cardsScroller
+              .entrance(entered, delay: 0.16, reduceMotion: reduceMotion)
+            openRoundsButton
+              .entrance(entered, delay: 0.22, reduceMotion: reduceMotion)
+          } header: {
+            WalletCard(
+              bankName: bankName, balance: vm.bankBalance,
+              earned: earnedTotal, debt: vm.totalDebt, collapse: collapse
+            )
+            .padding(.vertical, 8)
+            .background(pinnedBackdrop)
+          }
         }
+        .padding(.horizontal, GMSpacing.screen)
+        .padding(.bottom, 130)
       }
-      .padding(.horizontal, GMSpacing.screen)
-      .padding(.bottom, 130)
+      .coordinateSpace(name: space)
+      .onPreferenceChange(ScrollOffsetKey.self) { value in
+        collapse = min(1, max(0, value / 150))
+      }
     }
-    .coordinateSpace(name: space)
-    .onPreferenceChange(ScrollOffsetKey.self) { value in
-      collapse = min(1, max(0, value / 150))
-    }
+    .onAppear { entered = true }
   }
 
   // MARK: greeting
@@ -122,7 +135,7 @@ struct DashboardScreen: View {
 
   private var openRoundsButton: some View {
     Button(action: onOpenRounds) {
-      Text("Open rounds for full sets →")
+      Text("Start a session →")
         .font(GMFont.display(15, .semibold))
         .foregroundStyle(GMColor.ink)
         .frame(maxWidth: .infinity)
@@ -136,6 +149,8 @@ struct DashboardScreen: View {
     .padding(.top, 8)
   }
 
+  /// Masks content scrolling under the sticky wallet card. Invisible at rest
+  /// (opacity follows the collapse progress) so it never dims the layout above.
   private var pinnedBackdrop: some View {
     Rectangle().fill(.clear)
       .background(
@@ -145,6 +160,7 @@ struct DashboardScreen: View {
       )
       .padding(.horizontal, -GMSpacing.screen)
       .padding(.top, -60)
+      .opacity(min(1, collapse * 2.5))
   }
 
   // MARK: logging

@@ -12,6 +12,9 @@ struct AppRootView: View {
 
   @State private var selection: AppTab = .dashboard
   @State private var toast = ToastCenter()
+  @State private var showSplash = SplashPolicy.shouldShow(
+    arguments: ProcessInfo.processInfo.arguments)
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @State private var dashboardVM: DashboardViewModel
   @State private var roundsVM: RoundsViewModel
   @State private var debtVM: DebtViewModel
@@ -66,11 +69,15 @@ struct AppRootView: View {
         .transition(.opacity)
       } else {
         content
+          .id(selection)
+          .transition(
+            reduceMotion ? .opacity : .opacity.combined(with: .offset(y: 8))
+          )
           .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 0) }
 
         VStack {
           Spacer()
-          FloatingTabBar(items: tabItems, selection: $selection)
+          FloatingTabBar(items: tabItems, selection: animatedSelection)
         }
         .ignoresSafeArea(.keyboard)
 
@@ -82,6 +89,14 @@ struct AppRootView: View {
           }
           .allowsHitTesting(false)
         }
+      }
+
+      if showSplash {
+        SplashView {
+          withAnimation(.easeOut(duration: 0.4)) { showSplash = false }
+        }
+        .transition(.opacity)
+        .zIndex(10)
       }
     }
     .preferredColorScheme(.dark)
@@ -106,13 +121,25 @@ struct AppRootView: View {
     }
   }
 
+  /// Tab switches route through here so the content cross-fade always runs.
+  private var animatedSelection: Binding<AppTab> {
+    Binding(
+      get: { selection },
+      set: { tab in select(tab) }
+    )
+  }
+
+  private func select(_ tab: AppTab) {
+    withAnimation(reduceMotion ? nil : .easeOut(duration: 0.22)) { selection = tab }
+  }
+
   @ViewBuilder private var content: some View {
     switch selection {
     case .dashboard:
       DashboardScreen(
         vm: dashboardVM, bankName: bankName, toast: toast,
-        onOpenRounds: { selection = .rounds },
-        onOpenTargets: { selection = .targets })
+        onOpenRounds: { select(.rounds) },
+        onOpenTargets: { select(.targets) })
     case .rounds:
       RoundsScreen(vm: roundsVM, toast: toast)
     case .bank:
@@ -120,7 +147,14 @@ struct AppRootView: View {
     case .debt:
       DebtScreen(vm: debtVM, onPayAll: payAllDebt)
     case .targets:
-      TargetsScreen(vm: settingsVM, onClose: { selection = .dashboard })
+      TargetsScreen(
+        vm: settingsVM,
+        onClose: { select(.dashboard) },
+        onReset: {
+          reloadAll()
+          publishWidget()
+          toast.show("Bank reset", "clean slate — go get it")
+        })
     }
   }
 
@@ -157,7 +191,7 @@ struct AppRootView: View {
   /// into today's rounds (reuses the proven payoff pathway).
   private func payAllDebt() {
     roundsVM.requestPayoff(.full)
-    selection = .rounds
+    select(.rounds)
   }
 
   private func publishWidget() {

@@ -12,7 +12,6 @@ struct WalletCard: View {
   var collapse: CGFloat = 0
 
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
-  @State private var sheen = false
 
   private var p: CGFloat { min(1, max(0, collapse)) }
 
@@ -52,6 +51,7 @@ struct WalletCard: View {
           .foregroundStyle(GMColor.ink)
           .monospacedDigit()
           .contentTransition(.numericText())
+          .animation(reduceMotion ? nil : .snappy(duration: 0.45), value: balance)
         Spacer()
         coins
       }
@@ -83,15 +83,24 @@ struct WalletCard: View {
     .overlay(sheenOverlay)
     .clipShape(RoundedRectangle(cornerRadius: GMRadius.card, style: .continuous))
     .shadow(color: .black.opacity(0.4 + 0.2 * p), radius: 28 + 18 * p, x: 0, y: 12 + 14 * p)
-    .onAppear {
-      guard !reduceMotion else { return }
-      withAnimation(.easeInOut(duration: 5).repeatForever(autoreverses: false)) {
-        sheen = true
+  }
+
+  /// The two overlapping coins breathe on a slow cycle. Time-driven (not
+  /// state-driven) so scrolling/collapse re-renders can't kill the motion.
+  private var coins: some View {
+    Group {
+      if reduceMotion {
+        coinPair(scale: 1)
+      } else {
+        TimelineView(.animation(minimumInterval: 1.0 / 30)) { context in
+          let t = context.date.timeIntervalSinceReferenceDate
+          coinPair(scale: 1 + 0.05 * sin(t * .pi * 2 / 2.8))
+        }
       }
     }
   }
 
-  private var coins: some View {
+  private func coinPair(scale: CGFloat) -> some View {
     ZStack {
       Circle().fill(GMColor.accent).frame(width: 24, height: 24)
         .offset(x: -7)
@@ -100,19 +109,32 @@ struct WalletCard: View {
         .offset(x: 7)
     }
     .frame(width: 38)
+    .scaleEffect(scale)
   }
 
-  private var sheenOverlay: some View {
-    GeometryReader { geo in
-      let w = geo.size.width
-      LinearGradient(
-        colors: [.clear, Color.white.opacity(0.07), .clear],
-        startPoint: .leading, endPoint: .trailing
-      )
-      .frame(width: 70)
-      .rotationEffect(.degrees(18))
-      .offset(x: sheen ? w + 80 : -120)
+  /// Diagonal sheen: sweeps for ~1.7s, rests, repeats. Driven by wall-clock
+  /// time via TimelineView so it survives any re-render (the old
+  /// onAppear+repeatForever version died as soon as scroll collapsed the card,
+  /// and snapped back instead of sweeping).
+  @ViewBuilder private var sheenOverlay: some View {
+    if reduceMotion {
+      Color.clear.allowsHitTesting(false)
+    } else {
+      GeometryReader { geo in
+        let w = geo.size.width
+        TimelineView(.animation(minimumInterval: 1.0 / 60)) { context in
+          let t = context.date.timeIntervalSinceReferenceDate
+          let phase = CGFloat(min(1, t.truncatingRemainder(dividingBy: 4.6) / 1.7))
+          LinearGradient(
+            colors: [.clear, Color.white.opacity(0.07), .clear],
+            startPoint: .leading, endPoint: .trailing
+          )
+          .frame(width: 70)
+          .rotationEffect(.degrees(18))
+          .offset(x: -120 + phase * (w + 220))
+        }
+      }
+      .allowsHitTesting(false)
     }
-    .allowsHitTesting(false)
   }
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Space Grotesk';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/SpaceGrotesk-VF.ttf');font-weight:300 700}
+@font-face{font-family:'Manrope';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/Manrope-VF.ttf');font-weight:200 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:393px;height:852px;overflow:hidden}
+body{font-family:'Manrope',sans-serif;color:#F2F5F0;position:relative;
+  background:radial-gradient(620px 620px at 50% -5%, #141B22 0%, #080B0F 55%, #05080B 100%)}
+.screen{padding:64px 20px 0}
+.hdr .sub{font-size:14px;font-weight:600;color:rgba(242,245,240,.5)}
+.hdr .t{font-family:'Space Grotesk';font-size:24px;font-weight:700}
+.lbl{margin-top:22px;font-family:'Space Grotesk';font-size:14px;font-weight:700}
+/* exercise chips */
+.chips{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.05);font-weight:700;font-size:14px;color:rgba(242,245,240,.6);display:flex;gap:8px;align-items:center}
+.chip.on{background:#C6F833;color:#0A0D11;box-shadow:0 4px 18px rgba(198,248,51,.3)}
+.chip .d{font-size:11px;font-weight:800;color:#FF5B5B;background:rgba(255,91,91,.12);padding:2px 7px;border-radius:8px}
+.chip.on .d{color:#7A1F1F;background:rgba(10,13,17,.15)}
+/* depth */
+.depths{margin-top:10px;display:flex;gap:8px}
+.depth{flex:1;height:46px;border-radius:13px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:15px;color:rgba(242,245,240,.6)}
+.depth.on{background:#C6F833;color:#0A0D11}
+.depth-cap{margin-top:8px;font-size:12px;font-weight:600;color:rgba(242,245,240,.4)}
+/* live summary */
+.summary{margin-top:20px;border-radius:22px;padding:20px;background:linear-gradient(160deg,#2B3138 0%,#181C22 55%,#12151A 100%);border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 28px rgba(0,0,0,.4)}
+.summary .big{font-family:'Space Grotesk';font-size:38px;font-weight:700;font-variant-numeric:tabular-nums}
+.summary .big span{color:#C6F833}
+.summary .sub{margin-top:4px;font-size:13.5px;font-weight:600;color:rgba(242,245,240,.55)}
+.summary .done{margin-top:12px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#C6F833}
+.summary .done i{width:8px;height:8px;border-radius:50%;background:#C6F833;box-shadow:0 0 8px rgba(198,248,51,.8)}
+/* round preview */
+.rounds{margin-top:16px;display:flex;gap:8px}
+.r{flex:1;border-radius:14px;padding:12px 0;text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.r .n{font-size:10px;font-weight:800;letter-spacing:.1em;color:rgba(242,245,240,.4)}
+.r .v{margin-top:4px;font-family:'Space Grotesk';font-size:22px;font-weight:700}
+.r.last .v{color:rgba(242,245,240,.6)}
+.r.last .tag{font-size:9.5px;font-weight:700;color:rgba(242,245,240,.4)}
+/* CTA */
+.cta{position:absolute;left:20px;right:20px;bottom:36px;height:60px;border-radius:20px;background:#C6F833;color:#0A0D11;
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:18px;
+  box-shadow:0 10px 32px rgba(198,248,51,.35)}
+.anno{position:absolute;top:20px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.14em;color:rgba(242,245,240,.35);font-weight:700}
+.anno2{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:9.5px;color:rgba(242,245,240,.28);font-weight:600}
+</style></head><body>
+<div class="anno">PACKET 22 · SESSION SETUP — ROUNDS COUNT THEMSELVES</div>
+<div class="screen">
+  <div class="hdr"><div class="sub">Pick what you're training</div><div class="t">Today's Session</div></div>
+  <div class="lbl">Exercise</div>
+  <div class="chips">
+    <div class="chip on">💪 Push-ups <span class="d">$120 owed</span></div>
+    <div class="chip">🤸 Pull-ups</div>
+    <div class="chip">🦵 Squats</div>
+    <div class="chip">⚡ Full circuit</div>
+  </div>
+  <div class="lbl">Depth · reps per round</div>
+  <div class="depths"><div class="depth">10</div><div class="depth">15</div><div class="depth on">20</div><div class="depth">25</div></div>
+  <div class="depth-cap">Deeper rounds = fewer rounds. The count updates live.</div>
+  <div class="summary">
+    <div class="big">4 rounds <span>· 72 reps to go</span></div>
+    <div class="sub">Daily target 100 · you already did 28 today</div>
+    <div class="done"><i></i>28 solo reps counted in — session shrank from 5 rounds to 4</div>
+  </div>
+  <div class="rounds">
+    <div class="r"><div class="n">RD 1</div><div class="v">20</div></div>
+    <div class="r"><div class="n">RD 2</div><div class="v">20</div></div>
+    <div class="r"><div class="n">RD 3</div><div class="v">20</div></div>
+    <div class="r last"><div class="n">RD 4</div><div class="v">12</div><div class="tag">short</div></div>
+  </div>
+</div>
+<div class="cta">Start session →</div>
+<div class="anno2">Log reps anywhere (dashboard +10, quick add) → “4 rounds · 72 reps” re-counts automatically. Changing target or depth re-counts too. ceil(remaining ÷ depth), last round short.</div>
+</body></html>

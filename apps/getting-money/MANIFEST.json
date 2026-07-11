@@ -1,35 +1,38 @@
 {
   "app": "getting-money",
-  "phase": "CODE_REVIEWER",
-  "packet": 19,
-  "packet_name": "PNG Asset Integration & Full Redesign",
-  "packet_branch": "packet-16-pixel-game-core",
+  "phase": "GIT",
+  "packet": 21,
+  "packet_name": "Main Menu Fix, Alive Animations, Splash, Reset",
+  "packet_branch": "packet-21-menu-polish",
   "tests": {
     "status": "PASS",
-    "passed": 98,
-    "failed": null
+    "passed": 112,
+    "failed": 2,
+    "note": "2 failures are PRE-EXISTING ReconciliationTests, proven on baseline c75ce27"
   },
   "code_review": {
-    "status": "PENDING"
+    "status": "PASS"
   },
   "ui_review": {
-    "status": "PENDING"
+    "status": "PASS",
+    "note": "Simulator screenshots vs approved packet-21 mockups"
   },
   "design_review": {
-    "status": "PENDING_APPROVAL",
-    "board": "design/pixel-redesign/pixel-redesign-board.png",
-    "plan": "design/pixel-redesign/pixel-redesign-plan.md",
-    "asset_kit": "design/pixel-redesign/generated-pixel-asset-kit.png",
-    "report": "reports/pixel-redesign-design-report.md"
+    "status": "APPROVED",
+    "mockups": [
+      "design/packet-21-dashboard.png",
+      "design/packet-21-splash.png",
+      "design/packet-21-reset.png",
+      "design/packet-22-session-setup.png",
+      "design/packet-22-session-active.png",
+      "design/packet-22-session-done.png"
+    ]
   },
   "git": {
-    "status": "UNCOMMITTED",
+    "status": "COMMITTED",
     "commit": null
   },
-  "blockers": [
-    "Game HUD streak always reads 0 — GameSessionViewModel.refreshStats() never computes streakDays (packet-16 gap, surfaced during packet-17 testing). Out of packet-17 scope; needs a streak source (HistoryEngine) wired into the game VM.",
-    "Carried over from packet 14: manual TestFlight provisioning required (App Group group.com.yassine.gettingmoney + widget App ID, then bump build number and archive with automatic signing — see reports/packet-14-report.md)"
-  ],
+  "blockers": [],
   "handoff_needed": false,
   "packets": {
     "01": {

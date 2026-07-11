@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Space Grotesk';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/SpaceGrotesk-VF.ttf');font-weight:300 700}
+@font-face{font-family:'Manrope';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/Manrope-VF.ttf');font-weight:200 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:393px;height:852px;overflow:hidden}
+body{font-family:'Manrope',sans-serif;color:#F2F5F0;position:relative;
+  background:radial-gradient(620px 620px at 50% -5%, #141B22 0%, #080B0F 55%, #05080B 100%)}
+.center{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+/* pulse rings */
+.rings{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(198,248,51,.22)}
+.r1{width:170px;height:170px}
+.r2{width:225px;height:225px;border-color:rgba(198,248,51,.12)}
+.r3{width:280px;height:280px;border-color:rgba(198,248,51,.06)}
+/* the coin */
+.coin{width:120px;height:120px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 38% 30%, #20272E 4px, #0C0F13 170px);
+  border:2px solid rgba(198,248,51,.45);
+  box-shadow:0 24px 50px rgba(0,0,0,.6), 0 0 44px rgba(198,248,51,.14)}
+.coin .inner{position:absolute;inset:7px;border-radius:50%;border:6px solid rgba(255,255,255,.05);filter:blur(2px)}
+.coin .glyph{font-family:'Space Grotesk';font-size:52px;font-weight:700;color:#C6F833}
+.word{margin-top:34px;text-align:center}
+.word .t{font-family:'Space Grotesk';font-size:26px;font-weight:700;letter-spacing:.01em}
+.word .s{margin-top:6px;font-size:13px;font-weight:600;color:rgba(242,245,240,.45)}
+.foot{position:absolute;bottom:56px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;letter-spacing:.18em;color:rgba(242,245,240,.3)}
+.anno{position:absolute;top:20px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.14em;color:rgba(242,245,240,.35);font-weight:700}
+.anno2{position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:10px;color:rgba(242,245,240,.28);font-weight:600}
+</style></head><body>
+<div class="anno">PACKET 21 · SPLASH (≈1.1s ON COLD LAUNCH)</div>
+<div class="center">
+  <div class="rings">
+    <div class="ring r3"></div><div class="ring r2"></div><div class="ring r1"></div>
+    <div class="coin"><div class="inner"></div><div class="glyph">$</div></div>
+  </div>
+  <div class="word">
+    <div class="t">Training Bank</div>
+    <div class="s">Reps in. Money up.</div>
+  </div>
+</div>
+<div class="foot">GETTING MONEY</div>
+<div class="anno2">Motion: coin drops in with a spring bounce → lime rings pulse outward once → wordmark fades up → whole splash cross-fades into the dashboard. Reduce Motion: plain fade.</div>
+</body></html>

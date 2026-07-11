@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Space Grotesk';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/SpaceGrotesk-VF.ttf');font-weight:300 700}
+@font-face{font-family:'Manrope';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/Manrope-VF.ttf');font-weight:200 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:393px;height:852px;overflow:hidden}
+body{font-family:'Manrope',sans-serif;color:#F2F5F0;
+  background:radial-gradient(620px 620px at 50% -5%, #141B22 0%, #080B0F 55%, #05080B 100%);position:relative}
+.d{font-family:'Space Grotesk',sans-serif}
+.screen{padding:64px 20px 0}
+/* greeting — crisp, above everything, never overlapped */
+.greet{display:flex;align-items:center;gap:12px}
+.avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#2B3138,#12151A);border:2px solid rgba(198,248,51,.3);
+  color:#C6F833;font-family:'Space Grotesk';font-weight:700;font-size:18px}
+.greet .sub{font-size:13px;font-weight:600;color:rgba(242,245,240,.5)}
+.greet .name{font-family:'Space Grotesk';font-size:17px;font-weight:700}
+.gear{margin-left:auto;width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#C6F833;font-size:17px}
+/* wallet card */
+.wallet{margin-top:16px;height:196px;border-radius:24px;padding:22px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#2B3138 0%,#181C22 55%,#12151A 100%);
+  border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 28px rgba(0,0,0,.4);
+  display:flex;flex-direction:column}
+.wallet .sheen{position:absolute;top:-40px;bottom:-40px;width:70px;left:58%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);transform:rotate(18deg)}
+.wallet .row1{display:flex;justify-content:space-between;align-items:center}
+.wallet .row1 .t{font-family:'Space Grotesk';font-weight:700;font-size:15px}
+.plus{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:15px}
+.wallet .bank{font-family:'Space Grotesk';font-size:25px;font-weight:500;color:rgba(242,245,240,.55);margin-top:6px}
+.wallet .bal-row{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between}
+.wallet .bal{font-family:'Space Grotesk';font-size:40px;font-weight:700;font-variant-numeric:tabular-nums}
+.coins{position:relative;width:38px;height:24px}
+.coins i{position:absolute;width:24px;height:24px;border-radius:50%;top:0}
+.coins .a{left:0;background:#C6F833}.coins .b{right:0;background:#FF5B5B;mix-blend-mode:screen}
+.wallet .meta{display:flex;justify-content:space-between;font-family:'Space Grotesk';font-size:13px;color:rgba(242,245,240,.45);margin-top:8px}
+/* status pill */
+.pill{margin-top:18px;display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:999px;
+  background:rgba(255,91,91,.09);border:1px solid rgba(255,91,91,.25)}
+.pill .dot{width:9px;height:9px;border-radius:50%;background:#FF5B5B;box-shadow:0 0 8px rgba(255,91,91,.8)}
+.pill .txt{font-size:14px;font-weight:700;color:#FF7B70}
+.pill .sub{font-size:13px;font-weight:600;color:rgba(255,123,112,.75)}
+/* goals */
+.goals-h{margin-top:22px;display:flex;justify-content:space-between;align-items:baseline}
+.goals-h .t{font-family:'Space Grotesk';font-size:18px;font-weight:700}
+.goals-h .pct{font-size:13px;font-weight:600;color:rgba(242,245,240,.45)}
+.cards{margin-top:12px;display:flex;gap:14px}
+.gcard{min-width:242px;border-radius:22px;padding:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.gcard.dim{min-width:150px}
+.gcard .nm{font-family:'Space Grotesk';font-weight:700;font-size:17px}
+.gcard .debt-dot{position:absolute;top:18px;right:18px;width:9px;height:9px;border-radius:50%;background:#FF5B5B}
+.gcard .cnt{margin-top:14px;font-family:'Space Grotesk';font-weight:700;font-size:44px;font-variant-numeric:tabular-nums}
+.gcard .cnt span{font-size:20px;color:rgba(242,245,240,.4);font-weight:500}
+.bar{margin-top:14px;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;width:28%;border-radius:3px;background:#C6F833}
+.gact{margin-top:16px;display:flex;gap:10px;align-items:center}
+.chip-ic{width:42px;height:42px;border-radius:12px;background:rgba(255,91,91,.12);display:flex;align-items:center;justify-content:center;font-size:18px}
+.b10{margin-left:auto;padding:11px 16px;border-radius:12px;background:rgba(255,255,255,.06);font-family:'Space Grotesk';font-weight:700;font-size:15px}
+.b1{width:52px;height:44px;border-radius:14px;background:#C6F833;color:#0A0D11;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;box-shadow:0 4px 18px rgba(198,248,51,.35)}
+/* rounds cta */
+.rounds-cta{margin-top:18px;height:52px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:600;font-size:15px}
+/* tab bar */
+.tabbar{position:absolute;left:16px;right:16px;bottom:22px;height:74px;border-radius:26px;
+  background:rgba(20,24,28,.92);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:space-around;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:rgba(242,245,240,.45)}
+.tab .ic{font-size:20px}
+.tab.on{color:#C6F833}
+.note{position:absolute;top:20px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.14em;color:rgba(242,245,240,.35);font-weight:700}
+</style></head><body>
+<div class="note">PACKET 21 · DASHBOARD — TOP FIXED, NO GHOSTING</div>
+<div class="screen">
+  <div class="greet">
+    <div class="avatar">$</div>
+    <div><div class="sub">Good evening</div><div class="name">Yassine's Bank</div></div>
+    <div class="gear">⚙︎</div>
+  </div>
+  <div class="wallet">
+    <div class="sheen"></div>
+    <div class="row1"><div class="t">Training Bank</div><div class="plus">＋</div></div>
+    <div class="bank">Yassine's Bank</div>
+    <div class="bal-row"><div class="bal">$128</div><div class="coins"><i class="a"></i><i class="b"></i></div></div>
+    <div class="meta"><span>Earned ·· $648</span><span>Debt ·· $520</span></div>
+  </div>
+  <div class="pill"><div class="dot"></div><div><span class="txt">Behind on reps</span>&nbsp;&nbsp;<span class="sub">$520 rep debt to clear</span></div></div>
+  <div class="goals-h"><div class="t">Today's goals</div><div class="pct">26% complete</div></div>
+  <div class="cards">
+    <div class="gcard">
+      <div class="nm">Push-ups</div><div class="debt-dot"></div>
+      <div class="cnt">28 <span>/ 100</span></div>
+      <div class="bar"><i></i></div>
+      <div class="gact"><div class="chip-ic">💪</div><div class="b10">+10</div><div class="b1">＋</div></div>
+    </div>
+    <div class="gcard dim">
+      <div class="nm">Pull-ups</div>
+      <div class="cnt">2 <span>/ 10</span></div>
+      <div class="bar"><i style="width:20%"></i></div>
+      <div class="gact"><div class="chip-ic" style="background:rgba(198,248,51,.1)">🤸</div></div>
+    </div>
+  </div>
+  <div class="rounds-cta">Start a session →</div>
+</div>
+<div class="tabbar">
+  <div class="tab on"><div class="ic">⌂</div>Dashboard</div>
+  <div class="tab"><div class="ic">▣</div>Rounds</div>
+  <div class="tab"><div class="ic">🏛</div>Bank</div>
+  <div class="tab"><div class="ic">！</div>Debt</div>
+</div>
+</body></html>

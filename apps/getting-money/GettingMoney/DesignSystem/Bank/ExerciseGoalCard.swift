@@ -39,6 +39,8 @@ struct ExerciseGoalCard: View {
           .font(GMFont.display(50, .bold))
           .foregroundStyle(GMColor.ink)
           .monospacedDigit()
+          .contentTransition(.numericText(value: Double(done)))
+          .animation(reduceMotion ? nil : .snappy(duration: 0.4), value: done)
           .scaleEffect(pop ? 1.16 : 1, anchor: .bottomLeading)
         Text("/ \(target)")
           .font(GMFont.display(16, .medium))

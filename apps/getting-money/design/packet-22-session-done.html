@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Space Grotesk';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/SpaceGrotesk-VF.ttf');font-weight:300 700}
+@font-face{font-family:'Manrope';src:url('file:///Users/sinou/claude-app-system/apps/getting-money/GettingMoney/Resources/Fonts/Manrope-VF.ttf');font-weight:200 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:393px;height:852px;overflow:hidden}
+body{font-family:'Manrope',sans-serif;color:#F2F5F0;position:relative;
+  background:radial-gradient(620px 620px at 50% -5%, #141B22 0%, #080B0F 55%, #05080B 100%)}
+.confetti i{position:absolute;width:7px;height:7px;border-radius:2px;background:#C6F833;opacity:.8}
+.confetti i:nth-child(2){left:22%;top:14%;transform:rotate(30deg);background:#FFD34D}
+.confetti i:nth-child(1){left:12%;top:22%;transform:rotate(-15deg)}
+.confetti i:nth-child(3){left:78%;top:12%;transform:rotate(60deg)}
+.confetti i:nth-child(4){left:88%;top:24%;transform:rotate(12deg);background:#FFD34D;width:5px;height:5px}
+.confetti i:nth-child(5){left:64%;top:8%;transform:rotate(-40deg);width:5px;height:9px}
+.confetti i:nth-child(6){left:38%;top:9%;transform:rotate(75deg);background:#F2F5F0;width:4px;height:4px;border-radius:50%}
+.center{padding:120px 20px 0;text-align:center}
+.badge{width:96px;height:96px;margin:0 auto;border-radius:50%;background:rgba(198,248,51,.12);border:2px solid rgba(198,248,51,.5);
+  display:flex;align-items:center;justify-content:center;font-size:42px;color:#C6F833;box-shadow:0 0 44px rgba(198,248,51,.18)}
+.h{font-family:'Space Grotesk';font-size:28px;font-weight:700;margin-top:22px}
+.s{font-size:14.5px;font-weight:600;color:rgba(242,245,240,.55);margin-top:6px}
+/* summary card */
+.card{margin:26px 20px 0;border-radius:24px;padding:22px;text-align:left;
+  background:linear-gradient(160deg,#2B3138 0%,#181C22 55%,#12151A 100%);
+  border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 28px rgba(0,0,0,.4)}
+.big{font-family:'Space Grotesk';font-size:44px;font-weight:700;color:#C6F833;font-variant-numeric:tabular-nums}
+.big-cap{font-size:13px;font-weight:700;color:rgba(242,245,240,.5);margin-top:2px}
+.rows{margin-top:18px;border-top:1px solid rgba(255,255,255,.08);padding-top:14px;display:flex;flex-direction:column;gap:11px}
+.row{display:flex;justify-content:space-between;font-size:14.5px;font-weight:600;color:rgba(242,245,240,.65)}
+.row b{font-family:'Space Grotesk';font-weight:700;color:#F2F5F0;font-variant-numeric:tabular-nums}
+.row b.debt{color:#FF6A5A}
+.row b.lime{color:#C6F833}
+.cta{position:absolute;left:20px;right:20px;bottom:40px;height:60px;border-radius:20px;background:#C6F833;color:#0A0D11;
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:17px;
+  box-shadow:0 10px 32px rgba(198,248,51,.35)}
+.ghost{position:absolute;left:20px;right:20px;bottom:112px;height:50px;border-radius:16px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14.5px;color:rgba(242,245,240,.7)}
+.anno{position:absolute;top:20px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.14em;color:rgba(242,245,240,.35);font-weight:700}
+</style></head><body>
+<div class="anno">PACKET 22 · SESSION COMPLETE</div>
+<div class="confetti"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="center">
+  <div class="badge">✓</div>
+  <div class="h">Session banked</div>
+  <div class="s">Push-ups · 4 rounds · 9 min</div>
+</div>
+<div class="card">
+  <div class="big">+$72</div>
+  <div class="big-cap">EARNED THIS SESSION</div>
+  <div class="rows">
+    <div class="row"><span>Reps completed</span><b>72</b></div>
+    <div class="row"><span>Debt paid off</span><b class="debt">−$20</b></div>
+    <div class="row"><span>Bonus reps</span><b class="lime">+$0</b></div>
+    <div class="row"><span>Daily goal</span><b class="lime">100 / 100 ✓</b></div>
+  </div>
+</div>
+<div class="ghost">Keep going — bonus reps pay extra</div>
+<div class="cta">Back to the bank</div>
+</body></html>

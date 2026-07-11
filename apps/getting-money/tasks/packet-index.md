@@ -18,5 +18,10 @@ App: native iOS (Swift 6 · SwiftUI · SwiftData local-only) → TestFlight. Bui
 | 12 | Dashboard Daily Date Selector | UI | PUSHED | packet-09-debt-day-close | 8bc2972 |
 | 13 | Past-Day Rep Corrections | UI + backend | PUSHED | packet-09-debt-day-close | 8bc2972 |
 | 14 | Home-Screen Widget (Daily Targets) | UI + small backend | PUSHED | packet-14-widget | c4bd3e1 |
+| 16 | Pixel Game Dashboard | UI | SUPERSEDED by 20 | packet-16 | a2ebe33 |
+| 19 | PNG asset kit + 5-screen redesign | UI | SUPERSEDED by 20 | — | 43d7d5a |
+| 20 | Training Bank redesign (Claude Design file) | UI | COMMITTED, at gate | packet-20-training-bank-redesign | c75ce27 |
+| 21 | Main menu fix + animations + splash + reset | UI | COMPLETE | packet-21-menu-polish | (see git) |
+| 22 | Dynamic rounds + guided exercise sessions | UI + backend | DESIGN APPROVED — ready to build | — | — |
 
 Source root: `apps/getting-money/GettingMoney/` · Tests: `apps/getting-money/GettingMoneyTests/` · Mockups: `apps/getting-money/design/packet-NN.png` (dark/lime/coral, from `design/reference-mockup.png`).
